@@ -3,6 +3,7 @@ version = "1.0.0-1"
 
 source = {
   url = "git://github.com/nessan/lulu",
+  tag = "v1.0",
 }
 
 description = {
