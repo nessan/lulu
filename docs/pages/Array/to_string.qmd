@@ -1,0 +1,87 @@
+---
+title: Lulu Arrays --- Stringification
+---
+
+## Introduction
+
+If you have imported the {lulu.Array} class as
+```lua
+local Array = require 'lulu.Array'
+```
+then you can convert `Array` instances to strings using these methods:
+
+**`Array:inline()`**<br>
+Returns a one-line string representation of `self`.
+This is the default method used by `print` and friends.
+
+**`Array:pretty()`**<br>
+Returns a "pretty" multiline string representation of `self`.
+
+**`Array:alt()`**<br>
+Returns a alternate, slightly more compact, "pretty" multiline string representation of `self`.
+
+**`Array:classic()`**<br>
+Returns a "classic" multiline string representation of `self`.
+
+**`Array:inline_json()`**<br>
+Returns a one-line "JSON" string representation of `self`.
+
+**`Array:json()`**<br>
+Returns a "JSON" multiline string representation of `self`.
+
+NOTE: The class also points the standard Lua `tostring` method at `Array.inline` which means that the `print` method and friends all automatically use `self:inline()` to turn an `Array` into a string where needed.
+
+These methods use the facilities in the {lulu.scribe} module and can handle an `Array` instance with cycles and self references.
+
+[Example: Simple Arrays]{.bt}
+```lua
+local fruits = Array{'Apple', 'Pear', 'Banana'}
+print("Inline Format:", fruits:inline())
+print("Pretty Format:", fruits:pretty())
+print("Alt Format:")
+print(fruits:alt())
+```
+
+[Output: Simple Arrays]{.bt}
+```txt
+Inline Format:	[ "Apple", "Pear", "Banana" ]
+Pretty Format:	[ "Apple", "Pear", "Banana" ]
+Alt Format:
+"Apple",
+"Pear",
+"Banana"
+```
+
+[Another Example]{.bt}
+```lua
+local a = Array{{1,2,3}, {4,5,6}}
+print("Inline Format:", a:inline())
+print("Pretty Format:")
+print(a:pretty())
+```
+[Output]{.bt}
+```txt
+Inline Format:	[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
+Pretty Format:
+[
+    [ 1, 2, 3 ],
+    [ 4, 5, 6 ]
+]
+```
+
+[An Example with a Cycle]{.bt}
+```lua
+local a, b = Array{1,2,3}
+a[4] = a                                -- <1>
+print("Inline Format:", a:inline())
+```
+1. We add a fourth elements to `a` that is a (spurious) self-reference.
+
+[Output]{.bt}
+```txt
+Inline Format:	<table> = [ 1, 2, 3, <table> ]
+```
+
+## See Also
+
+{lulu.scribe}

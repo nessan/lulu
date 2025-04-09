@@ -1,0 +1,76 @@
+---
+title: Lulu Arrays --- Maxima and Minima
+---
+
+## Introduction
+
+If you have imported the {lulu.Array} class as
+```lua
+local Array = require 'lulu.Array'
+```
+then you have access to the following methods:
+
+**`Array:extreme(comparator,...)`** <br>
+Returns the value and index of the “extreme” element in `self` according to the `comparator` function.
+
+**`Array:max()`** <br>
+Returns the value and index of the “maximum” element in `self`.
+
+**`Array:min()`** <br>
+Returns the value and index of the “minimum” element in `self`.
+
+## `Array:extreme`
+
+This method uses a comparator  “function”, which should take two array values, `v1` and `v2`, as arguments and return `true` if `v1` dominates `v2`.
+The comparator is also passed any extra `...` trailing arguments from the `extreme` call.
+It is free to ignore those.
+
+[Example: Finding the top student]{.bt}
+Suppose we have an array of exam results and want to find the top student:
+```lua
+local results = Array{{'Mary', 78}, {'Johnny', 67}, {'Mark', 92}, {'Colette', 93}}
+local v, i    = results:extreme(function(a,b) return a[2] > b[2] end)
+print("Best record is at index", i)
+print("Congratulations " .. v[1] .. " you scored:", v[2])
+```
+
+[Output]{.bt}
+```txt
+Best record is at index	4
+Congratulations Colette you scored:	93
+```
+
+## `Array:max` & `Array:min`
+
+The `max` method is the same as calling `extreme` with the comparator `">"`. <br>
+The `min` method is the same as calling `extreme` with the comparator `"<"`. <br>
+
+These really do something reasonable only for Arrays with simple non-table values.
+```lua
+local arr = Array{1,12,6,-19}
+local v_min, i_min = arr:min()
+local v_max, i_max = arr:max()
+print("Minimum value", v_min, "occurs at index", i_min)
+print("Maximum value", v_max, "occurs at index", i_max)
+```
+Outputs:
+```txt
+Minimum value -19 occurs at index 4
+Maximum value 12 occurs at index 2
+```
+
+## Comparator Functions
+
+A custom comparator function can come in one of several forms:
+
+1. You can use Lua function: `i,v = results:extreme(function(a,b) return a[2] > b[2] end)`.
+2. You can use a string operator, as we show below.
+3. You can use a string lambda: `i,v = results:extreme("|v1,v2| v1[2] > v2[2]")`
+4. You can pass a “table” that is *callable*, i.e., it has a `__call()` metamethod that takes two items and compares them.
+
+There is more detail on the second and third options in the documentation for the {lulu.anon} module.
+
+## See Also
+
+{Array.sort}    <br>
+{lulu.callable}

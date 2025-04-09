@@ -1,0 +1,142 @@
+---
+title: Lua Tables --- Keys and Values
+---
+
+## Introduction
+
+If you have imported the {lulu.table} module as
+```lua
+require 'lulu.table'
+```
+then you have access to the following methods:
+
+Method                          | Brief Description
+------------------------------- | -----------------------------------------------------------------
+`table.keys(tbl, comparator)`   | Returns the top-level keys from `tbl` as an array, generally sorted in some manner.
+`table.values(tbl, comparator)` | Return top-level values from `tbl` as an array, optionally sorted in some manner.
+`table.counts(tbl)`             | Returns a table of the top-level value counts for each value in `tbl`.
+`table.set_of_keys(tbl)`        | Returns the *set* of keys in `tbl`.
+`table.set_of_values(tbl)`      | Returns the *set* of values in `tbl`.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
+
+## `table.keys`
+
+This method can be given a *comparator* argument, a function called with two items.
+It should return true if the first one is considered dominant and false otherwise.
+
+TIP: We supply a default {table.compare} function used to sort table keys.
+It sorts the keys by type and value, so numeric keys come first and are sorted in natural order.
+String keys are sorted alphabetically.
+
+You can explicitly set the `comparator` argument to `false` to disable key sorting.
+So, `table.keys(tbl, false)` returns the array of keys in whatever order Lua happened to store them.
+This is **not** the same as `table.keys(tbl)`,  which returns the array of keys sorted using the *default* `comparator` method.
+
+[Example]{.bt}
+
+```lua
+local tbl = { frog = 1, badger = 2, eagle = 3 }
+print(table.concat(table.keys(tbl,false), ", "))    -- <1>
+print(table.concat(table.keys(tbl),       ", "))    -- <2>
+```
+1. We explicitly set the `comparator` argument to `false` so no sorting is done on the keys.
+2. We passed a single argument here, so the *default* comparator will be used to sort the keys.
+
+This outputs:
+```txt
+frog, eagle, badger  # <1>
+badger, eagle, frog  # <2>
+```
+1. The keys are output in whatever undefined order Lua stores them (varies from run to run).
+2. The keys are output in a fixed, alphabetically sorted, order.
+
+## `table.values`
+
+Like the `keys` method above, you can pass the `values` method a `comparator` function or the boolean `false` to disable sorting.
+
+However, in this case, the default for `comparator` is `false`, and we return the values in whatever manner Lua stored them.
+
+[Example]{.bt}
+
+```lua
+local tbl =  {frog = 1, badger = 2, eagle = 3}
+print(table.concat(table.values(tbl,false), ", "))
+print(table.concat(table.values(tbl),       ", "))
+print(table.concat(table.values(tbl, "<"),  ", "))
+```
+outputs:
+```txt
+3, 2, 1     # <1>
+3, 2, 1     # <2>
+1, 2, 3     # <3>
+```
+1. The values are output in whatever undefined order Lua stores them (this can vary from run to run).
+2. This is the same result because the default value for the `comparator` argument is `false`.
+3. The values are sorted using a custom comparator, as described below.
+
+## `table.counts`
+
+Sometimes, you need to see whether a table has duplicated values.
+
+[Example]{.bt}
+```lua
+local tbl =  {frog = "kermit", badger = "kermit", eagle = "eddie"}
+local counts = table.counts(tbl)
+for k,v in pairs(counts) do print(k,v) end
+```
+outputs:
+```txt
+eddie	1
+kermit	2
+```
+
+## `table.set_of_keys`
+
+This method returns a table where the keys are the values in `tbl` with corresponding value `true`.
+
+[Example]{.bt}
+
+```lua
+local tbl =  {frog = "kermit", badger = "kermit", eagle = "eddie"}
+local key_set = table.set_of_keys(tbl)
+for k in pairs(key_set) do print(k) end
+```
+outputs:
+```txt
+badger
+eagle
+frog
+```
+
+## `table.set_of_values`
+
+This method returns a table where the values are the values in `tbl` with corresponding value `true`.
+
+[Example]{.bt}
+
+```lua
+local tbl =  {frog = "kermit", badger = "kermit", eagle = "eddie"}
+local value_set = table.set_of_values(tbl)
+for v in pairs(value_set) do print(v) end
+```
+outputs:
+```txt
+eddie
+kermit
+```
+
+### Comparator Functions
+
+A custom comparator function can come in one of several forms:
+
+1. You can use Lua function like `table.keys(tbl, function(a,b) return a > b end)`.
+2. You can use a string operator like `table.keys(tbl, ">", 0)`.
+3. You can use a string lambda like `table.keys(tbl, "|a,b| a > b")`.
+4. You can pass a "table" that happens to be *callable* i.e. has a `__call()` metamethod that takes two items and does a comparison.
+
+There is more detail on the second and third options in the documentation for the {lulu.callable} module.
+
+## See Also
+
+{table.ordered_pairs} <br>
+{lulu.callable}

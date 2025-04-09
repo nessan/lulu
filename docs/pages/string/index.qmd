@@ -1,0 +1,293 @@
+---
+title: Lua strings --- Extensions
+---
+
+## Introduction
+
+The `lulu.string` module adds extra methods to the Lua `string` class.
+
+If you have imported the module as
+```lua
+require 'lulu.string'
+```
+You then have access to dozens of extra methods for any string `s`.
+
+In practice, each method belongs to a functional group, and we first list them by those groupings.
+The method names within any group follow a consistent scheme.
+
+The complete list of all the methods is also available in [alphabetic order](#all-methods).
+
+## Queries
+
+Queries to check that the contents of a string `s` are in some particular form:
+
+String Method                   | Description
+------------------------------  | --------------------------------------------------------------------
+`s:contains_word(word)`         | Does `s` contain a `word`; a string/pattern *surrounded* by whitespace?
+`s:contains(pattern)`           | Does `s` contain the string or `lpeg` pattern `pattern`?
+`s:ends_with(suffix)`           | Returns `true` if `s` ends with the specified suffix.
+`s:is_alpha()`                  | Returns `true` if `s` only contains alphabetic characters.
+`s:is_alphanumeric()`           | Returns `true` if `s` only contains alphanumeric characters.
+`s:is_bin()`                    | Returns `true` if `s` can be interpreted as a positive binary number.
+`s:is_blank()`                  | Returns `true` if `s` is all white space characters.
+`s:is_dec()`                    | Returns `true` if `s` can be interpreted as a positive integer.
+`s:is_digit()`                  | Returns `true` if `s` only contains digit characters.
+`s:is_empty()`                  | Returns `true` if `s` is empty (length 0).
+`s:is_escaped(esc)`             | Returns `true` if `s` starts with an escape character `esc` that defaults to the backslash character.
+`s:is_float()`                  | Returns `true` if `s` can be interpreted as an arbitrary floating point number.
+`s:is_hex()`                    | Returns `true` if `s` can be interpreted as a positive hexadecimal number.
+`s:is_int()`                    | Returns `true` if `s` can be interpreted as an arbitrary integer.
+`s:is_lower()`                  | Returns `true` if `s` only contains lowercase characters.
+`s:is_non_empty()`              | Returns `true` if `s` is not the empty string.
+`s:is_number()`                 | Returns `true` if `s` can be interpreted as a number or some sort.
+`s:is_oct()`                    | Returns `true` if `s` can be interpreted as a positive octal number.
+`s:is_upper()`                  | Returns `true` if `s` only contains uppercase characters.
+`s:starts_with(prefix)`         | Returns `true` if `s` starts with the specified prefix.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
+
+There are a few other queries that deal with [delimited text](#delimited-text).
+We include them here for completeness but the details are in the later section.
+
+String Method                   | Description
+------------------------------  | --------------------------------------------------------------------
+`s:is_delimited(l, r, line)`    | Returns `true` if `s` is is marked on the left by `l` and the right by `r`.
+`s:contains_delimited(l,r,line)`| Returns `true` if `s` contains delimited text anywhere inside it.
+`s:is_quoted()`                 | Returns `true` if `s` is surrounded by single or double quotes.
+`s:contains_quoted()`           | Returns `true` if `s` contains quoted text anywhere inside it.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
+
+## End Changes
+
+We often need to check or perhaps change just the start or end of a string:
+
+NOTE: Strings are never changed *in place* by these methods. <br>
+Instead a string copy with the relevant changes is returned.
+
+String Method                   | Description
+------------------------------  | --------------------------------------------------------------------
+`s:append(suffix)`              | Returns a new string that is `s` with the `suffix` string appended to it.
+`s:ellipsis(n)`                 | Returns a copy of `s` truncated after `n` characters with a following " ..."
+`s:ensure_end(suffix)`          | Return `s` if it already ends with a specified suffix. Otherwise returns a new padded version that does indeed end with the required prefix.
+`s:ensure_start(prefix)`        | Return `s` if it already starts with a specified prefix. Otherwise returns a new padded version that does indeed start with the required prefix.
+`s:kill_from(p)`                | Returns a copy of `s` where each line has from `p` to the end of that line removed. The `p` argument can be a number, a string, or an `lpeg` pattern.
+`s:kill_to(p)`                  | Returns a copy of `s` where each line is killed from its start up to and including `p`. The `p` argument can be a number, a string, or an `lpeg` pattern.
+`s:pad_end(len,fill)`           | Returns a copy of `s` that has a specified minimum length by padding `s` on the right. The default `fill` is a space.
+`s:pad_start(len,fill)`         | Returns a copy of `s` that has a specified minimum length by padding `s` on the left. The default `fill` is a space.
+`s:prepend(prefix)`             | Returns a new string that is `s` with the `prefix` string prepended to it.
+`s:strip_comments(char)`        | Returns a copy of `s` with any end-of-line comments erased from each line. <br> The default comment start `char` is the hash symbol `#`.
+`s:trim_end(chars)`             | Returns a copy of `s` that has `chars` trimmed from the right side. <br> The default `chars` is the Lua pattern for whitespace.
+`s:trim_start(chars)`           | Returns a copy of `s` that has `chars` trimmed from the left side. <br> The default `chars` is the Lua pattern for whitespace.
+`s:trim_ws()`                   | Returns a copy of `s` without any leading or trailing whitespace.
+`s:trim(chars)`                 | Returns a copy of `s` that has `chars` trimmed from both the left & right sides. <br> The default `chars` is the Lua pattern for whitespace.
+`s:truncate(n)`                 | Returns a copy of a string where each line is truncated at `n` characters.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
+
+## General Changes
+
+Other methods change strings anywhere as opposed to those above that only  effect the start or end.
+
+NOTE: Strings are never changed *in place* by these methods. <br>
+Instead a copy with the relevant changes is returned.
+
+String Method                   | Description
+------------------------------  | --------------------------------------------------------------------
+`s:add_escapes(esc,specials)`   | Returns a copy of `s` that has an escape character added before characters in the string *that need "escaping"*. The default `esc` character is a backslash. <br> By default, we add the `esc` character before all quotation marks and the backslash.
+`s:change(from, to)`            | Returns a new string that is a copy of `s` with all occurrences of `from` replaced with `to`. The `from` argument can be a string or an `lpeg` pattern.
+`s:collapse_ws(careful)`        | Returns a copy of `s` with contiguous whitespaces converted to a single space. By default, quoted substrings in `s` are unaltered (`careful = true`).
+`s:dedent_lines(indent)`        | Returns a copy of `s` with each line's indentation removed. <br> The `indent` argument is the string to remove from the start of each line.
+`s:delete_ws()`                 | Returns a copy of `s` with all spaces removed.
+`s:delete(p)`                   | Returns a copy of `s` where all matches to a string or pattern `p` are deleted.
+`s:from_hex()`                  | Returns a decoded version of a hex-encoded `s` so e.g., "68656c6c6f" -> "hello"
+`s:from_lua_pattern()`          | Returns a copy of `s` with all the '%' characters from a *Lua pattern* removed.
+`s:indent_lines(indent, ignore_first)` | Returns a copy of `s` with each line's indentation removed. <br> The `indent` argument is the string to add to the start of each line. <br> The `ignore_first` argument is a boolean that defaults to `false`. <br> If `true`, the first line is not indented.
+`s:remove_escapes(esc)`         | Returns a copy of `s` with any `esc` characters removed (default is a backslash).
+`s:to_bool()`                   | Tries to interpret `s` as a `boolean` value where we recognize yes/no, on/off etc. <br> The case of `s` does not matter.
+`s:to_hex()`                    | Returns a hex-encoded version of `s` so e.g., "hello" -> "68656c6c6f"
+`s:to_lua_pattern()`            | Returns a new version `s` string that can be safely used in Lua's pattern matching functions.
+`s:unescape(chars,esc)`         | Returns a copy of `s` with *specific* add_escapes characters turned into remove_escapes ones. The default character to unescape is the double quotation mark and the default escape character is the backslash.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
+
+[Example:]{.bt}
+```lua
+local str = [[joe \{said\} \"no way\".]]
+print("str:                      ",  str)
+print("str:remove_escapes():     ",  str:remove_escapes())
+print("str:unescape_chars('{}'): ",  str:unescape_chars('{}'))
+```
+
+[Output]{.bt}
+```txt
+str:                      	joe \{said\} \"no way\".
+str:remove_escapes():       joe {said} "no way".        # <1>
+str:unescape_chars('{}'): 	joe {said} \"no way\".      # <2>
+```
+1. All backslashes are removed from `str`.
+2. Only the backslashed braces `\{` and `\}` are altered.
+
+## Tokenising
+
+String *parsing* generally involves splitting text into *tokens/words* that are delimited by separators such as whitespace.
+We have several methods to help with that task:
+
+String Method                   | Description
+------------------------------  | --------------------------------------------------------------------
+`s:after(sep)`                  | Returns the text after the separator `sep`. <br> The separator can be a string or an `lpeg` pattern.
+`s:before(sep)`                 | Returns the text after the separator `sep`. <br> The separator can be a string or an `lpeg` pattern.
+`s:split(sep)`                  | Returns an array of "tokens" in `s` split by a separator `sep`. <br> The default separator is the whitespace pattern.
+`s:to_blocks()`                 | Returns a table of all the text blocks/paragraphs in `s`. <br> Blocks/paragraphs are pieces of text delimited by one or more blank lines.
+`s:to_lines()`                  | Returns an array of all the "lines" in `s` by splitting on a newline character.
+`s:to_tokens(sep)`              | Returns an array of all the "tokens" in `s` by splitting it on a separator/pattern `sep`. <br> The default separator is the whitespace pattern.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
+
+We also have a couple of methods to access the individual characters in a string:
+
+String Method                   | Description
+------------------------------  | --------------------------------------------------------------------
+`s:iter()`                      | Returns an iterator for the characters in `s` <br> This can be used as `for c in s:iter() do ... end` <br> This iterator is Unicode-aware.
+`s:to_array()`                  | Returns an array that contains the individual characters in `s`. <br> This is Unicode-aware.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
+
+## Delimited Text
+
+Given a block of text, you often need to extract substrings surrounded by markers of some sort.
+For example, given a block of C/C++ code, you might want to delete any multiline comment.
+In C/C++ multiline comments begin with the left delimiter `/*` and end with the right delimiter `*/`.
+
+We have methods that work on text containing delimited strings.
+Some specialisations work on strings delimited by quotation marks, a typical case of interest.
+
+String Method                   | Description
+------------------------------  | --------------------------------------------------------------------
+`s:all_delimited(l,r,line)`     | Returns an array of all delimited substrings in `s`.
+`s:all_quoted()`                | Returns an array of all quoted substrings in `s`
+`s:contains_delimited(l,r,line)`| Returns `true` if `s` contains delimited text anywhere inside it.
+`s:contains_quoted()`           | Returns `true` if `s` contains quoted text anywhere inside it.
+`s:contains_word(word)`         | Does `s` contain a particular `word` which a string or any `lpeg` pattern surrounded by whitespace? This is the simplest form of delimited text.
+`s:first_delimited(l,r,line)`   | Returns the first delimited substring found in `s`.
+`s:first_quoted()`              | Returns the first quoted substring found in `s`.
+`s:is_delimited(l,r,line)`      | Returns `true` if `s` is is marked on the left by `l` and the right by `r`.
+`s:is_quoted()`                 | Returns `true` if `s` is surrounded by single or double quotes.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
+
+The various `*_delimited(l, r, line)` methods take three optional arguments:
+`l` and `r` are the left and right delimiters to look for, and both default to the double quotation mark.
+The `line` argument is a boolean that defaults to `false`.
+If set to `true`, matches stop at the first newline character in the string.
+
+The full rules for delimiters are:
+
+1. If neither is given, we set them to the default double quote character `"`.
+2. If only one is given and it's a single character (e.g. `'`) then we use that for both delimiters.
+3. If only one is given and it has an *even* number of characters, then we split that into half. For example, if we are passed the single delimiter "{}", then we split it in half, so in effect `l = '{'` and `r = '}'`.
+4. Finally, of course, you can specify `l` and `r` separately.
+
+[Example]{.bt}
+```lua
+local s = "Here is a string with {text in braces}"
+print("is_delimited:       ", s:is_delimited("{}"))
+print("contains_delimited: ", s:contains_delimited("{}"))
+print("first_delimited:    ", s:first_delimited("{}"))
+print("all_delimited:      ", table.concat(s:all_delimited("{}"), ", "))
+```
+[Output]{.bt}
+```txt
+is_delimited:       	false
+contains_delimited: 	true
+first_delimited:    	text in braces
+all_delimited:      	text in braces
+```
+
+[Another Example]{.bt}
+```lua
+local s = "{Here} {is a string} {with} {text in braces}"
+print("is_delimited:       ", s:is_delimited("{}"))
+print("contains_delimited: ", s:contains_delimited("{}"))
+print("first_delimited:    ", s:first_delimited("{}"))
+print("all_delimited:      ", table.concat(s:all_delimited("{}"), ", "))
+```
+[Output]{.bt}
+```txt
+is_delimited:       	true
+contains_delimited: 	true
+first_delimited:    	Here
+all_delimited:      	Here, is a string, with, text in braces
+```
+Note that in this case, `s` starts with a `"{"` and ends with a `"}"` so the entire string is indeed *delimited*.
+However, the `first_delimited` and `all_delimited` methods work in a *non-greedy* manner, which is almost certainly what you would want.
+
+## All Methods
+
+Here is an alphabetic list of all the methods added by the `string` module to the Lua `string` class for any string `s`.
+
+Click on a method to jump to the documentation section for the corresponding functional group.
+
+- [`s:add_escapes(esc, specials)`](#general-changes)
+- [`s:after(sep)`](#tokenising)
+- [`s:all_delimited(l,r,line)`](#delimited-text)
+- [`s:all_quoted()`](#delimited-text)
+- [`s:append(suffix)`](#end-changes)
+- [`s:before(sep)`](#tokenising)
+- [`s:change(from, to)`](#general-changes)
+- [`s:collapse_ws(careful)`](#general-changes)
+- [`s:contains_delimited(l, r, line)`](#delimited-text)
+- [`s:contains_quoted()`](#delimited-text)
+- [`s:contains_word(word)`](#queries)
+- [`s:contains(pattern)`](#queries)
+- [`s:dedent_lines(indent)`](#general-changes)
+- [`s:delete_ws()`](#general-changes)
+- [`s:delete(p)`](#general-changes)
+- [`s:ellipsis(n)`](#end-changes)
+- [`s:ends_with(prefix)`](#queries)
+- [`s:ensure_end(suffix)`](#end-changes)
+- [`s:ensure_start(prefix)`](#end-changes)
+- [`s:first_delimited(l, r, line)`](#delimited-text)
+- [`s:first_quoted()`](#delimited-text)
+- [`s:from_hex()`](#general-changes)
+- [`s:from_lua_pattern()`](#general-changes)
+- [`s:indent_lines(indent, ignore_first_line)`](#general-changes)
+- [`s:is_alpha()`](#queries)
+- [`s:is_alphanumeric()`](#queries)
+- [`s:is_bin()`](#queries)
+- [`s:is_blank()`](#queries)
+- [`s:is_dec()`](#queries)
+- [`s:is_delimited(l, r, line)`](#delimited-text)
+- [`s:is_digit()`](#queries)
+- [`s:is_empty()`](#queries)
+- [`s:is_escaped(esc)`](#queries)
+- [`s:is_float()`](#queries)
+- [`s:is_hex()`](#queries)
+- [`s:is_int()`](#queries)
+- [`s:is_lower()`](#queries)
+- [`s:is_non_empty()`](#queries)
+- [`s:is_number()`](#queries)
+- [`s:is_oct()`](#queries)
+- [`s:is_quoted()`](#delimited-text)
+- [`s:is_upper()`](#queries)
+- [`s:iter()`](#tokenising)
+- [`s:kill_from(p)`](#end-changes)
+- [`s:kill_to(p)`](#end-changes)
+- [`s:pad_end(len, fill)`](#end-changes)
+- [`s:pad_start(len, fill)`](#end-changes)
+- [`s:prepend(prefix)`](#end-changes)
+- [`s:remove_escapes(esc)`](#general-changes)
+- [`s:split(sep)`](#tokenising)
+- [`s:starts_with(suffix)`](#queries)
+- [`s:strip_comments(char)`](#end-changes)
+- [`s:to_array()`](#tokenising)
+- [`s:to_blocks()`](#tokenising)
+- [`s:to_bool()`](#general-changes)
+- [`s:to_hex()`](#general-changes)
+- [`s:to_lines()`](#tokenising)
+- [`s:to_lua_pattern()`](#general-changes)
+- [`s:to_tokens(sep)`](#tokenising)
+- [`s:trim(chars)`](#end-changes)
+- [`s:trim_end(chars)`](#end-changes)
+- [`s:trim_start(chars)`](#end-changes)
+- [`s:trim_ws()`](#end-changes)
+- [`s:truncate(n)`](#end-changes)
+- [`s:unescape_chars(chars, esc)`](#general-changes)
+
+## See Also
+
+{lulu.table} <br>
+{lulu.lpeg}

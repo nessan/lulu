@@ -1,0 +1,200 @@
+---
+title: Lulu Enums --- `add_enumerator`
+---
+
+## Introduction
+
+The enumerators for an `Enum` instance are usually specified when the `Enum` is created.
+
+However, you can add an enumerator to an existing `Enum` using the `Enum:add_enumerator` method.
+We use this feature when we are using `lulu` to create domain specific languages and want to add an enumerator for a new domain.
+
+The `add_enumerator(name, ...)` method has several forms:
+
+## One Argument
+
+**`Enum:add_enumerator(name)`** <br>
+Adds an enumerator with the given name to the `Enum` instance.
+
+The ordinal value for the enumerator is generated as the next consecutive integer in the existing sequence.
+If this is the first enumerator added to the `Enum` instance then the ordinal value is 1.
+
+[Example]{.bt}
+```lua
+local Suit = Enum()                     -- <1>
+Suit:add_enumerator('Clubs')            -- <2>
+Suit:add_enumerator('Diamonds')
+Suit:add_enumerator('Hearts')
+Suit:add_enumerator('Spades')
+print(Suit)
+```
+1. Create an empty `Enum` instance.
+2. Add an enumerator with the name `Clubs`.
+
+This outputs:
+```txt
+Enum: [1] Clubs, [2] Diamonds, [3] Hearts, [4] Spades
+```
+
+Alternatively, you can also specify the type name for the enum by using the `ENUM` function:
+
+[Example]{.bt}
+```lua
+ENUM 'Suit' {}                          -- <1>
+Suit:add_enumerator('Clubs')            -- <2>
+Suit:add_enumerator('Diamonds')
+Suit:add_enumerator('Hearts')
+Suit:add_enumerator('Spades')
+```
+1. Creates an empty `Enum` instance with the type name `Suit`.
+2. Add an enumerator with the name `Clubs`.
+
+This outputs:
+```txt
+Suit: [1] Clubs, [2] Diamonds, [3] Hearts, [4] Spades
+```
+## Two Arguments
+
+TIP: In the two argument form, the second argument **must** be either a number or a table.
+
+**`Enum:add_enumerator(name, ordinal)`** <br>
+If the second argument is a number we add an enumerator to the `Enum` instance with the specified ordinal value.
+
+[Example]{.bt}
+```lua
+ENUM 'Suit' {}
+Suit:add_enumerator('Clubs',    1)      -- <1>
+Suit:add_enumerator('Diamonds', 2)
+Suit:add_enumerator('Hearts',   4)
+Suit:add_enumerator('Spades',   8)
+print(Suit)
+```
+1. The second argument is a number and is interpreted as the ordinal value for the enumerator.
+
+This outputs:
+```txt
+Suit: [1] Clubs, [2] Diamonds, [4] Hearts, [8] Spades
+```
+
+**`Enum:add_enumerator(name, associated_data)`** <br>
+If the second argument is a table we add an enumerator to the `Enum` instance with the specified associated data.
+The ordinal value can be specified in the table of associated data under the `ordinal` field or it will be automatically generated as the next consecutive integer in the existing sequence.
+
+[Example]{.bt}
+```lua
+ENUM 'Suit' {}
+Suit:add_enumerator('Clubs',    { color = 'black' })
+Suit:add_enumerator('Diamonds', { color = 'red'   })
+Suit:add_enumerator('Hearts',   { color = 'red'   })
+Suit:add_enumerator('Spades',   { color = 'black' })
+putln("%T", Suit)
+```
+This outputs:
+```txt
+Suit:
+    [1] Clubs = { color = "black" },            # <1>
+    [2] Diamonds = { color = "red" },
+    [3] Hearts = { color = "red" },
+    [4] Spades = { color = "black" }
+```
+1. The ordinal values are automatically generated as consecutive integers starting at 1.
+
+You can specify the ordinal value explicitly in the associated data by adding a numeric `ordinal` field to the table.
+
+[Example]{.bt}
+```lua
+ENUM 'Suit' {}
+Suit:add_enumerator('Clubs',    { color = 'black', ordinal = 1 })
+Suit:add_enumerator('Diamonds', { color = 'red',   ordinal = 2 })
+Suit:add_enumerator('Hearts',   { color = 'red',   ordinal = 4 })
+Suit:add_enumerator('Spades',   { color = 'black', ordinal = 8 })
+putln("%T", Suit)
+```
+This outputs:
+```txt
+Suit:
+    [1] Clubs = { color = "black" },            # <1>
+    [2] Diamonds = { color = "red" },
+    [4] Hearts = { color = "red" },
+    [8] Spades = { color = "black" }
+```
+1. Note that the ordinal values are not cloned from the associated data but are shown in the output as `[ordinal]`
+
+You have read access to the ordinal values using the `Enumerator:tonumber()` method.
+For example, `print(Suit.Spades:tonumber())` outputs `8`.
+
+## Three Arguments
+
+**`Enum:add_enumerator(name, ordinal, associated_data)`** <br>
+In this form, the ordinal value is specified explicitly, and must be a number.
+The associated data must be a table.
+Any ordinal field in the associated data is ignored.
+
+[Example]{.bt}
+```lua
+ENUM 'Suit' {}
+Suit:add_enumerator('Clubs',    1, { color = 'black' })
+Suit:add_enumerator('Diamonds', 2, { color = 'red'   })
+Suit:add_enumerator('Hearts',   4, { color = 'red'   })
+Suit:add_enumerator('Spades',   8, { color = 'black' })
+putln("%T", Suit)
+```
+This outputs:
+```txt
+Suit:
+    [1] Clubs = { color = "black" },
+    [2] Diamonds = { color = "red" },
+    [4] Hearts = { color = "red" },
+    [8] Spades = { color = "black" }
+```
+
+We ignore any ordinal field in the associated data if the ordinal value is specified explicitly.
+
+[Example]{.bt}
+```lua
+ENUM 'Suit' {}
+Suit:add_enumerator('Clubs',    1, { color = 'black', ordinal = 10 })
+Suit:add_enumerator('Diamonds', 2, { color = 'red',   ordinal = 20 })
+Suit:add_enumerator('Hearts',   4, { color = 'red',   ordinal = 30 })
+Suit:add_enumerator('Spades',   8, { color = 'black', ordinal = 40 })
+putln("%T", Suit)
+```
+This outputs:
+```txt
+Suit:
+    [1] Clubs = { color = "black" },            # <1>
+    [2] Diamonds = { color = "red" },
+    [4] Hearts = { color = "red" },
+    [8] Spades = { color = "black" }
+```
+1. Here the ordinal values from the associated data are not used as we specified the ordinal values explicitly.
+
+You are free to specify *some* of the the ordinal values in the associated data or have them automatically generated.
+
+[Example]{.bt}
+```lua
+ENUM 'Suit' {}
+Suit:add_enumerator('Clubs',    1, { color = 'black', ordinal = 10 })
+Suit:add_enumerator('Diamonds', 2, { color = 'red',   ordinal = 20 })
+Suit:add_enumerator('Hearts',      { color = 'red',   ordinal = 30 })
+Suit:add_enumerator('Spades',      { color = 'black'})
+putln("%T", Suit)
+```
+This outputs:
+```txt
+Suit:
+    [1] Clubs = { color = "black" },            # <1>
+    [2] Diamonds = { color = "red" },           # <2>
+    [30] Hearts = { color = "red" },            # <3>
+    [31] Spades = { color = "black" }           # <4>
+```
+1. The ordinal value in the associated data is ignored as we specified the value in the second argument.
+2. The ordinal value in the associated data is ignored as we specified the value in the second argument.
+3. The ordinal value from the associated data is used as we did not specify the ordinal value explicitly.
+4. This ordinal value is automatically generated as the next consecutive integer in the existing sequence.
+
+
+## See Also
+
+{Enum.new} <br>
+{ENUM}

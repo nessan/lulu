@@ -1,0 +1,104 @@
+---
+title: Lua Tables --- Searches
+---
+
+## Introduction
+
+If you have imported the {lulu.table} module as
+```lua
+require 'lulu.table'
+```
+then, you can search for particular keys and values in any `table` using the following methods.
+
+**`table.find(tbl,value)`** <br>
+Returns the first key found in `tbl` where `tbl[key]` is *identical in content* to `value`. <br>
+This is a top-level search that returns `nil` on failure.
+
+**`table.contains(tbl,value)`** <br>
+Returns `true` if there is a top-level value in `tbl` that is *identical in content* to `value`.
+
+**`table.find_if(tbl,predicate,...)`** <br>
+Returns a `key, value, p` trio where `p = predicate(value,...)` is not `nil` and `value = tbl[key]`. <br>
+This is a top-level search that returns `nil` on failure.
+
+## `table.find` & `table.contains`
+
+The `table.find` method searches the top-level keys in `tbl` for the one whose corresponding value matches the searched-for item.
+The matches are done using {table.eq} so, if the hunted-for object is a table, we look for one identical in content, not just occupying the same memory blocks.
+
+NOTE: The search stops on the first match. The concept of "first" is nebulous for general Lua tables, as the elements are stored in an undefined order. The next time you run the search on a table with more than one match, you may get a different key. That will never happen for Lua arrays.
+
+The `table.contains(value)` method is the same as `table.find(tbl, value) ~= nil`.
+
+[Example]{.bt}
+
+```lua
+require("lulu.table")
+local p = {first = 'Joan', middle = 'Frances', last = 'Doe'}
+print("Key for 'Doe':", table.find(p,'Doe'))
+```
+Returns the answer `Key for 'Doe': last`.
+
+If we have a repeated value in a general table like:
+```lua
+local p = {first = 'Joan', middle = 'Frances', last = 'Doe', other = 'Doe'}
+print("Key for 'Doe':", table.find(p,'Doe'))
+```
+Then, if you run the code multiple times, you will get both `Key for 'Doe': last` *and* ``Key for 'Doe': other`.
+
+If, instead, we have an *array* of values like:
+```lua
+local p = {'Joan', 'Frances', 'Doe', 'Doe'}
+print("Key for 'Doe':", table.find(p,'Doe'))
+```
+Then we *always* get `Key for 'Doe': 3`.
+
+## `table.find_if`
+
+The `table.find_if(tbl ,predicate,...)` method allows for more complex searches.
+
+It looks for a top-level `key` in `tbl` such that `predicate(tbl[key], ...) ~= nil`. <br>
+On success, it returns the trio `key, tbl[key], predicate(tbl[key],...)`. <br>
+On failure, it returns the trio `nil, nil, nil`.
+
+NOTE: The search stops on the first non-nil return from the predicate function.
+As noted earlier, “first” is nebulous for general Lua tables, as the elements are stored in an undefined order.
+
+[Example: General table]{.bt}
+
+Here, we search for the "first" value in a table that is larger than 42:
+```lua
+local tbl = {foo = 41, boo = 42, bar = 43, baba = 44}
+print(table.find_if(tbl, ">", 42))
+```
+If you run this multiple times, you will get the trio: bar 43 true or baba 44 true.
+There is no fixed storage order for items in general Lua tables.
+
+We also note that the returned third element will never be of interest in this example.
+
+[Example: Lua array]{.bt}
+
+The same example for a Lua array:
+```lua
+local tbl = {41, 42, 43, 44}
+print(table.find_if(tbl, ">", 42))
+```
+will always output `3 43 true` as the integer keys for Lua arrays are stored in a fixed order.
+
+## Predicate Functions
+
+The predicate function can come in one of several forms:
+
+1. You can use Lua function like `table.find_if(tbl, function(v) return v > 42 end)`.
+2. You can use a string operator like we did above `table.find_if(tbl, ">", 42)`.
+3. You can use a string lambda like `table.find_if(tbl, "|v| v > 42")`.
+4. You can pass a "table" that is *callable,* i.e. it has a `__call()` metamethod.
+
+There is more detail on the second and third options in the documentation for the {lulu.callable} module.
+
+## See Also
+
+{table.eq}       <br>
+{table.keys}     <br>
+{table.values}   <br>
+{lulu.callable}

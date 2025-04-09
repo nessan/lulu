@@ -1,0 +1,162 @@
+---
+title: Lua tables --- Extensions
+---
+
+## Introduction
+
+The `lulu.table` module *extends* the standard set of Lua `table` methods with extra functionality for *any* Lua `table`.
+
+If you have imported the module as
+```lua
+local table = require 'lulu.table'
+```
+Then, you can access many extra methods that work for any Lua `table`.
+
+There are quite a few new methods.
+In practice, each belongs to a functional group, and we first list them by those groupings.
+The method names within any group follow a consistent scheme.
+
+The complete list of all the module's methods is also available in [alphabetic order](#all-methods).
+
+## General Queries
+
+The module has various methods for common queries.
+In particular, the `size` method works correctly for general tables.
+
+Method                       | Brief Description
+---------------------------- | ---------------------------------------------------------------------
+{table.size}                 | Returns the number of top-level items in any table.
+{table.is_table}             | Checks that the argument is a table. Issues a warning if its not.
+{table.is_array}             | Checks that the argument is a Lua array.
+{table.is_array_of}          | Checks that the argument is a Lua array where all the elements are of the given type.
+{table.is_array_of_one_type} | Checks that the argument is a Lua array where all the elements are of the same type.
+{table.is_array_of_numbers}  | Checks that the argument is a Lua array where all the elements are numbers.
+{table.is_array_of_strings}  | Checks that the argument is a Lua array where all the elements are strings.
+{table.metadata}             | Returns a table of metadata about a table.
+: {.bordered .striped .hover .responsive tbl-colwidths="[30,70]"}
+
+## Key-Value Queries
+
+We have methods to grab all the keys and values in arrays and sets.
+
+Method                       | Brief Description
+---------------------------- | -------------------------------------------------------------------
+{table.keys}                 | Returns the top-level keys from a table as an array, generally sorted in some manner.
+{table.values}               | Return top-level values from a table as an array, optionally sorted in some manner.
+{table.counts}               | Returns a table of the top-level value counts for each value in a table.
+{table.set_of_keys}          | Returns the *set* of keys in a table.
+{table.set_of_values}        | Returns the *set* of values in a table.
+: {.bordered .striped .hover .responsive tbl-colwidths="[30,70]"}
+
+## Copying & Comparing
+
+As well as the usual shallow clone method we also supply deep copy and deep comparison methods that can work with complex tables containing cycles and self references.
+
+Method                       | Brief Description
+---------------------------- | ---------------------------------------------------------------------
+{table.clone}                | Make a *shallow* copy of a table.
+{table.copy}                 | Make a *deep* copy of a table.
+{table.eq}                   | Does a *deep* comparison between the content of two tables.
+: {.bordered .striped .hover .responsive tbl-colwidths="[30,70]"}
+
+## Iterating
+
+The order that Lua stores key-value pairs in a general table is not defined and will change from run to run of the same program and data.
+We supply an iterator maker that can be passed a comparator to order the keys in a fixed manner; it returns an iterator that traverses the keys in that order.
+
+Method                       | Brief Description
+---------------------------- | ---------------------------------------------------------------------
+{table.compare}              | The default comparison method used to sort a table's keys.
+{table.ordered_pairs}        | An iterator that traverses a table in a sorted key order.
+: {.bordered .striped .hover .responsive tbl-colwidths="[30,70]"}
+
+## Searching
+
+We have methods to look for particular values in a table.
+
+Method                       | Brief Description
+---------------------------- | ---------------------------------------------------------------------
+{table.find}                 | Find the key for a top-level value.
+{table.contains}             | Returns `true` if a top-level value is present in a table.
+{table.find_if}              | Finds a top-level key-value pair where the value is not nil when passed to a predicate function.
+: {.bordered .striped .hover .responsive tbl-colwidths="[30,70]"}
+
+## Unions etc.
+
+We have methods to find elements in common between tables etc.
+These methods look at *both* the keys *and* the values of table elements when considering commonality and differences.
+
+Method                       | Brief Description
+---------------------------- | ---------------------------------------------------------------------
+{table.union}                | Returns the union of two or more tables.
+{table.intersection}         | Returns the intersection of two or more tables.
+{table.difference}           | Returns the difference between two tables. <br> Optionally can return the *symmetric* difference.
+{table.merged_keys}          | Returns an array of the merged keys from two or more tables.
+{table.merged_values}        | Returns an array of the merged values from two or more tables.
+{table.common_keys}          | Returns an array of the common keys from two or more tables.
+{table.common_values}        | Returns an array of the common values from two or more tables.
+{table.unique_keys}          | Returns an array of the unique keys from one of two tables.
+{table.unique_values}        | Returns an array of the unique values from one of two tables.
+: {.bordered .striped .hover .responsive tbl-colwidths="[30,70]"}
+
+## Transforming & Mapping
+
+We have methods to transform and map over the values in a table.
+
+Method                       | Brief Description
+---------------------------- | ---------------------------------------------------------------------
+{table.map}                  | Map a function over the top-level values & return a *new* table.
+{table.map2}                 | Map a function over the top-level values from two tables with identical keys  & return a *new* table.
+{table.kv_map}               | Map a function over the top-level key-value pairs & return a *new* table.
+{table.transform}            | Transforms a table *in place* by applying a function to each top-level value.
+: {.bordered .striped .hover .responsive tbl-colwidths="[30,70]"}
+
+The first three of those methods do not alter any passed table argument.
+
+## All Methods
+
+Here is a table of the module methods in alphabetical order.
+
+Method                       | Brief Description
+---------------------------- | ---------------------------------------------------------------------
+{table.clone}                | Returns a *shallow* copy of a table.
+{table.common_keys}          | Returns the keys that are present in all tables passed as arguments.
+{table.common_values}        | Returns the values that are present in all tables passed as arguments.
+{table.compare}              | The default comparison method used to sort a table's keys.
+{table.contains}             | Returns `true` if a top-level value is present in a table.
+{table.copy}                 | Returns a *deep* copy of a table.
+{table.counts}               | Returns a table of the top-level value counts for each value in `tbl`.
+{table.difference}           | Returns the difference between two tables.
+{table.eq}                   | Does a *deep* comparison between the content of two tables.
+{table.find}                 | Find the key for a top-level value.
+{table.find_if}              | Finds a top-level key-value pair where the value is not nil when passed to a predicate function.
+{table.intersection}         | Returns the intersection of two or more tables.
+{table.is_array}             | Checks that the argument is a Lua array.
+{table.is_array_of}          | Checks that the argument is a Lua array where all the elements are of a given type.
+{table.is_array_of_numbers}  | Checks that the argument is a Lua array where all the elements are numbers.
+{table.is_array_of_one_type} | Checks that the argument is a Lua array where all the elements are of the same type.
+{table.is_array_of_strings}  | Checks that the argument is a Lua array where all the elements are strings.
+{table.is_table}             | Checks that the argument is a table.
+{table.keys}                 | Returns the top-level keys from a table as an array, generally sorted in some manner.
+{table.kv_map}               | Map a function over the top-level key-value pairs & return a *new* table.
+{table.map}                  | Map a function over the top-level values & return a *new* table.
+{table.map2}                 | Map a function over the top-level values from two tables with identical keys  & return a *new* table.
+{table.merged_keys}          | Returns the merged keys of two or more tables.
+{table.merged_values}        | Returns the merged values of two or more tables.
+{table.metadata}             | Returns a table of metadata about a table.
+{table.ordered_pairs}        | An iterator that traverses a table in a sorted key order.
+{table.size}                 | Returns the number of top-level items in any table.
+{table.transform}            | Map a function over the top-level values & return a *new* table.
+{table.union}                | Returns the union of two or more tables.
+{table.unique_keys}          | Returns the unique keys in one of two tables.
+{table.unique_values}        | Returns the unique values in one of two tables.
+{table.values}               | Return top-level values from a table as an array, optionally sorted in some manner.
+{table.set_of_keys}          | Returns the *set* of keys in a table.
+{table.set_of_values}        | Returns the *set* of values in a table.
+: {.bordered .striped .hover .responsive tbl-colwidths="[30,70]"}
+
+## See Also
+
+{lua.table-manipulation}    <br>
+{lulu.Array}                <br>
+{lulu.callable}

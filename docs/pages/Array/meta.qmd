@@ -1,0 +1,91 @@
+---
+title: Lulu Arrays --- Metamethods etc.
+---
+
+## Introduction
+
+If you have imported the {lulu.Array} class as
+```lua
+local Array = require 'lulu.Array'
+```
+then you have access to the following methods & metamethods.
+
+**`Array:is_instance(obj)`** <br>
+Returns `true` if `obj` is an instance of the `Array` class or a subclass.
+
+**`Array:name()`** <br>
+Returns `self.__name` which is just `Array` for the base class.
+
+**`Array.__call`** <br>
+This make any `Array(...)` call a synonym for {Array.new}.
+
+**`Array.__eq`** <br>
+If `a` and `b` are `Array` instances this points code lke `a == b` and `a ~= b` use {Array.eq} under the covers.
+
+**`Array.__tostring`** <br>
+If `a` is an `Array` instance this points code lke `print(a)` or `tostring(a)` to {Array.tostring} under the covers.
+
+**`Array.__name`** <br>
+This is a piece of string data occasionally used by Lua and also returned by the `Array:name()` method above.
+It is set to "Array" for the base class.
+
+**`Array.__concat`** <br>
+If `a` and `b` are `Array` instances then we have overloaded `a .. b` to return `a:copy():append(b)`.
+
+[Example]{.bt}
+```lua
+local CheckedArray = Array:subclass("CheckedArray")     -- <1>
+local a = Array{1,2,3}
+local c = CheckedArray{1,2,3}
+putln("a is an '%s' with values: %t", a:name(), a)
+putln("c is a '%s' with values: %t", c:name(), c)
+```
+1. Create `CheckedArray` as a subclass of `Array`.
+
+[Output]{.bt}
+```txt
+a is an 'Array' with values: [ 1, 2, 3 ]
+c is a 'CheckedArray' with values: [ 1, 2, 3 ]
+```
+
+Note that any `CheckedArray` is also an `Array` but not vice-versa:
+```lua
+putln("a is an Array:       %s", Array:is_instance(a))
+putln("c is an Array:       %s", Array:is_instance(c))
+putln("a is a CheckedArray: %s", CheckedArray:is_instance(a))
+```
+
+[Output]{.bt}
+```txt
+a is an Array:       true
+c is an Array:       true
+a is a CheckedArray: false
+```
+
+[Example: Concatenation]{.bt}
+```lua
+local a = Array{1,2,3}
+local b = Array{3,4,5}
+local c = a .. b
+putln("a: %t", a)
+putln("b: %t", b)
+putln("c: %t", c)
+```
+
+[Output: Concatenation]{.bt}
+```txt
+a: [ 1, 2, 3 ]            # <1>
+b: [ 3, 4, 5 ]            # <2>
+c: [ 1, 2, 3, 3, 4, 5 ]   # <3>
+```
+1. `a` is unchanged.
+2. `b` is unchanged.
+3. `c` has the same elements as `a:append(b)` so there is duplication in this instance.
+
+## See Also
+
+{Array.new}       <br>
+{Array.subclass}  <br>
+{Array.eq}        <br>
+{Array.append}    <br>
+{Array.copy}

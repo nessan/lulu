@@ -1,0 +1,55 @@
+---
+title: Lulu Enums --- Enum Type Names
+---
+
+## Type Names
+
+The `Enum` class has a `__name` field that returns the type of the `Enum` instance.
+
+NOTE: The default type is `Enum`.
+
+You can set the type of an `Enum` instance using the `Enum:set_type` method and retrieve it using the `Enum:type` method.
+```lua
+local Suit = Enum{ 'Clubs', 'Diamonds', 'Hearts', 'Spades' }
+Suit:set_type('Suit')
+putln("The enum's type is %s", Suit:type())
+```
+This outputs `The enum's type is Suit`.
+
+The type is used in the string representation of the `Enum` instance, so `print(Suit)` outputs:
+```txt
+Suit: [1] Clubs, [2] Diamonds, [3] Hearts, [4] Spades
+```
+
+## The `ENUM` Function
+
+The `lulu.Enum` module exports the `ENUM` function which gives you an alternative way to create an `Enum` instance with a preset type.
+
+```lua
+ENUM 'Suit' { 'Clubs', 'Diamonds', 'Hearts', 'Spades' }
+```
+The first string after the `ENUM` keyword is the type of the `Enum` instance.
+The rest of the arguments are the same as those for the `Enum:new` method.
+
+## `Enum:is_instance`
+
+The `Enum:is_instance` is a "static" method that returns `true` if the argument is an `Enum` instance.
+
+```lua
+local Suit = Enum{ 'Clubs', 'Diamonds', 'Hearts', 'Spades' }
+putln("Suit is an enum:       %s", Enum.is_instance(Suit))       -- <1>
+putln("Suit.Clubs is an enum: %s", Enum.is_instance(Suit.Clubs))
+```
+1. `is_instance` is a static class method so you call it as `Enum.is_instance(obj)` as opposed to `Enum:is_instance(Suit)`.
+
+This outputs:
+```txt
+Suit is an enum:       true
+Suit.Clubs is an enum: false
+```
+
+## See Also
+
+{Enum.tostring} <br>
+{Enum.new}      <br>
+{ENUM}

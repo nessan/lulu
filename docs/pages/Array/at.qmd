@@ -1,0 +1,118 @@
+---
+title: Lulu Arrays --- Element Retrieval
+---
+
+## Introduction
+
+If you have imported the {lulu.Array} class as
+```lua
+local Array = require 'lulu.Array'
+```
+then you have access to the following methods:
+
+**`Array:first(default)`** <br>
+Returns the first element or an optional `default` value if `self` is empty.
+
+**`Array:final(default)`** <br>
+Returns the final element or an optional `default` value if `self` is empty.
+
+**`Array:at(i)`** <br>
+Returns a specific element from `self` where negative values for `i` count back from the end of the array.
+
+CAUTION: No range check is performed on the index `i`.
+
+**`Array:random()`** <br>
+Returns a random element from `self` or `nil` if the array is empty.
+
+## `Array:first` & `Array:final`
+
+[Example:]{.bt}
+```lua
+local arr = Array:range(1,10)
+putln("array: %t", arr)
+putln("first: %d", arr:first())
+putln("final: %d", arr:final())
+```
+
+[Output:]{.bt}
+```txt
+array: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+first: 1
+final: 10
+```
+
+[Example: Using a default value]{.bt}
+```lua
+local arr = Array{}     -- <1>
+local x = arr:first(9)
+putln("x: %d", x)
+```
+1. An empty array of `options`.
+
+Outputs `x: 9` as you would expect.
+
+## `Array:at`
+
+[Example:]{.bt}
+```lua
+local arr = Array:range(1,10)
+putln("array:      %t", arr)
+putln("arr:at(2):  %d", arr:at(2))
+putln("arr:at(-2): %d", arr:at(-2))     -- <1>
+```
+1. This pulls the element second from the end of the array.
+
+[Output:]{.bt}
+```txt
+array:      [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+arr:at(2):  2
+arr:at(-2): 9
+```
+
+## `Array:random`
+
+This method returns one sample from an array of values.
+All values are equally likely to occur.
+It will return `nil` if the array is empty.
+
+[Example: Rolling a die]{.bt}
+```lua
+local dice = Array:range(1,6)
+putln("Dice: %t", dice)
+putln("Roll: %d", dice:random())
+putln("Roll: %d", dice:random())
+putln("Roll: %d", dice:random())
+```
+The output varies from run to run but might look like:
+```txt
+Dice: [ 1, 2, 3, 4, 5, 6 ]
+Roll: 5
+Roll: 1
+Roll: 3
+```
+
+Each value is equally likely to occur, which we can check:
+```lua
+local dice   = Array:range(1,6)
+local counts = {0,0,0,0,0,0}
+local trials = 6*1000
+for trial = 1, trials do                -- <1>
+    local roll = dice:random()
+    counts[roll] = counts[roll] + 1
+end
+putln("After %d trials we have counts of %t", trials, counts)
+```
+1. Run lots of trials and count how many times each number arises.
+
+The output varies from run to run but might look like:
+```txt
+After 6000 trials we have counts of [ 980, 1025, 1051, 1008, 935, 1001 ]# <1>
+```
+1. Ideally, all the counts are 1000, but these are pretty close.
+
+## See Also
+
+{Array.take}        <br>
+{Array.drop}        <br>
+{Array.take_if}     <br>
+{Array.drop_if}

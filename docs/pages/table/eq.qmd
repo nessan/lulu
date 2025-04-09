@@ -1,0 +1,170 @@
+---
+title: Lua Tables --- Equality Checking
+---
+
+## Introduction
+
+Lua has a standard *value-based* equality check for all its *simple* types.
+This means `lhs == rhs` works precisely as you'd expect if `lhs` and `rhs` are both numbers.
+
+Lua's default notion of equality for other types is *reference* equality, which checks that two items point to the memory location.
+This means that
+```lua
+local a1, a2 = { 1,2,3 }, { 1,2,3 }
+putln("%t == %t returned: %s", a1, a2, a1 == a2)
+```
+outputs `[ 1, 2, 3 ] == [ 1, 2, 3 ] returned: false`.
+
+Despite having identical content, the two arrays occupy separate memory regions.
+Lua is just checking whether the addresses for `a1` and `a2` are the same, which they are not.
+
+However, Lua's string implementation ensures that a reference equality check works fine for those:
+```lua
+local s1, s2 = 'Hallo', 'Hallo'
+putln("%q == %q returned: %s", s1, s2, s1 == s2)
+```
+outputs `"Hallo" == "Hallo" returned: true`.
+
+Although it looks like you created two separate strings, `s1` and `s2`, Lua made a singleton behind the scenes and pointed the two values, `s1` and `s2`, to the same backing store.
+
+This behaviour is unique to strings. Lua never does this for tables,
+
+NOTE: The examples on this page use `scribe.putln` for formatted printing.
+
+## The `table.eq` Function
+
+If you have imported the {lulu.table} module as
+
+```lua
+require 'lulu.table'
+```
+
+then, you can check for *content* equality between any two Lua objects, `o1` and `o2`:
+
+**`table.eq(o1,o2,compare_mt)`** <br>
+Returns `true` if `o1` & `o2` are identical in *content*.
+
+In this function, `o1` and `o2` can be any Lua objects.
+If they are tables, we do a deep comparison for nested elements and will handle recursive tables, tables with self-references, and tables with keys that are tables themselves.
+
+The final boolean argument defaults to `true`.
+It determines whether we require table objects to have the same metatable.
+More details are provided [below](#metatables).
+
+## Simple Examples
+
+For that first array example above:
+```lua
+putln("table.eq(%t,%t) returned: %s", a1, a2, table.eq(a1,a2))
+```
+outputs `table.eq([ 1, 2, 3 ],[ 1, 2, 3 ]) returned: true`, which is likely what you would naively expect.
+
+Of course, for arrays like `a1` and `a2`, where the elements are simple, it is easy to check the contents are identical. The two arrays need the same length, and you can iterate through them to check that the elements are equal.
+
+However, even for simple tables like
+```lua
+local t1, t2 = {first='Alice',last='Smith'}, {first='Alice',last='Smith'}
+```
+one has to do some more work to compare the contents.
+Lua does not standardise the order in which key-value pairs are stored in general tables, so even a trivial example like this one requires some care.
+
+For this example, once again, `print(t1==t2)` returns `false`, while our function `print(table.eq(t1,t2))` will “correctly” return `true`.
+
+## Complex Examples
+
+[Nested tables]{.bt}
+```lua
+local t1 = {p1 = {name = 'Alice'}, p2 = {name = 'Beth'}}
+local t2 = {p2 = {name = 'Beth'}, p1 = {name = 'Alice'}}
+putln("t1: %t", t1)
+putln("t2: %t", t2)
+putln("table.eq(t1, t2) returned: %s", table.eq(t1,t2))
+```
+outputs:
+```txt
+t1: { p1 = { name = "Alice" }, p2 = { name = "Beth" } }
+t2: { p1 = { name = "Alice" }, p2 = { name = "Beth" } }
+table.eq(t1, t2) returned: true
+```
+
+[Recursive tables]{.bt}
+```lua
+local t1 = {p1 = {name = 'Alice'}, p2 = {name = 'Beth'}}
+local t2 = {p2 = {name = 'Beth'}, p1 = {name = 'Alice'}}
+t1.p1.next = t1.p2
+t1.p2.prev = t1.p1
+t2.p1.next = t2.p2
+t2.p2.prev = t2.p1
+putln("t1: %t", t1)
+putln("t2: %t", t2)
+putln("table.eq(t1, t2) returned: %s", table.eq(t1, t2))
+```
+outputs:
+```txt
+t1: { p1 = { name = "Alice", next = <p2> }, p2 = { name = "Beth", prev = <p1> } }
+t2: { p1 = { name = "Alice", next = <p2> }, p2 = { name = "Beth", prev = <p1> } }
+table.eq(t1, t2) returned: true
+```
+
+[Recursive tables with a self reference]{.bt}
+```lua
+local t1 = {p1 = {name = 'Alice'}, p2 = {name = 'Beth'}}
+local t2 = {p2 = {name = 'Beth'}, p1 = {name = 'Alice'}}
+t1.p1.next = t1.p2
+t1.p2.prev = t1.p1
+t2.p1.next = t2.p2
+t2.p2.prev = t2.p1
+t1.all = t1
+t2.all = t2
+putln("t1: %t", t1)
+putln("t2: %t", t2)
+putln("table.eq(t1, t2) returned: %s", table.eq(t1,t2))
+```
+outputs:
+```txt
+t1: <table> = { all = <table>, p1 = { name = "Alice", next = <p2> }, p2 = { name = "Beth", prev = <p1> } }
+t2: <table> = { all = <table>, p1 = { name = "Alice", next = <p2> }, p2 = { name = "Beth", prev = <p1> } }
+table.eq(t1, t2) returned: true
+```
+
+[Table with keys that are tables]{.bt}
+```lua
+local t1 = {p1 = {name = 'Alice'}, p2 = {name = 'Beth'}}
+local t2 = {p2 = {name = 'Beth'}, p1 = {name = 'Alice'}}
+t1[{}] = "hidden data"
+t2[{}] = "hidden data"
+putln("t1: %t", t1)
+putln("t2: %t", t2)
+putln("table.eq(t1,t2) returned: %s", table.eq(t1,t2))
+```
+outputs:
+```txt
+t1: { p1 = { name = "Alice" }, p2 = { name = "Beth" }, table: 0x600001792d80 = "hidden data" }
+t2: { p1 = { name = "Alice" }, p2 = { name = "Beth" }, table: 0x600001792dc0 = "hidden data" }
+table.eq(t1,t2) returned: true
+```
+
+NOTE: This "trick" of using an empty table as a key is quite common in Lua.
+It allows one to add "hidden" key-value pairs to user data, avoiding potential key duplication clashes.
+As you can see in the example output, the two table keys are at different addresses.
+This is irrelevant as we compare the content of those tables.
+They are both empty, so they match!
+
+## Metatables
+
+By default, if the two incoming tables have metatables, the `table.eq` function will check that they are the same. Of course, in many cases, your tables will not have metatables, so this does not apply.
+
+If a metatable contains a  `__.eq` metamethod, then, by default, the tables will be compared using that method.
+
+However, you may want to define a `__.eq` metamethod for a class using `table.eq`.
+This will cause an infinite recursion problem that needs to be avoided.
+The solution is to set the optional boolean parameter `compare_mt` to `false`.
+
+This is the route used by the {lulu.Array} class.
+
+## See Also
+
+{table.copy}   <br>
+{table.clone}  <br>
+{lulu.Array}   <br>
+{lulu.scribe}

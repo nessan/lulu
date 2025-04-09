@@ -1,0 +1,4 @@
+# Options for LuaFormatter
+# See https://github.com/Koihik/LuaFormatter/blob/master/docs/Style-Config.md
+
+column_limit: 120

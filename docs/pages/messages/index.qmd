@@ -1,0 +1,154 @@
+---
+title: Error and Warning Messages
+---
+
+## Introduction
+
+The `lulu.messages` module has functions for emitting informational, warning, and fatal error messages.
+These are used throughout `lulu`.
+
+Messages can have arbitrary payloads and are generally decorated with a tag of some sort (a string like INFO, WARNING, or FATAL ERROR) and the source code location where the message was emitted.
+
+## Methods
+
+If you have imported the module as
+```lua
+local msg = require 'lulu.messages'
+```
+then you have access to the following methods:
+
+Module Function           | Description
+------------------------- | --------------------------------------------------------------------
+`msg.message(arg, ...)`   | Prints a message to `stdout` without any tag but with source location information.
+`msg.info(arg, ...)`      | Prints a message to `stdout` decorated with an "INFO" tag and source location information.
+`msg.warn(arg, ...)`      | Prints a message to `stdout` decorated with a "WARNING" tag and source location information.
+`msg.fatal(arg, ...)`     | Prints prominent fatal error message to `stderr` and then exits the program.
+`msg.source_info(offset)` | Returns the function name, file basename, and the line number of the corresponding Lua stack location.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}|
+
+The purpose of the first four methods above is obvious.
+The `source_info` method is discussed in more detail below.
+
+## Sample Outputs
+
+Given a file `test.lua` with the following Lua code:
+```lua
+local msg = require 'lulu.messages'
+local function test_message(x) msg.message("x = %d", x)  end
+local function test_info(x)    msg.info("x = %d", x)     end
+local function test_warn(x)    msg.warn("x = %d", x)     end
+local function test_fatal(x)   msg.fatal("x = %d", x)    end
+```
+
+Adding a line `test_message(42)` to that file will give the output:
+```txt
+'test_message' (test.lua:2): x = 42
+```
+
+Changing that to `test_info(42)` yields
+```txt
+[INFO] from 'test_info' (test.lua:3): x = 42
+```
+
+Changing that to `test_warn(42)` yields
+```txt
+[WARNING] from 'test_info' (test.lua:4): x = 42
+```
+
+Finally, changing that to `test_fatal(42)` yields a more prominent message on `stderr`
+```txt
+===================================================================================================
+[FATAL ERROR] from 'test_fatal' (test.lua:5): x = 42
+The program will now exit ...
+===================================================================================================
+```
+A program exit follows this.
+
+NOTE: The source code location is the filename, followed by a colon `:`, and then a line number within the file (e.g. `test.lua:5`)
+Our `source_info` method strips the full file path to the basename only as this is generally adequate for tracing purposes, and printing the full path often overwhelms the valuable content in the message payload.
+
+## Library Usage
+
+If you're writing a library, it is often helpful to have the source code location of the error point **up** the stack to where the library *user* made an erroneous call.
+While the error is detected in a library function, it is often the caller of that function you want to highlight to the user.
+
+This is best illustrated with an example.
+
+Suppose we have the following incredibly clever and important library function in a file called `double.lua`:
+```lua
+local messages = require("messages")
+local function double(x)
+    if type(x) ~= 'number' then
+        messages.warn("Expected arg to be a number not a '%s'", type(x))
+        return nil
+    end
+    return 2*x
+end
+return double
+```
+
+The library has a function that takes a number and returns the double of that number.
+It also checks that the argument passed to the function is indeed a number and raises a warning if it is not (we're ignoring Lua's ability to turn some strings into numbers here).
+
+Here is a program `main.lua` that calls that function:
+```lua
+local putln = require('scribe').putln
+local double = require('double')
+local x = 42
+local y = double(x)
+if y then putln("2*%d = %d", x, y) end
+```
+
+When run, this prints the line "2*42 = 84" to your screen.
+
+Suppose we had a typo in `main.lua` and replaced the line `local x = 42` with `local x = 'hallo'`.
+Then, when we run the program, we will get the warning message:
+```txt
+[WARNING] from 'double' (double.lua:4): Expected arg to be a number not a 'string'
+```
+
+The message is clear, but the source code location information `(double.lua:4)` points to a file and line number inside our library, which is the location where the error was detected.
+It would be preferable to point instead to the source code location where the library's caller made the error.
+
+The `messages` module makes this easy!
+
+All the message methods can be given an extra numeric *first* argument that tells `source_info` method to grab the appropriate location information from a point further up the Lau stack.
+
+The designer of the ambitious `double` library can write the very slightly different code:
+```lua
+local messages = require("messages")
+local function double(x)
+    if type(x) ~= 'number' then
+        messages.warn(1, "Expected arg to be a number not a '%s'", type(x))
+        return nil
+    end
+    return 2*x
+end
+return double
+```
+
+where you should note that extra first argument in the `messages.warn(1, ...)` call.
+
+Now, if the user's code is in `main.lua` looks like
+```lua
+local putln = require('scribe').putln
+local double = require('double')
+local x = 'hallo'
+local y = double(x)
+if y then putln("2*%d = %d", x, y) end
+```
+
+Then, on running, the following error message appears:
+```txt
+[WARNING] from 'main' (main.lua:4): Expected arg to be a number not a 'string'
+```
+
+The payload for the warning message has not changed, but the source of the error now clearly points to the point (line 4 of `main.lua`) where the user called the library function incorrectly.
+
+NOTE: The module's `source_info` method makes use of Lua's introspection facilities and, in particular, [`debug.getinfo`](https://www.lua.org/pil/23.1.html).
+That standard library function takes a *stack location* as its first argument.
+
+## See Also
+
+{lulu.scribe} <br>
+{lulu.paths}

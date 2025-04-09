@@ -1,0 +1,201 @@
+---
+title: Lulu Arrays --- Elements and Sub-Arrays
+---
+
+## Introduction
+
+If you have imported the {lulu.Array} class as
+```lua
+local Array = require 'lulu.Array'
+```
+Then, you can use the following methods to extract sub-arrays.
+
+**`Array:most()`** <br>
+Returns a new array that is a copy of `self` with the final element removed.
+
+**`Array:rest()`** <br>
+Returns a new array that is a copy of `self` with the first element removed.
+
+**`Array:take(m,n)`** <br>
+Returns a new array that is a copy of the elements from index `m` to index `n` inclusive.
+Negative `m` and `n` count back from the end of the array.
+If there is no `n` argument, we take the first or final `m` elements.
+The no-argument call `take()` takes all but the final element; this is the same as `most()`.
+
+**`Array:take_if(predicate,...)`** <br>
+Returns a new array that is a copy of those elements in `self` that pass a test.
+
+**`Array:drop(m,n)`** <br>
+Returns a new array that is a copy of `self` without the elements from index `m` to index `n` inclusive.
+Negative `m` and `n` count back from the end of the array.
+If there is no `n` argument, we drop the first or final `m` elements.
+The no-argument call `self:drop()` drops the first element; this is the same as `self:rest()`.
+
+**`Array:drop_duplicates()`** <br>
+Returns a new array that is a copy of `self` with any duplicate elements removed.
+
+**`Array:drop_if(predicate,...)`** <br>
+Returns a new array that is a copy of `self` without any element that passes a predicate test.
+
+## `Array:most` & `Array:rest`
+
+[Example]{.bt}
+```lua
+local arr = Array:range(1,10)
+putln("array: %t", arr)
+putln("first: %d", arr:first())
+putln("rest:  %t", arr:rest())
+putln("final: %d", arr:final())
+putln("most:  %t", arr:most())
+```
+
+[Output]{.bt}
+```txt
+array: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+first: 1
+rest:  [ 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+final: 10
+most:  [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+```
+
+## `Array:take`
+
+This returns a sub-array from `self`.
+
+Returns a new array that is a copy of the elements from index `m` to index `n` inclusive.
+Negative `m` and `n` count back from the end of the array.
+If there is no `n` argument, we take the first or final `m` elements.
+The no-argument call `take()` takes all but the final element; this is the same as `most()`.
+
+[Example:]{.bt}
+```lua
+local arr = Array:range(1,10)
+putln("array:       %t", arr)
+putln("take(3):     %t", arr:take(3))
+putln("take(-3):    %t", arr:take(-3))
+putln("take(3,5):   %t", arr:take(3,5))
+putln("take(-5,-3): %t", arr:take(-5,-3))
+putln("take():      %t", arr:take())
+```
+
+[Output:]{.bt}
+```txt
+array:       [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+take(3):     [ 1, 2, 3 ]                        # <1>
+take(-3):    [ 8, 9, 10 ]                       # <2>
+take(3,5):   [ 3, 4, 5 ]                        # <3>
+take(-5,-3): [ 6, 7, 8 ]                        # <4>
+take():      [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]      # <5>
+```
+1. Copied the first three elements.
+2. Copied the final three elements.
+3. Copied elements 3,4, and 5.
+4. Copied elements 6,7, and 8.
+5. Copied all elements except the final one.
+
+## `Array:take_if`
+
+[Example]{.bt}
+```lua
+local arr = Array:range(1,10)
+putln("array: %t", arr)
+putln("evens: %t", arr:take_if("|x| x%2 == 0"))
+```
+[Output]{.bt}
+```txt
+array: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+evens: [ 2, 4, 6, 8, 10 ]
+```
+
+## `Array:drop`
+
+This is the counterpart to `Array:take`.
+
+Returns a new array that is a copy of `self` *without* the elements from index `m` to index `n` inclusive.
+Negative `m` and `n` count back from the end of the array.
+If there is no `n` argument, we drop the first or final `m` elements.
+The no-argument call `self:drop()` drops the first element; this is the same as `self:rest()`.
+
+[Example:]{.bt}
+```lua
+local arr = Array:range(1,10)
+putln("array:       %t", arr)
+putln("drop(3):     %t", arr:drop(3))
+putln("drop(-3):    %t", arr:drop(-3))
+putln("drop(3,5):   %t", arr:drop(3,5))
+putln("drop(-5,-3): %t", arr:drop(-5,-3))
+putln("drop():      %t", arr:drop())
+```
+
+[Output:]{.bt}
+```txt
+array:       [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+drop(3):     [ 4, 5, 6, 7, 8, 9, 10 ]     # <1>
+drop(-3):    [ 1, 2, 3, 4, 5, 6, 7 ]      # <2>
+drop(3,5):   [ 1, 2, 6, 7, 8, 9, 10 ]     # <3>
+drop(-5,-3): [ 1, 2, 3, 4, 5, 9, 10 ]     # <4>
+drop():      [ 2, 3, 4, 5, 6, 7, 8, 9 ]   # <5>
+```
+1. Dropped the first three elements.
+2. Dropped the final three elements.
+3. Dropped elements 3,4, and 5.
+4. Dropped elements 6,7, and 8.
+5. Dropped the first element.
+
+## `Array:drop_if`
+
+[Example]{.bt}
+```lua
+local arr = Array:range(1,10)
+putln("array: %t", arr)
+putln("odds:  %t", arr:drop_if("|x| x%2 == 1"))
+```
+[Output]{.bt}
+```txt
+array: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+odds:  [ 2, 4, 6, 8, 10 ]
+```
+
+## `Array:drop_duplicates`
+
+This returns a new array that is a copy of `self` with any duplicate values removed.
+
+[Example]{.bt}
+```lua
+local arr = Array{1,2,3,3,3,4,5,5,6,6}
+putln("array:           %t", arr)
+putln("drop_duplicates: %t", arr:drop_duplicates())
+```
+[Output]{.bt}
+```txt
+array:           [ 1, 2, 3, 3, 3, 4, 5, 5, 6, 6 ]
+drop_duplicates: [ 1, 2, 3, 4, 5, 6 ]
+```
+
+## Predicate Functions
+
+The predicate function will be called as `predicate(arr[i],...)` for each element `arr[i]` in the array.
+It should return `true` if that element is considered to have passed the test.
+
+The function is passed any extra `...` arguments that were given to the original class method call, and of course, it may ignore those.
+
+The "function" can come in several forms.
+For example, if you wish to extract the positive elements in an array, you could form the test as follows:
+
+1. `arr:take_where(function(v) return v > 0 end)`
+2. `arr:take_where(">", 0)`
+3. `arr:take_where("|v| v > 0")`
+4. `arr:take_where("_ > 0")`
+5. You can pass a "table" that is *callable*, i.e., it has a `__call()` metamethod that does the appropriate thing.
+
+There is more detail in the documentation for the {lulu.callable} module.
+
+## See Also
+
+{Array.first}    <br>
+{Array.final}    <br>
+{Array.range}    <br>
+{Array.delete}   <br>
+{Array.keep}     <br>
+{Array.keep_if}  <br>
+{lulu.callable}

@@ -1,0 +1,85 @@
+---
+title: Lulu Enums --- Stringification
+---
+
+## Introduction
+
+We provide a number of methods for converting `Enum` instances to strings.
+
+Method                     | Brief Description
+-------------------------- | ----------------------------------------------------------------------
+`Enum:inline()`            | Returns a one-line string representation of `self`.
+`Enum:pretty()`            | Returns a "pretty" multiline string representation of `self`.
+`Enum:tostring(indent)`    | Returns a string representation of `self` with custom indentation.
+`Enum:__tostring()`        | A metamethod that connects Lua's `tostring` and `print` functions to the `Enum:inline` method.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
+
+The methods all show the enumerator names preceded by their ordinal values in square brackets.
+Associated data for the enumerators is also shown if present.
+
+These methods play nicely with the {putln} formatted output functions in the {scribe} module.
+
+## `Enum:inline`
+
+This is the default method used by Lua's `print` and friends.
+It is also used by the `putln` function when the format specifier is `%t`.
+
+[Example]{.bt}
+```lua
+local Suit = Enum{ 'Clubs', 'Diamonds', 'Hearts', 'Spades' }
+print(Suit)
+```
+
+[Output]{.bt}
+```txt
+Enum: [1] Clubs, [2] Diamonds, [3] Hearts, [4] Spades
+```
+
+## `Enum:pretty`
+
+This is a "pretty" multiline string representation of `self`.
+It is used by the `putln` function when the format specifier is `%T`.
+
+[Example]{.bt}
+```lua
+local Suit = Enum({
+    Clubs    = { abbrev = 'C', color = 'black', icon = '♣', ordinal = 0 },
+    Diamonds = { abbrev = 'D', color = 'red',   icon = '♦', ordinal = 1 },
+    Hearts   = { abbrev = 'H', color = 'red',   icon = '♥', ordinal = 2 },
+    Spades   = { abbrev = 'S', color = 'black', icon = '♠', ordinal = 3 }
+})
+putln("%T", Suit)   -- <1>
+```
+1. The `%T` format specifier tells `putln` to use the `Enum:pretty` method to convert the `Enum` instance to a string.
+
+[Output]{.bt}
+```txt
+Enum:
+    [0] Clubs = { abbrev = "C", color = "black", icon = "♣" },
+    [1] Diamonds = { abbrev = "D", color = "red", icon = "♦" },
+    [2] Hearts = { abbrev = "H", color = "red", icon = "♥" },
+    [3] Spades = { abbrev = "S", color = "black", icon = "♠" }
+```
+
+## `Enum:tostring(indent)`
+
+This is a string representation of `self` with custom indentation.
+It is the workhorse method used by `Enum:inline` and `Enum:pretty`.
+
+[Example]{.bt}
+```lua
+print(Suit:tostring(' '))
+```
+
+[Output]{.bt}
+```txt
+Enum:
+  [0] Clubs = { abbrev = "C", color = "black", icon = "♣" },
+  [1] Diamonds = { abbrev = "D", color = "red", icon = "♦" },
+  [2] Hearts = { abbrev = "H", color = "red", icon = "♥" },
+  [3] Spades = { abbrev = "S", color = "black", icon = "♠" }
+```
+
+## See Also
+
+{Enum.mt}

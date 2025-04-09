@@ -1,0 +1,123 @@
+---
+title: Lulu --- Enums
+---
+
+## Introduction
+
+Enums are a way of specifying that a variable can only take on one of a limited number of choices.
+
+For example, in C++ you might define the `Suit` for a card game as:
+```cpp
+enum class Suit = { Clubs, Diamonds, Hearts, Spades };
+```
+This declaration defines `Suit` as an enumerated *type*, an *enumeration* or *enum* for short, whose instances can only be one of the four allowed choices.
+
+The named choices in an enumeration are often called the *enumerators*.
+
+In effect, an enumeration introduces some named constants that are available for variable assignment.
+Of course, we need to be able to compare enumerators.
+Other than that, the memory layout and implementation can be opaque.
+
+Early programming languages did not have enumerated types as part of the language.
+You would instead define some integer constants for the `Suit` choices (probably in a `Suit.h` header file):
+```cpp
+#define CLUBS       0
+#define DIAMONDS    1
+#define HEARTS      2
+#define SPADES      3
+```
+Then later, have code that includes that header and has statements like `if(suit == DIAMONDS) { ... }`.
+
+However, using *magic numbers* like this makes source code hard to read and prone to errors.
+
+It is evident that, even for our simple example, using the `enum Suit` type makes the code much more self-documenting.
+For this reason, most modern programming languages support some form of *enumerated type* as a core concept in the language itself.
+
+Moreover, languages usually have specific constructs designed to work naturally with their idea of what an enumerated type should be --- the `switch` statement in C and C++, or various `match` statements in other languages.
+Those constructs may be more generally applicable, but their core design has the language's enumerated type as their core raison d'etre.
+
+Programming languages have implemented the idea of an enum in various ways.
+
+They can be very simple, like in C and C++ where every enumerator is an integer of some sort.
+Other languages like Rust and Swift allow enumerators to own arbitrary *associated* data and methods.
+There will still be an underlying *ordinal* somewhere (perhaps a compiler construct) that defines an ordering of the enumerators.
+
+Lua does not have a native enumerated type or anything like a multi-armed `switch` or `match` block.
+
+It only has one complex native type, the all-powerful `table`.
+So you might have code like:
+```lua
+Suit = { Clubs = 1, Diamonds = 2, Hearts = 3, Spades = 4 }
+local function is_black(s)
+    return s == Suit.Clubs or s == Suit.Spades
+end
+
+local s = Suit.Diamonds
+print("Suit", s, " is black:", is_black(s))
+```
+This outputs `Suit 2 is black: false`.
+
+This works but isn't suitable for anything except the trivial scripts.
+For one thing, the `Suit` table is not constant and can easily be changed by mistake.
+
+## The `Enum` Class
+
+The `lulu.Enum` module provides a specific *class* for this common data structure.
+
+Our enums have constant enumerators that cannot easily be changed.
+
+If you have imported the `lulu.Enum` module as:
+```lua
+local Enum = require 'lulu.Enum'
+```
+then, you have access to the following methods:
+
+Method                     | Brief Description
+-------------------------- | ----------------------------------------------------------------------
+{Enum.new}                 | Create an `Enum` instance in various ways.
+{ENUM}                     | An alternative syntax for creating `Enum` instances with a preset type.
+{Enum.set_type}            | Set the type of an `Enum` to a string. The default type is `Enum`.
+{Enum.type}                | Get the type of an `Enum`. The default type is `Enum`.
+{Enum.is_instance}         | Check if an object is an instance of `Enum`.
+{Enum.count}               | Get the number of enumerators in an `Enum`.
+{Enum.iter}                | Returns an iterator that traverses the enumerators of an `Enum` in sorted order.
+{Enum.mt}                  | Returns the metatable shared by all the *enumerators* of an `Enum`.
+{Enum.inline}              | Returns a one-line string representation of an `Enum`.
+{Enum.pretty}              | Returns a pretty-printed string representation of an `Enum`.
+{Enum.__tostring}          | A metamethod that connects Lua's `tostring` and `print` functions to the `Enum:inline` method.
+{Enum.add_enumerator}      | Add an enumerator to an `Enum`.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
+
+
+## The `Enumerator` Class
+
+The `Enumerator` class is used to represent the enumerators of an `Enum` and has the following methods:
+
+Method                     | Brief Description
+-------------------------- | ----------------------------------------------------------------------
+{Enumerator.tostring}      | Returns the name of the enumerator. <br> Enumerator names are unique within an `Enum`.
+{Enumerator.tonumber}      | Returns the ordinal value of the enumerator. <br> By default, ordinals are consecutive integers starting at 1. <br> However, they can be set to other values and need not be unique.
+{Enumerator.is_a}          | Returns `true` if the argument is an `Enumerator` that belongs to the argument `Enum`.
+{Enumerator.__eq}          | Compares enumerators by their ordinal values.
+{Enumerator.__lt}          | Compares enumerators by their ordinal values.
+{Enumerator.__le}          | Compares enumerators by their ordinal values.
+{Enumerator.__index}       | This metamethod allows direct access to any *associated* data for the enumerator.
+{Enumerator.__newindex}    | This metamethod prevents attempts to set values in an enumerator.
+{Enumerator.__tostring}    | A metamethod that connects Lua's `tostring` and `print` functions to the `Enumerator:tostring` method.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
+
+NOTE: `Enumerator` instances are immutable and generated by the `Enum` class. <br> They are not usually created directly.
+
+You access enumerators through an `Enum` instance.
+
+For example:
+```lua
+local Suit = Enum{ 'Clubs', 'Diamonds', 'Hearts', 'Spades' }
+local s = Suit.Clubs
+putln("Suit %s has ordinal %d", s, s:tonumber())
+```
+This outputs `Suit Clubs has ordinal 1`.
+
+## See Also
+
+{lulu.Array}

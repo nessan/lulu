@@ -1,0 +1,75 @@
+---
+title: Lulu Arrays --- Folding and Reducing
+---
+
+## Introduction
+
+If you have imported the {lulu.Array} class as
+```lua
+local Array = require 'lulu.Array'
+```
+Then, you have access to the following methods:
+
+**`Array:fold(f, x)`** <br>
+Returns a new array, which is the result of "folding" a function over `self`. <br>
+The `x` argument is optional and defaults to `self[1]`.
+
+**`Array:reduce(f, x)`** <br>
+Reduce `self` to a single value by applying a function to each element and accumulating the result. <br>
+The `x` argument is optional and defaults to `self[1]`.
+
+## `Array:fold`
+
+Suppose that `arr = Array{a,b,c, ...}` then `arr:fold(f,x)` returns `[ x, f(x,a), f(f(x,a),b), ... ]`.
+
+If the `x` argument is missing, then `arr:fold(f)` returns `[ a, f(a,b), f(f(a,b),c), ... ]`.
+
+NOTE: If you pass an `x` argument, the returned array will be of size `#self+1`; otherwise, it will have size `#self`.
+
+[Example:]{.bt}
+```lua
+local arr = Array:range(1,10)          -- <1>
+putln("array: %t", arr)                -- <2>
+putln("sums:  %t", arr:fold("+", 0))   -- <3>
+putln("sums:  %t", arr:fold("+"))      -- <4>
+```
+1. See the {Array.range} method for the details.
+2. The examples on this page use `putln` from {lulu.scribe} for formatted printing.
+3. Running sum totals starting from 0.
+4. Running sums without the zero value isn't helpful in this case.
+
+[Output:]{.bt}
+```txt
+array: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+sums:  [ 0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55 ]
+sums:  [ 1, 3, 6, 10, 15, 21, 28, 36, 45, 55 ]
+```
+
+# `Array:reduce`
+
+This essentially returns the last element from the equivalent `fold` operation.
+It doesn't store the intermediate values.
+
+So given the array from the previous example, `putln("sum: %d", arr:reduce("+"))` returns `sum: 55`.
+
+## Functions
+
+The function `f` passed to `Array:fold` and `Array:reduce` will be passed two arguments and should return a single value.
+If the optional `x` argument is missing then the first call will be `f(self[1], self[2])`, the next will be `f((self[1], self[2]), self[3])` and so on.
+
+The "function" can come in several forms.
+For example, if you wish to add up the elements in `arr` then you could form the function as follows:
+
+1. `arr:reduce(function(a,b) return a + b end, 0)`
+2. `arr:reduce("+", 0)`
+3. `arr:reduce("|a,b| a + b", 0)`
+4. You can pass a "table" that is *callable*, i.e., it has a `__call()` metamethod that does the appropriate thing.
+
+There is more detail on the second and third options in the documentation for the {lulu.callable} module.
+
+## See Also
+
+{Array.range}       <br>
+{Array.transform}   <br>
+{Array.map}         <br>
+{lulu.callable}

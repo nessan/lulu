@@ -1,0 +1,390 @@
+---
+title: Lulu Arrays --- Changing Elements etc.
+---
+
+## Introduction
+
+If you have imported the {lulu.Array} class as
+```lua
+local Array = require 'lulu.Array'
+```
+Then, you can use the following methods:
+
+**`Array:clear(start)`**  <br>
+Clears `self` from `self[start]` on. <br>
+The default value for `start` is 1, which clears the entire array.
+Negative `start` counts back from the end of the array.
+
+**`Array:push(value)`**  <br>
+Add a value to the end of the array amd return `self` to allow for chaining. <br>
+This is just a synonym for `table.insert(self, value)`.
+
+**`Array:pop()`**  <br>
+Remove the value from the end of  `self` and return the value removed. <br>
+This is just a synonym for `table.remove(self)`.
+
+**`Array:insert(pos, value)`**  <br>
+Insert a value at position `pos` and return `self` to allow for chaining. <br>
+This is just a synonym for `table.insert(self, pos, value)` so if `pos` is in the interior of `self` then existing elements are shifted  to the next-greater index.
+
+**`Array:remove(pos)`**  <br>
+Remove the value at position `pos` and return the value removed. <br>
+This is just a synonym for `table.remove(self, pos)` so if `pos` is in the interior of `self` then existing elements are shifted down as needed.
+
+**`Array:append(...)`**  <br>
+Appends the passed arguments to the end of the array & return `self` to allow for chaining. <br>
+If any passed argument is itself an `Array` we append the *values* from that argument (unwrapping by one level).
+
+**`Array:sort(comparator)`** <br>
+Sorts `self` in-place; the `comparator` argument is optional. <br>
+The default comparator sorts the elements by type first and then alphabetically.
+
+**`Array:shuffle()`** <br>
+Shuffles the elements of`self` in place.
+
+**`Array:reverse()`** <br>
+Reverses the elements of `self` in place.
+
+**`Array:reversed()`** <br>
+Returns a new `Array` that in a copy of `self` with the elements in reverse order. <br>
+The other methods on this page all change `self` --- this is the exception.
+
+**`Array:delete(m, n)`**
+
+Efficiently deletes the elements from index `m` to index `n` inclusive.
+Negative `m` and `n` count back from the end of the array.
+If there is no `n` argument, we delete the first or final `m` elements.
+The no-argument call `arr:delete()` deletes the first element in `arr`.
+
+**`Array:keep(m, n)`**
+
+Efficiently deletes the  elements *except* from index `m` to index `n` inclusive.
+Negative `m` and `n` count back from the end of the array.
+If there is no `n` argument, we delete the first or final `m` elements.
+The no-argument call `arr:keep()` deletes the final element in `arr`.
+
+**`Array:delete_if(prd, ...)`**
+
+This call deletes any element in the array that passes a predicate test.
+The test is called as `prd(arr[i], ...)` for each element `arr[i]` in the array.
+
+The predicate can be anything {lulu.callable} can interpret as a function.
+
+**`Array:keep_if(prd, ...)`**
+
+This call deletes any element in the array that does *not* passes a predicate test.
+The test is called as `prd(arr[i], ...)` for each element `arr[i]` in the array.
+
+The predicate can be anything {lulu.callable} can interpret as a function.
+
+## `Array:clear()`
+
+Clears n array in-place from an optional `start` index.
+If the `start` index is not given, the entire array is cleared.
+If the `start` index is negative, it counts back from the end of the array.
+
+[Example:]{.bt}
+```lua
+local n = 10
+local arr = Array:range(1,n,1)
+for i = 0, n do
+    putln("Array: %t", arr)                   -- <1>
+    arr:clear(10-i)                           -- <2>
+end
+```
+1. The examples on this page use {lulu.scribe} for formatted printing.
+2. The `start` index is negative, so it counts back from the end of the array.
+
+[Output:]{.bt}
+```txt
+Array: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+Array: [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+Array: [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+Array: [ 1, 2, 3, 4, 5, 6, 7 ]
+Array: [ 1, 2, 3, 4, 5, 6 ]
+Array: [ 1, 2, 3, 4, 5 ]
+Array: [ 1, 2, 3, 4 ]
+Array: [ 1, 2, 3 ]
+Array: [ 1, 2 ]
+Array: [ 1 ]
+Array: []
+```
+
+NOTE: This method can be helpful for temporary arrays holding large table elements.
+The `clear` method sets those elements to `nil`, which is a hint to Lua's garbage collector to free up memory.
+
+## `Array:insert`
+
+[Example]{.bt}
+```lua
+local arr = Array:range(1,9)
+putln("Original: %t", arr)
+for i = 1,9 do
+    putln("Inserted %d at position %d: %t", i, i, arr:insert(i,i))
+end
+```
+
+[Output]{.bt}
+```txt
+Original: [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+Inserted 1 at position 1: [ 1, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+Inserted 2 at position 2: [ 1, 2, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+Inserted 3 at position 3: [ 1, 2, 3, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+Inserted 4 at position 4: [ 1, 2, 3, 4, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+Inserted 5 at position 5: [ 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+Inserted 6 at position 6: [ 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+Inserted 7 at position 7: [ 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+Inserted 8 at position 8: [ 1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+Inserted 9 at position 9: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+```
+
+## `Array:append`
+
+[Example]{.bt}
+```lua
+local a = Array:range(1,3)
+putln("Original:                %t", a)
+putln("Appended 4,5,6:          %t", a:append(4,5,6))   -- <1>
+local b = Array{7,8,9}
+putln("Appended %t:    %t", b, a:append(b))             -- <2>
+local c = {10,11,12}
+local b = Array{7,8,9}
+putln("Appended %t: %t", c, a:append(c))                -- <3>
+```
+1. Appending individual elements.
+2. Appending another `Array`.
+3. Appending a table that is a Lua array **but not** an `Array`.
+
+[Output]{.bt}
+```txt
+Original:                [ 1, 2, 3 ]
+Appended 4,5,6:          [ 1, 2, 3, 4, 5, 6 ]
+Appended [ 7, 8, 9 ]:    [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]                  # <1>
+Appended [ 10, 11, 12 ]: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]      # <2>
+```
+1. The appended `Array` is *unwrapped* for one level.
+2. The appended `Array` is *unwrapped* for one level.
+
+## `Array:sort`
+
+[Example: Using the default comparator]{.bt}
+```lua
+local arr = Array:range(50,10, -10)
+arr:append('mary', 'elizabeth', 'joy')
+putln("array:  %t", arr)
+putln("sorted: %t", arr:sort())  -- <1>
+```
+1. We sort the array using the default comparator.
+
+The gives the output:
+```txt
+array:  [ 50, 40, 30, 20, 10, "mary", "elizabeth", "joy" ]
+sorted: [ 10, 20, 30, 40, 50, "elizabeth", "joy", "mary" ]    # <1>
+```
+1. The elements are sorted first by *type* and then alphabetically.
+
+[Example: Using a custom comparator]{.bt}
+The comparator can be a Lua function, a string lambda, or a `table` with an appropriate `__call` metamethod.
+In any case, two values `v1` and `v2` will be passed and should return `true` if `v1` is to come before `v2`.
+
+```lua
+local arr = Array:range(10,50,10)
+putln("array:  %t", arr)
+putln("sorted: %t", arr:sort(">"))  -- <1>
+```
+1. Here, we sort the array into reverse order as the more significant items come first.
+
+The gives the output:
+```txt
+array:  [ 10, 20, 30, 40, 50 ]
+sorted: [ 50, 40, 30, 20, 10 ]
+```
+
+## `Array:shuffle`
+
+This method randomly shuffles the items in an array.
+
+[Example: Dealing four hands for a game of Bridge]{.bt}
+Bridge is a card game using a standard deck of 52 cards.
+The four players, south, west, north, and east, each get 13 cards.
+```lua
+-- A deck of cards in Bridge order
+local deck = Array {
+    'C2','C3','C4','C5','C6','C7','C8','C9','CT','CJ','CQ','CK','CA',   -- Clubs from the 2 to the Ace
+    'D2','D3','D4','D5','D6','D7','D8','D9','DT','DJ','DQ','DK','DA',   -- Diamonds from the 2 to the Ace
+    'H2','H3','H4','H5','H6','H7','H8','H9','HT','HJ','HQ','HK','HA',   -- Hearts from the 2 to the Ace
+    'S2','S3','S4','S5','S6','S7','S8','S9','ST','SJ','SQ','SK','SA'    -- Spades from the 2 to the Ace
+}
+
+-- Shuffled version of the deck
+local shuffled = deck:shuffle()
+
+-- Deal out 13 cards to each player:
+local south  = shuffled:take(13)        -- <1>
+local west   = shuffled:take(14,26)
+local north  = shuffled:take(27,39)
+local east   = shuffled:take(40,52)
+
+-- Look at what we got:
+putln("south: %t", south)
+putln("west:  %t", west)
+putln("north: %t", north)
+putln("east:  %t", east)
+```
+1. See the {Array.take} method for details.
+
+The actual cards dealt vary from run to run, but here is a sample output:
+```txt
+south: [ "C2", "D7", "SJ", "C3", "CJ", "H7", "H8", "SK", "S5", "C5", "S2", "D9", "D5" ]
+west:  [ "H5", "DJ", "HJ", "D8", "SA", "SQ", "HK", "S6", "DT", "DQ", "C4", "C6", "H3" ]
+north: [ "CA", "ST", "CT", "D6", "DK", "HA", "D3", "D2", "S4", "H9", "S9", "H4", "C7" ]
+east:  [ "C9", "HQ", "S7", "CK", "HT", "CQ", "S8", "DA", "C8", "D4", "H2", "S3", "H6" ]
+```
+
+## `Array:reverse`
+
+This method reverses the order of the elements of an array.
+
+For example:
+```lua
+local arr = Array:range(10,50,10)
+putln("Original: %t", arr)
+putln("Reversed: %t", arr:reverse())
+```
+Outputs:
+```txt
+Original: [ 10, 20, 30, 40, 50 ]
+Reversed: [ 50, 40, 30, 20, 10 ]
+```
+
+CAUTION: This method works *in place, moving the elements in the input array to their new locations.
+
+## `Array:reversed`
+
+This method returns a new `Array` with the elements of `self` in reverse order.
+Unlike all the other methods on this page `self` is not changed by tbe call.
+
+For example:
+```lua
+local a = Array:range(10,50,10)
+local b = a:reversed()
+putln("Original: %t", a)
+putln("Reversed: %t", b)
+```
+Outputs:
+```txt
+Original: [ 10, 20, 30, 40, 50 ]
+Reversed: [ 50, 40, 30, 20, 10 ]
+```
+
+## `Array:delete`
+
+Efficiently deletes the  elements of an array from index `m` to index `n` inclusive.
+Negative `m` and `n` count back from the end of the array.
+If there is no `n` argument, we delete the first or final `m` elements.
+The no-argument call `arr:delete()` deletes the first element in `arr`.
+
+NOTE: This method does *not* use `table.remove`.
+
+It is much more efficient than the equivalent code:
+```lua
+for i = m, n do
+    table.remove(self, m)
+end
+```
+
+[Example:]{.bt}
+```lua
+putln("Array:range(1,10):delete(4):    %t", Array:range(1, 10):delete(4))
+putln("Array:range(1,10):delete(-4):   %t", Array:range(1, 10):delete(-4))
+putln("Array:range(1,10):delete(4, 7): %t", Array:range(1, 10):delete(4, 7))
+putln("Array:range(1,10):delete():     %t", Array:range(1, 10):delete())
+```
+[Output:]{.bt}
+```txt
+Array:range(1,10):delete(4):    [ 5, 6, 7, 8, 9, 10 ]
+Array:range(1,10):delete(-4):   [ 1, 2, 3, 4, 5, 6 ]
+Array:range(1,10):delete(4, 7): [ 1, 2, 3, 8, 9, 10 ]
+Array:range(1,10):delete():     [ 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+```
+
+## `Array:delete_if`
+
+Efficiently deletes any element of an array that pass a predicate test.
+
+[Example:]{.bt}
+```lua
+local arr = Array:range(1, 10)
+arr:delete_if(function(x) return x % 2 == 0 end)
+putln("Array: %t", arr)
+```
+[Output:]{.bt}
+```txt
+Array: [ 1, 3, 5, 7, 9 ]
+```
+
+## `Array:keep`
+
+Efficiently deletes all elements of an array *except* those from index `m` to index `n` inclusive.
+Negative `m` and `n` count back from the end of the array.
+If there is no `n` argument, we keep the first or final `m` elements.
+The no-argument call `arr:delete()` deletes the final element in `arr`.
+
+[Example:]{.bt}
+```lua
+putln("Array:range(1,10):keep(4):    %t", Array:range(1, 10):keep(4))
+putln("Array:range(1,10):keep(-4):   %t", Array:range(1, 10):keep(-4))
+putln("Array:range(1,10):keep(4, 7): %t", Array:range(1, 10):keep(4, 7))
+putln("Array:range(1,10):keep():     %t", Array:range(1, 10):keep())
+```
+[Output:]{.bt}
+```txt
+Array:range(1,10):keep(4):    [ 1, 2, 3, 4 ]
+Array:range(1,10):keep(-4):   [ 7, 8, 9, 10 ]
+Array:range(1,10):keep(4, 7): [ 4, 5, 6, 7 ]
+Array:range(1,10):keep():     [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+```
+
+## `Array:keep_if`
+
+Efficiently deletes all elements of an array *except* those that pass a predicate test.
+
+[Example:]{.bt}
+```lua
+local arr = Array:range(1, 10)
+arr:keep_if('_ % 2 == 0')
+putln("Array: %t", arr)
+```
+[Output:]{.bt}
+```txt
+Array: [ 2, 4, 6, 8, 10 ]
+```
+
+## Predicate Functions
+
+The predicate function in `delete_if` and `keep_if` will be called as `predicate(arr[i],...)` for each element `arr[i]` in the array `arr`.
+It should return `true` if that element is considered to have passed the test.
+
+The function is passed any extra `...` arguments that were given to the original class method call.
+Of course, it may ignore those.
+
+The "function" can come in several forms.
+For example, the predicate to test for positivity can be written as:
+
+1. `arr:keep_if(function(x) return x % 2 == 0 end)`
+2. `arr:keep_if("_ % 2 == 0")`
+3. `arr:keep_if("|v| v % 2 == 0")`
+4. You can pass a “table” that is *callable*, i.e., it has a `__call()` metamethod that does the appropriate thing.
+
+There is more detail in the documentation for the {lulu.callable} module.
+
+## See Also
+
+{Array.range}     <br>
+{Array.transform} <br>
+{Array.__concat}  <br>
+{Array.flatten}   <br>
+{Array.take}      <br>
+{Array.drop}      <br>
+{Array.drop_duplicates} <br>
+{lulu.callable}

@@ -1,0 +1,31 @@
+---
+title: Lulu Arrays --- Element Type Checks
+---
+
+## Introduction
+
+If you have imported the {lulu.Array} class as
+```lua
+local Array = require 'lulu.Array'
+```
+then you have access to the following methods to check consistency for the array elements' *type*.
+
+**`Array:is_array_of(e_type)`** <br>
+Returns `true` if all the elements in the array have the given type `e_type`. <br>
+Element types are determined by the {lulu.types} method which is slightly more discriminating that the standard Lua `type` function.
+
+**`Array:is_array_of_one_type()`** <br>
+Returns `true` if all the elements in the array have the same type. <br>
+Element types are determined by the {lulu.types} method which is slightly more discriminating that the standard Lua `type` function.
+
+**`Array:is_array_of_numbers()`** <br>
+Returns `true` if all the elements in the array are numbers,
+
+**`Array:is_array_of_strings()`** <br>
+Returns `true` if all the elements in the array are strings,
+
+## See Also
+
+{Array.size}        <br>
+{Array.is_empty}    <br>
+{lulu.types}

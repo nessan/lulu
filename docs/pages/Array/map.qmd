@@ -1,0 +1,71 @@
+---
+title: Lulu Arrays --- Mapping & Transforming
+---
+
+## Introduction
+
+If you have imported the {lulu.Array} class as
+```lua
+local Array = require 'lulu.Array'
+```
+Then, you have access to the following methods:
+
+**`Array:map(fun,...)`** <br>
+Returns a new `Array`, which results from applying `fun` to each value in `self`.
+
+**`Array:transform(fun,...)`** <br>
+Transform an `Array` *in place* by applying `fun` to each top-level value.
+This method returns the transformed `self` and is ready for further processing.
+
+## `Array:map`
+
+Classic “functional” method that creates a *new* table by applying `fun` to each value in `self`.
+
+In this implementation, the function also passes any extra `...` arguments in the call to `Array:map(fun,...)`.
+
+If the returned `Array` is the `result`, then for each index `k`, we set:
+```lua
+result[k] = fun(self[k],...)
+```
+Of course, `fun` may ignore those extra arguments entirely, and Lua is happy to call a function with multiple arguments, even if it only uses the first one.
+
+[Example:]{.bt}
+```lua
+local lower = Array{'warning', 'notice', 'hint'}
+local upper = lower:map(string.upper)
+putln("lower: %t", lower)       -- <1>
+putln("upper: %t", upper)
+```
+1. The examples on this page use `putln` from {lulu.scribe} for formatted printing.
+
+[Output:]{.bt}
+```txt
+lower: ["warning", "notice", "hint"]
+upper: ["WARNING", "NOTICE", "HINT"]    # <1>
+```
+1. We *mapped* the Lua standard `string.upper(...)` method over every *value* in the `lower` array.
+
+## `Array:transform`
+
+This method is like `map` above except that it works *in place*, so for each index `k`, we set:
+```lua
+self[k] = fun(self[k],...)
+```
+
+[Example:]{.bt}
+```lua
+local admonitions = Array{'warning', 'notice', 'hint'}
+putln("admonitions: %t", admonitions)
+admonitions:transform(string.upper)
+putln("admonitions: %t", admonitions)
+```
+
+[Output:]{.bt}
+```txt
+admonitions: ["warning", "notice", "hint"]
+admonitions: ["WARNING", "NOTICE", "HINT"]
+```
+
+## See Also
+
+{lulu.callable}

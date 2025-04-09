@@ -1,0 +1,42 @@
+---
+title: Lulu Arrays -- Flattening
+---
+
+## Introduction
+
+If you have imported the {lulu.Array} class as
+```lua
+local Array = require 'lulu.Array'
+```
+Then, you can use *flatten* an `Array` using the method:
+
+**`Array:flatten(depth))`**  <br>
+Returns a new `Array` which is a flattened version of `self`. <br>
+The default value for the `depth` parameter is 1.
+
+[Example:]{.bt}
+```lua
+local a = Array{{1,2}, {3,4}, {5,6}}
+putln("a:           %t", a)
+putln("a:flatten(): %t", a:flatten())
+```
+
+Outputs:
+```txt
+a:           [ [1, 2], [3, 4], [5, 6] ]
+a:flatten(): [ 1, 2, 3, 4, 5, 6 ]
+```
+
+[Another Example:]{.bt}
+```lua
+local a = Array{{{1,2}}, {{{3,4}}}, {5,6}}
+putln("a:flatten(): %t", a:flatten())
+```
+Outputs `[ [ 1, 2 ], [ [ 3, 4 ] ], 5, 6 ]`.
+
+For the same array, `a:flatten(2)` will give ` [ 1, 2, [3, 4], 5, 6 ]`, and `a:flatten(3)` will give
+`[ 1, 2, 3, 4, 5, 6 ]` which is also the output from `a:flatten(n)` for $n > 3$.
+
+## See Also
+
+{Array.zip}

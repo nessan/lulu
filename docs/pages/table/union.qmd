@@ -1,0 +1,303 @@
+---
+title: Lua Tables --- Unions, Intersections, Differences
+---
+
+## Introduction
+
+If you have imported the module as
+```lua
+require 'lulu.table'
+```
+then you have access to the following methods to combine general tables:
+
+Method                              | Brief Description
+----------------------------------- | -------------------------------------------------------------
+`table.union(...)`                  | Returns a new table that is the union of the arguments.
+`table.intersection(...)`           | Returns a new table that is the intersection of the arguments.
+`table.difference(t1,t2,symmetric)` | Returns a new table that is the *difference* between `t1` and `t2`.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
+
+NOTE: These `table` methods take into account a table's keys **and** values when looking for commonalities and differences!
+Both must match (or differ as the case may be).
+
+There are also methods to look at the keys and values separately:
+
+Method                              | Brief Description
+----------------------------------- | -------------------------------------------------------------
+`table.merged_values(...)`          | Returns an *array* of all the values from the table arguments.
+`table.merged_keys(...)`            | Returns an *array* of all the keys from the table arguments.
+`table.common_values(...)`          | Returns an *array* of the values that are in common between the table arguments.
+`table.common_keys(...)`            | Returns an *array* of the keys that are in common between the table arguments.
+`table.unique_values(...)`          | Returns an array of the values that are unique to each table argument.
+`table.unique_keys(...)`            | Returns an array of the keys that are unique to each table argument.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
+
+## `table.union`
+
+This returns a new table, the union of the passed table arguments.
+If a key is in more than one of the table arguments, the returned union will have an array of values for that key.
+
+Here is an example: We create three trivial “person” records and examine the union of those records.
+
+[Example: Unions of general tables]{.bt}
+```lua
+local p1 = {first = 'Joan', second = 'Doe'}
+local p2 = {first = 'John', second = 'Doe'}
+local p3 = {first = 'John', second = 'Smith'}
+putln("p1:    %t", p1)  -- <1>
+putln("p2:    %t", p2)
+putln("p3:    %t", p3)
+putln("Union: %t", table.union(p1,p2,p3))
+```
+1. The examples on this page use `scribe.putln` for formatted printing.
+
+[Output:]{.bt}
+```txt
+p1:    { first = "Joan", second = "Doe" }
+p2:    { first = "John", second = "Doe" }
+p3:    { first = "John", second = "Smith" }
+Union: { first = [ "Joan", "John" ], second = [ "Doe", "Smith" ] }   # <1>
+```
+1. The `union` method returns *arrays* of values for the `first` and `last` keys.
+
+NOTE: The values in the union arrays are unique, so in the example, there is just one reference to "Doe", not two.
+
+[Example: Unions of arrays]{.bt}
+Remember that Lua treats *arrays* as tables where the keys are consecutive integers starting at 1.
+Often, the keys are not seen explicitly, but they are always there.
+Here is what the `union` of some simple arrays looks like:
+
+```lua
+local a1 = {1,2,3,4}
+local a2 = {4,5,6,7}
+local a3 = {7,8,9,0}
+putln("a1:    %t", a1)
+putln("a2:    %t", a2)
+putln("a3:    %t", a3)
+putln("Union: %t", table.union(a1,a2,a3))
+```
+
+This yields the output:
+```txt
+a1:    [ 1, 2, 3, 4 ]
+a2:    [ 4, 5, 6, 7 ]
+a3:    [ 7, 8, 9, 0 ]
+Union: [ [ 1, 4, 7 ], [ 2, 5, 8 ], [ 3, 6, 9 ], [ 4, 7, 0 ] ]   # <1>
+```
+1. The `union` method collected all the unique values it found under the key `1`, which are `{1,4,7}` and then did the same for the key `2` and so on.
+
+## `table.intersection`
+
+Given a collection of general tables, we can look for the key-value pairs they have in common.
+The critical thing to remember is that an element only makes it into the intersection if *both* the key *and* the value match in all the tables.
+
+[Example: Intersections of general tables]{.bt}
+If we take our earlier "person" record example:
+```lua
+local p1 = {first = 'Joan', second = 'Doe'}
+local p2 = {first = 'John', second = 'Doe'}
+local p3 = {first = 'John', second = 'Smith'}
+putln("Intersection p1, p2:     %t", table.intersection(p1, p2))
+putln("Intersection p2, p3:     %t", table.intersection(p2, p3))
+putln("Intersection p3, p1:     %t", table.intersection(p3, p1))
+putln("Intersection p1, p2, p3: %t", table.intersection(p1, p2, p3))
+```
+
+[Output: Intersections of general tables]{.bt}
+```txt
+Intersection p1, p2:     { second = "Doe"}     # <1>
+Intersection p2, p3:     { first = "John"}     # <2>
+Intersection p3, p1:     {}                    # <3>
+Intersection p1, p2, p3: {}                    # <4>
+```
+1. The first and second person share a surname.
+2. The second and third person share a first name.
+3. The third and first-person have no names in common.
+4. Similarly, the intersection of all the three persons is empty.
+
+[Example: Intersections of arrays]{.bt}
+The results from taking this type of intersection of Lua arrays can, at first, seem unexpected:
+```lua
+local a1 = {1,2,3,4}
+local a2 = {4,5,6,7}
+putln("Intersection a1, a2: %t", table.intersection(a1, a2))
+```
+This yields `Intersection a1, a2: {}` even though the arrays have the value `4` in common.
+
+However, for a key-value pair to be part of the intersection, *both* the key (the array index in this case) *and* the value must match.
+
+If we change the example, so the common value has the same index:
+```lua
+local a1 = {1,2,3,4}
+local a2 = {5,6,7,4}
+putln("Intersection a1, a2: %t", table.intersection(a1, a2))
+```
+Then we get `Intersection a1, a2: { 4 = 4 }`.
+
+## `table.difference`
+
+The difference between two tables captures the elements in one but not the other.
+Like the other methods on this page this function takes into account *both* the key and the value of an element when looking for equality.
+
+Generally `table.difference(t1, t2) ~= table.difference(t2, t1)`.
+
+We sometimes refer to `table.difference(t1, t2)` as $t_1 - t_2$.
+
+By default, the boolean `symmetric` argument is `false`.
+You can set it to `true` to get the *symmetric difference* between $t_1$ and $t_2$:
+$$
+t_1 - t_2 \cup t_2 - t_1.
+$$
+That is the table of top-level elements that occurs only in *one* of `t1` or `t2`.
+
+[Example:]{.bt}
+```lua
+local p1 = {a = 'alpha', b = 'beta'}
+local p2 = {a = 'gamma', b = 'beta'}        -- <1>
+putln("p1:      %t", p1)
+putln("p2:      %t", p2)
+putln("p1 - p2: %t", table.difference(p1, p2))
+putln("p2 - p1: %t", table.difference(p2, p1))
+```
+1. Note that `p1` and `p2` share the common *key* `a` but that the corresponding values do not match.
+
+[Output:]{.bt}
+```txt
+p1:      { a = "alpha", b = "beta"}
+p2:      { a = "gamma", b = "beta"}
+p1 - p2: { a = "alpha"}      # <1>
+p2 - p1: { a = "gamma"}      # <2>
+```
+1. The elements in `p1` that are *not* in `p2`.
+2. The elements in `p2` that are *not* in `p1`.
+
+If we repeat the exercise using *symmetric* differencing:
+```lua
+local p1 = {a = 'alpha', b = 'beta'}
+local p2 = {a = 'gamma', b = 'beta'}
+putln("p1 - p2: %t", table.difference(p1, p2, true))
+putln("p2 - p1: %t", table.difference(p2, p1, true))
+```
+we get:
+```txt
+p1 - p2: { a = [ "alpha", "gamma" ] }    # <1>
+p2 - p1: { a = [ "gamma", "alpha" ] }
+```
+1. This shows the union $p_1 - p_2 \cup p_2 - p_1$ where they have the common key `a` but with two different values.
+
+In both cases, we get the table of key-value pairs that only occur in one of the two tables.
+
+## `table.merged_values`, `table.merged_keys`
+
+These methods return an array of all the values and keys from the table arguments.
+
+[Example:]{.bt}
+```lua
+local p1 = {first = 'Joan', second = 'Doe'}
+local p2 = {first = 'John', second = 'Doe'}
+local p3 = {first = 'John', second = 'Smith'}
+putln("Merged Values: %t", table.merged_values(p1,p2,p3))
+putln("Merged Keys:   %t", table.merged_keys(p1,p2,p3))
+```
+
+[Output:]{.bt}
+```txt
+Merged Values: [ "Joan", "Doe", "John", "Smith" ]  # <1>
+Merged Keys:   [ "first", "second" ]               # <2>
+```
+1. The values are merged into a single array with no duplicates.
+2. The keys are merged into a single array with no duplicates.
+
+## `table.common_values`, `table.common_keys`
+
+These methods return an array of the values and keys that are *in common* between the table arguments.
+
+[Example:]{.bt}
+```lua
+local p1 = {first = 'Joan', second = 'Doe'}
+local p2 = {first = 'John', second = 'Doe'}
+local p3 = {first = 'John', second = 'Smith'}
+putln("Common Values: p1, p2:     %t", table.common_values(p1, p2))
+putln("Common Values: p2, p3:     %t", table.common_values(p2, p3))
+putln("Common Values: p3, p1:     %t", table.common_values(p3, p1))
+putln("Common Values: p1, p2, p3: %t", table.common_values(p1, p2, p3))
+```
+
+[Output:]{.bt}
+```txt
+Common Values: p1, p2:     [ "Doe" ]    # <1>
+Common Values: p2, p3:     [ "John" ]   # <2>
+Common Values: p3, p1:     {}           # <3>
+Common Values: p1, p2, p3: {}    # <4>
+```
+1. The only value that is in common between `p1` and `p2` is `"Doe"`.
+2. The only value that is in common between `p2` and `p3` is `"John"`.
+3. The are no common values between `p3` and `p1`.
+4. The are no common values between all three tables.
+
+[Example:]{.bt}
+```lua
+local a1 = {1,2,3,4}
+local a2 = {4,5,6,7}
+putln("Common Values: a1, a2: %t", table.common_values(a1, a2))
+```
+
+[Output:]{.bt}
+```txt
+Common Values: a1, a2: [ 4 ]  # <1>
+```
+1. The only value that is in common between `a1` and `a2` is `4`. The location of the value is not important.
+
+## `table.unique_values`, `table.unique_keys`
+
+These methods return an array of the values and keys that are *unique* to each table argument.
+
+[Example:]{.bt}
+```lua
+local p1 = {first = 'Joan', second = 'Doe'}
+local p2 = {first = 'John', second = 'Doe'}
+local p3 = {first = 'John', second = 'Smith'}
+putln("Unique Values: p1 - p2: %t", table.unique_values(p1, p2))
+putln("Unique Values: p2 - p1: %t", table.unique_values(p2, p1))
+putln("Unique Keys:   p1 - p2: %t", table.unique_keys(p1, p2))
+putln("Unique Keys:   p2 - p1: %t", table.unique_keys(p2, p1))
+```
+
+[Output:]{.bt}
+```txt
+Unique Values: p1 - p2: [ "Joan" ]  # <1>
+Unique Values: p2 - p1: [ "John" ]  # <2>
+Unique Keys:   p1 - p2: {}          # <3>
+Unique Keys:   p2 - p1: {}         # <4>
+```
+1. The only value that is unique to `p1` is `"Joan"`.
+2. The only value that is unique to `p2` is `"John"`.
+3. There are no keys that are unique to `p1` versus `p2`.
+4. There are no keys that are unique to `p2` versus `p1`.
+
+[Example:]{.bt}
+```lua
+local p1 = {a = 'alpha', b = 'beta'}
+local p2 = {a = 'gamma', b = 'beta'}
+putln("p1: %t", p1)
+putln("p2: %t", p2)
+putln("Values only in one of p1 or p2: %t", table.unique_values(p1, p2, true))
+putln("Values only in one of p2 or p1: %t", table.unique_values(p2, p1, true))
+putln("Keys only in one of p1 or p2:   %t", table.unique_keys(p1, p2, true))
+putln("Keys only in one of p2 or p1:   %t", table.unique_keys(p2, p1, true))
+```
+
+[Output:]{.bt}
+```txt
+p1: { a = "alpha", b = "beta" }
+p2: { a = "gamma", b = "beta" }
+Values only in one of p1 or p2: [ "alpha", "gamma" ]
+Values only in one of p2 or p1: [ "gamma", "alpha" ]
+Keys only in one of p1 or p2:   {}
+Keys only in one of p2 or p1:   {}
+```
+
+## See Also
+
+{lulu.Array}  <br>
+{scribe}

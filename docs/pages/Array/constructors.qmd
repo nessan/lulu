@@ -1,0 +1,185 @@
+---
+title: Lulu Arrays --- Constructors
+---
+
+## Introduction
+
+If you have imported the {lulu.Array} class as
+```lua
+local Array = require 'lulu.Array'
+```
+then, you can create new Array instances using the following methods:
+
+**`Array:new(...)` or `Array(...)`** <br>
+Creates an `Array` instance by adopting an existing Lua array or by copying elements.
+
+TIP: The function call `Array(...)` is a synonym for `Array:new(...)`.
+
+**`Array:rep(n, value, ...)`**  <br>
+Creates an `Array` instance with a specified size and repeated initial value *or* repeated calls to a value function.
+
+**`Array:range(start, stop, step)`** <br>
+Creates an array of numbers from `start` to `stop` with an optional `step` increment.
+The default step size is 1.
+
+**`Array:subclass(name, tbl)`** <br>
+Creates a subclass of `Array` or a sub-subclass etc.
+The `name` argument is optional and will be the name for the subclass.
+The second `tbl` argument is also optional and should be a table of methods to add to the subclass.
+
+**`Array:new_instance()`** <br>
+
+Returns a new empty array instance that has the same metatable as `self`
+
+## `Array:new(...)` or `Array(...)`
+
+1. The no argument version returns a new empty `Array` instance.
+2. If there is a single argument which is a Lua array then it adopts that argument and converts it to an `Array` instance by adding an appropriate metatable.
+3. The single non-array argument version returns new one element `Array` instance with the argument as the element.
+4. The $n$ argument version returns an $n$-element `Array` instance with those $n$ elements.
+
+[Simple Examples]{.bt}
+```lua
+local a1 = Array()
+putln("a1: %t", a1)         -- <1>
+
+local a2 = Array("whatever")
+putln("a2: %t", a2)         -- <2>
+
+local a3 = Array({1,2,3})
+putln("a3: %t", a3)         -- <3>
+
+local a4 = Array{1,2,3}     -- <4>
+putln("a4: %t", a4)
+```
+1. Creates the *empty* `Array`,
+2. Creates an `Array` with a single element.
+3. *Adopts* the array argument and converts it to an `Array`.
+4. *Copies* the three arguments into a new `Array`.
+
+[Output]{.bt}
+```txt
+a1: []
+a2: [ "whatever" ]
+a3: [ 1, 2, 3 ]
+a4: [ 1, 2, 3 ]
+```
+There is a subtle difference between the last two examples which we can illustrate:
+```lua
+local t = {1,2,3}
+local a = Array(t)  -- <1>
+putln("a: %t", a)
+
+t[1] = 99           -- <2>
+putln("a: %t", a)   -- <3>
+```
+1. We have *adopted* the Lua array `t` as the `Array` `a`.
+2. We alter the first element in `t`.
+3. Then look at what it does to `a`.
+
+This outputs:
+```txt
+a: [ 1, 2, 3 ]
+a: [ 99, 2, 3 ]   # <1>
+```
+1. As expected `a[1]` has changed --- we adopted `t` so `a` and `t` point to the same region of memory.
+
+## `Array:rep(n, value, ...)`
+
+This creates an `Array` of size `n`.
+
+In the simplest case `value` is just a constant:
+```lua
+local a = Array:rep(3, "Hallo")
+putln("a: %s", a)
+```
+Outputs `a: [ "Hallo", "Hallo", "Hallo" ]`.
+
+However, `value` can be a Lua function, a string lambda, a string operator, or callable object as described in {lulu.callable}.
+It will get called for each element `i` as `value(i, ...)` where any extra arguments to the `rep` method are forwarded to the `value` function.
+
+For example:
+```lua
+local a = Array:rep(5, "*", 10)
+putln("a: %t", a)
+```
+Outputs `a: [ 10, 20, 30, 40, 50 ]`.
+
+That could also be written using a full Lua function definition:
+```lua
+local a = Array:rep(5, function(i,m) return m*i; end, 10)
+putln("a: %t", a)
+```
+Outputs `a: [ 10, 20, 30, 40, 50 ]`.
+
+## `Array:range(start, stop, step)`
+
+This creates an `Array` of numbers from `start` to `stop` with an optional `step` increment.
+The default value for `step` is 1.
+The `start` number will be included in the array, the `stop` may not be depending on the value for `step`.
+
+```lua
+local a = Array:range(1,15,4)
+putln("a: %t", a)
+```
+Outputs `a: [ 1, 5, 9, 13 ]` which does not include the stop value `15` because we are using a `step` size of `4`.
+
+## `Array:subclass(name, tbl)`
+
+This creates a subclass of `Array` or a sub-subclass etc.
+
+The `name` argument is optional.
+If present, it will become the name for the subclass (accessed using the {Array.name} method).
+
+The `tbl` argument is also optional.
+If present, it can be used to pass a table of predefined methods for all instances of the subclass.
+
+[Example]{.bt}
+```lua
+local CheckedArray = Array:subclass("CheckedArray")     -- <1>
+
+function CheckedArray:at(i)                             -- <2>
+    if i > #self then
+        local warn = require('messages').warn
+        warn("Index is set to %d but it should be be at most %d", i, #self)
+        return nil
+    end
+    return self[i]
+end
+
+local c = CheckedArray{1,2,3}                           -- <3>
+putln("c is a %s with values: %s", c:name(), c)
+
+print(c:at(6))                                          -- <4>
+```
+1. Create `CheckedArray` as a subclass of `Array`.
+2. Override the `Array:at(i)` method so that it checks the index is in bounds for a `CheckedArray`.
+3. Create an instance of `CheckedArray` with three elements.
+4. Try to access element number 6.
+
+[Output]{.bt}
+```txt
+c is a CheckedArray with values: [ 1, 2, 3 ]
+[WARNING] from 'at' (scratch.lua:10): Index is set to 6 but it should be be at most 3
+nil
+```
+
+Note that any `CheckedArray` is also an `Array` but not vice-versa:
+```lua
+local a, c = Array{1,2,3}, CheckedArray{1,2,3}
+putln("a is an Array:       %s", Array:is_instance(a))
+putln("c is an Array:       %s", Array:is_instance(c))
+putln("a is a CheckedArray: %s", CheckedArray:is_instance(a))
+```
+
+Outputs:
+```txt
+a is an Array:       true
+c is an Array:       true
+a is a CheckedArray: false
+c is a CheckedArray: true
+```
+
+## See Also
+
+{lulu.callable}

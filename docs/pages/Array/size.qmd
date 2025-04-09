@@ -1,0 +1,24 @@
+---
+title: Lulu Arrays --- Size
+---
+
+## Introduction
+
+If you have imported the {lulu.Array} class as
+```lua
+local Array = require 'lulu.Array'
+```
+then you have access to the following trivial size methods:
+
+**`Array:size()`** <br>
+Returns the number of *top-level* items in `self`.
+
+**`Array:is_empty(tbl)`** <br>
+Returns `true` if `self` is empty.
+
+## See Also
+
+{Array.first}    <br>
+{Array.final}    <br>
+{Array.at}      <br>
+{Array.random}

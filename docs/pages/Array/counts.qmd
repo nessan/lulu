@@ -1,0 +1,47 @@
+---
+title: Lulu Arrays --- Values and Counts
+---
+
+## Introduction
+
+If you have imported the {lulu.Array} class as
+```lua
+local Array = require 'lulu.Array'
+```
+Then, you have access to the following methods:
+
+**`Array:counts()`** <br>
+Returns a *map* of the values in `self` to the number of times they occur.
+
+**`Array:to_set()`** <br>
+Returns a *set* from `self`.
+The set is a table whose keys are the unique values in `self`. The associated values in that table are always `true`.
+
+**`Array:to_map()`** <br>
+Returns a table where the keys are the values in `self`, and the table values are the corresponding indices. <br>
+If a value occurs more than once in an array, the table value will be the index of the *first* occurrence.
+
+[Example:]{.bt}
+```lua
+local arr = Array{'a', 'b', 'a', 'c', 'b', 'a'}     -- <1>
+putln("The array:       %t", arr)
+putln("As a set:        %t", arr:to_set())
+putln("As a map:        %t", arr:to_map())
+putln("Value counts:    %t", arr:counts())
+```
+1. We set up an `Array` with some repeated values.
+
+[Output:]{.bt}
+```txt
+The array:       [ "a", "b", "a", "c", "b", "a" ]
+As a set:        { a = true, b = true, c = true }   # <1>
+As a map:        { a = 1, b = 2, c = 4 }            # <2>
+Value counts:    { a = 3, b = 2, c = 1 }            # <3>
+```
+1. There are just three distinct elements in the array.
+2. "a" occurs more than once, but the first occurrence is at index 1, and ditto for "b" at index 2
+3. In all, "a" occurs 3 times, "b" occurs twice, and "c" occurs just once.
+
+## See Also
+
+{Array.drop_duplicates}

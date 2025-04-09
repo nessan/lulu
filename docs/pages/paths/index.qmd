@@ -1,0 +1,91 @@
+---
+title: Rudimentary Path Utilities
+---
+
+## Introduction
+
+The `lulu.paths` module has a few functions for manipulating file paths.
+
+## Methods
+
+If you have imported the module as
+```lua
+local paths = require 'lulu.paths'
+```
+then you have access to the following methods:
+
+Method                           | Description
+-------------------------------- | -----------------------------------------------------------------
+`paths.components(path)`         | Splits a path into a directory, basename, and extension.
+`paths.basename(path)`           | Returns the basename part of a path. This includes the file extension.
+`paths.dirname(path)`            | Returns the directory part of a path.
+`paths.extension(path)`          | Returns the extension part of a path.
+`paths.filename(path)`           | Returns the basename for the path without its extension if there is one.
+`paths.script_path()`            | Returns the path for the current script.
+`paths.script_name()`            | Returns the name for the current script w/o any `.lua` extension.
+`paths.os_directory_separator()` | Returns the directory separator for the current platform.
+`paths.is_windows()`             | Returns `true` if the current platform is Windows, `false` otherwise.
+`paths.is_unix()`                | Returns `true` if the current platform is Unix, `false` otherwise.
+`paths.is_posix()`               | Returns `true` if the current platform is POSIX, `false` otherwise.
+`paths.join(...)`                | Returns a path from a list of path segments.
+`paths.exists(path)`             | Returns `true` if a path exists in the filesystem, `false` otherwise.
+`paths.is_directory(path)`       | Returns `true` if a path exists in the filesystem and is a directory, `false` otherwise.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
+
+## Example
+
+```lua
+local paths = require('lulu.paths')
+local putln = require('lulu.scribe').putln
+
+local path = [[/Users/Jorge/Dev/lua/test.lua]]      -- <1>
+local dir, base, ext = paths.components(path)
+local filename = paths.filename(path)
+local script_name = paths.script_name()
+
+putln("Script:    %s", script_name)
+putln("")
+putln("Path:      %s", path)
+putln("Directory: %s", dir)
+putln("Basename:  %s", base)
+putln("Filename:  %s", filename)
+putln("Extension: %s", ext)
+
+path = [[C:\Users\Jorge\Dev\lua\test.lua]]        -- <2>
+dir, base, ext = paths.components(path)
+filename = paths.filename(path)
+script_name = paths.script_name()
+
+putln("")
+putln("Path:      %s", path)
+putln("Directory: %s", dir)
+putln("Basename:  %s", base)
+putln("Filename:  %s", filename)
+putln("Extension: %s", ext)
+```
+1. A Unix path.
+2. A Windows path.
+
+[Output:]{.bt}
+```txt
+Script:    paths01
+
+Path:      /Users/Jorge/Dev/lua/test.lua
+Directory: /Users/Jorge/Dev/lua/
+Basename:  test.lua
+Filename:  test
+Extension: lua
+
+Path:      C:\Users\Jorge\Dev\lua\test.lua
+Directory: C:\Users\Jorge\Dev\lua\
+Basename:  test.lua
+Filename:  test
+Extension: lua
+```
+
+CAUTION: Unix paths can have `\` in their names (rarely/never seen in practice).
+We ignore that fact in this implementation.
+
+## See Also
+
+{lulu.messages}

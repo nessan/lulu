@@ -1,0 +1,37 @@
+---
+title: Type Checking Utilities
+---
+
+## Introduction
+
+The `lulu.types` module has a few functions for checking the type of a value.
+
+## Methods
+
+If you have imported the module as
+```lua
+local types = require 'lulu.types'
+```
+then you have access to the following methods:
+
+Method                           | Description
+-------------------------------- | -----------------------------------------------------------------
+`types.is_integer(val)`          | Returns `true` if `val` is an integer.
+`types.is_positive_integer(val)` | Returns `true` if `val` is a positive integer.
+`types.is_negative_integer(val)` | Returns `true` if `val` is a negative integer.
+`types.is_nan(val)`              | Returns `true` if `val` a NaN.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
+
+These functions are mostly self-explanatory, and mostly are simple one-liners.
+
+## `types.type`
+
+For tables with a string field `__name` this returns that string.
+Otherwise it returns the output from the Lua standard `type` function.
+
+NOTE: The shorthand `types(obj)` is a synonym for `types.type(obj)`.
+
+## See Also
+
+{lulu.table} <br>
+{lulu.Array}

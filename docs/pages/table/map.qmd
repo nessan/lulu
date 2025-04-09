@@ -1,0 +1,158 @@
+---
+title: Lua Tables --- Mapping & Transforming
+---
+
+## Introduction
+
+If you have imported the {lulu.table} module as
+```lua
+require 'lulu.table'
+```
+then you have access to the following methods:
+
+**`table.map(tbl,fun,...)`** <br>
+Returns a *new* table, which results from applying `fun` to each value in a table.
+
+**`table.map2(tbl1,tbl2,fun,...)`** <br>
+Returns a *new* table that results from applying `fun` to the values from two tables.
+
+**`table.kv_map(tbl,fun,...)`** <br>
+Returns a *new* table, which results from applying fun to a table's keys and values.
+
+**`table.transform(tbl,fun,...)`** <br>
+Transform a table *in place* by applying `fun` to each top-level value.
+This method returns the transformed `tbl` and is ready for further processing.
+
+## `table.map`
+
+Classic “functional” method that creates a *new* table by applying `fun` to each value in `tbl`.
+
+In this implementation, the function also passes any extra arguments in the call to `table.map(tbl,fun,...)`.
+
+If the returned table is the `result`, then for each key-value pair `k,v` in `tbl`, we set:
+```lua
+result[k] = fun(v,...)
+```
+Of course, `fun` may ignore those extra arguments entirely, and Lua is happy to call a function with multiple arguments, even if it only uses the first one.
+
+[Example:]{.bt}
+```lua
+local lower = {warn = 'warning', note = 'notice', tip = 'hint'}
+local upper = table.map(lower, string.upper)
+putln("lower: %t", lower)       -- <1>
+putln("upper: %t", upper)
+```
+1. The examples on this page use {format.putln} for formatted printing.
+
+[Output:]{.bt}
+```txt
+lower: {['note'] = "note", ['tip'] = "tip", ['warn'] = "warning"}
+upper: {['note'] = "NOTE", ['tip'] = "TIP", ['warn'] = "WARNING"}    # <1>
+```
+1. We *mapped* the Lua standard `string.upper(...)` method over every *value* in the `lower` table.
+
+## `table.map2`
+
+Creates a *new* table by applying `fun` to pairs of values taken from two input tables.
+`table.map2(tbl1,tbl2,fun,....)` iterates through the keys `k` in `tbl1` and if there is a corresponding key in `tbl2` then it sets:
+```lua
+result[k] = fun(tbl1[k],tbl2[k],...).
+```
+Note that the method skips past any keys that are not present in both the input tables.
+
+[Example:]{.bt}
+```lua
+local phone = {mary = '888-888-8888', phil = '888-888-9999'}
+local email = {mary = 'mary@gmail.com', phil = 'phil@gmail.com'}
+local combined = table.map2(phone, email,
+                        function(v1,v2) return {phone=v1, email=v2} end)
+putln("phone:    %t", phone)
+putln("email:    %t", email)
+putln("combined: %t", combined)
+```
+
+[Output:]{.bt}
+```txt
+phone:    {['mary'] = "888-888-8888", ['phil'] = "888-888-9999"}
+email:    {['mary'] = "mary@gmail.com", ['phil'] = "phil@gmail.com"}
+combined: {['mary'] = {['email'] = "mary@gmail.com", ['phone'] = "888-888-8888"},
+           ['phil'] = {['email'] = "phil@gmail.com", ['phone'] = "888-888-9999"}}
+```
+
+## `table.kv_map`
+
+For this method, `fun` is called with at least two arguments.
+At its simplest, it is similar to the `map` function above, and for every key-value pair in `tbl` it sets:
+
+```lua
+result[k] = fun(k,v,...)
+```
+This means that `fun` can do something different depending on `k`.
+Here is an example that uses that feature:
+
+[Example: `kv_map` with a single output]{.bt}
+```lua
+local lower = {warn = 'warning', note = 'notice', tip = 'hint'}
+local upper = table.map(lower,
+                    function(v) return v == 'notice' and "CAREFUL!" or v:upper() end) -- <1>
+putln("lower: %t", lower)
+putln("upper: %t", upper)
+```
+1. Here, we do something special for the `notice` key.
+
+[Output:]{.bt}
+```txt
+lower: {['note'] = "notice", ['tip'] = "hint", ['warn'] = "warning"}
+upper: {['note'] = "CAREFUL!", ['tip'] = "HINT", ['warn'] = "WARNING"}
+```
+
+Perhaps more interestingly, the `kv_map` method can optionally return *two outputs*.
+If it does, we interpret the first as a key and the second as a value for the `result` table.
+
+```lua
+local rk, rv = fun(k,v,...)
+result[rk] = rv
+```
+This can be very powerful.
+
+[Example: `kv_map` with two outputs]{.bt}
+```lua
+local original = {warn = 'warning', note = 'notice', tip = 'hint'}
+local reversed = table.kv_map(original, "|k,v| v,k")  -- <1>
+putln("original: %t", original)
+putln("reversed: %t", reversed)
+```
+1. This string lambda `"|k,v| v,k"` reverses the key and value and returns both.
+
+[Output:]{.bt}
+```txt
+original: {['note'] = "notice", ['tip'] = "hint", ['warn'] = "warning"}
+reversed: {['hint'] = "tip", ['notice'] = "note", ['warning'] = "warn"}  # <1>
+```
+1. Every key-value pair in `original` is now a value-key pair in `reversed`.
+
+## `table.transform`
+
+This method is like `map` above except that it works *in place*, so for each key-value pair `k,v` in `tbl`,  we set:
+```lua
+tbl[k] = fun(v,...)
+```
+
+[Example:]{.bt}
+```lua
+local admonitions = {warn = 'warning', note = 'notice', tip = 'hint'}
+putln("admonitions: %t", admonitions)
+table.transform(admonitions, string.upper)
+putln("admonitions: %t", admonitions)
+```
+
+[Output:]{.bt}
+```txt
+admonitions: {['note'] = "notice", ['tip'] = "hint", ['warn'] = "warning"}
+admonitions: {['note'] = "NOTICE", ['tip'] = "HINT", ['warn'] = "WARNING"}
+```
+
+## See Also
+
+{lulu.callable} <br>
+{scribe}

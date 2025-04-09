@@ -1,0 +1,113 @@
+---
+title: Lulu Arrays --- Copying
+---
+
+## Introduction
+
+If you have imported the {lulu.Array} class as
+```lua
+local Array = require 'lulu.Array'
+```
+then you have access to the following methods to copy `Arrays`.
+
+**`Array:clone()`**<br>
+Returns a shallow copy of `self`.
+
+**`Array:copy()`**  <br>
+Returns a deep copy of `self` that can include recursive and cyclical elements.
+
+## Shallow vs. Deep Copying
+
+The `Array:clone` and `Array:copy` methods both start by creating a new empty `Array` of the same type as `self`.
+
+A shallow `clone` then inserts copies of the *top-level* elements from `self` into that new `Array`.
+
+On the other hand, a deep `copy` copies *all* the elements from the `self` argument by recursively visiting any sub-tables, sub-sub-tables, and so on.
+
+TIP: The methods give identical results for a simple `Array` where the elements are not tables.
+
+[Example: A Simple Array]{.bt}
+```lua
+local a = Array{"Mary", "Sheila", "Fiona"}  -- <1>
+local a_clone = a:clone()
+local a_copy  = a:copy()
+putln("a:       %t", a)
+putln("a_clone: %t", a_clone)               -- <2>
+putln("a_copy:  %t", a_copy)
+
+a[1]       = "Tom"                          -- <3>
+a_clone[2] = "Dick"
+a_copy[3]  = "Harry"
+putln("After changing elements:")
+putln("a:       %t", a)
+putln("a_clone: %t", a_clone)               -- <4>
+putln("a_copy:  %t", a_copy)
+```
+1. `a` is a simple `Array` with three elements.
+2. We expect that the output from `a:clone()` and `a:copy()` to be the same.
+3. We alter one element in each of the three Arrays.
+4. We check to see if the three `Arrays` are completely independent.
+
+[Output:]{.bt}
+```txt
+a:       [ "Mary", "Sheila", "Fiona" ]
+a_clone: [ "Mary", "Sheila", "Fiona" ]
+a_copy:  [ "Mary", "Sheila", "Fiona" ]    # <1>
+After changing elements:
+a:       [ "Tom", "Sheila", "Fiona" ]
+a_clone: [ "Mary", "Dick", "Fiona" ]
+a_copy:  [ "Mary", "Sheila", "Harry" ]    # <2>
+```
+1. The three `Arrays` are identical.
+2. The three `Arrays` are independent.
+
+[Example: An Array with table elements]{.bt}
+```lua
+local p1, p2 = {name = 'John', age = 25}, {name = 'Mary', age = 23}
+local a = Array(p1, p2)             -- <1>
+local a_clone = a:clone()
+local a_copy  = a:copy()
+putln("a:       %t", a)
+putln("a_clone: %t", a_clone)
+putln("a_copy:  %t", a_copy)        -- <2>
+
+a[1].name       = 'Tom'
+a_clone[2].name = 'Fiona'
+putln("After changing elements in `a` and `a_clone`:")
+putln("a:       %t", a)
+putln("a_clone: %t", a_clone)
+putln("a_copy:  %t", a_copy)        -- <3>
+
+a_copy[1].name = 'Goofy'
+putln("After changing elements in `a_copy`:")
+putln("a:       %t", a)
+putln("a_clone: %t", a_clone)
+putln("a_copy:  %t", a_copy)        -- <4>
+```
+1. In this case `a` is an `Array` whose elements are themselves tables.
+2. We expect to see the same output from all of these print statements.
+3. But what do you expect to happen here?
+4. And here?
+
+[Output:]{.bt}
+```txt
+a:       [ { age = 25, name = "John" }, { age = 23, name = "Mary" } ]    # <1>
+a_clone: [ { age = 25, name = "John" }, { age = 23, name = "Mary" } ]
+a_copy:  [ { age = 25, name = "John" }, { age = 23, name = "Mary" } ]
+After changing elements in `a` and `a_clone`:
+a:       [ { age = 25, name = "Tom" }, { age = 23, name = "Fiona" } ]    # <2>
+a_clone: [ { age = 25, name = "Tom" }, { age = 23, name = "Fiona" } ]
+a_copy:  [ { age = 25, name = "John" }, { age = 23, name = "Mary" } ]    # <3>
+After changing elements in `a_copy`:
+a:       [ { age = 25, name = "Tom" }, { age = 23, name = "Fiona" } ]    # <4>
+a_clone: [ { age = 25, name = "Tom" }, { age = 23, name = "Fiona" } ]
+a_copy:  [ { age = 25, name = "Goofy" }, { age = 23, name = "Mary" } ]
+```
+1. The three arrays look identical.
+2. This shows that the elements in `a_clone` are really just references to the same blocks of memory used for the elements of `a`.
+3. The `a_copy` object is completely untouched by those changes as it is a **deep** copy of `a`.
+4. This reinforces the fact that `a_copy` is independent from `a` and it mirror `a_clone`.
+
+## See Also
+
+{Array.eq}

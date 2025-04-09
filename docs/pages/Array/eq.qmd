@@ -1,0 +1,101 @@
+---
+title: Lulu Arrays --- Equality Checking
+---
+
+## Introduction
+
+If you have imported the {lulu.Array} class as
+```lua
+local Array = require 'lulu.Array'
+```
+then you can check for equality between `Array` instances using the `Array:eq` method:
+
+**`Array:eq(rhs, check_mt)`**<br>
+Returns `true` if `self` & `rhs` are both `Arrays` of the same type with identical *content*.
+This method does a *deep* comparison between `Arrays` with table elements.
+It can handle table elements with recursive and cyclical references.
+
+The `check_mt` argument is optional and defaults to `true`.
+
+If you set `check_mt` to `false` then the method will only check the content of the arrays and not the metatables.
+
+NOTE: The class also points the standard Lua comparison operators at this method so that `a == b` and `a ~= b` will call `a:eq(b)` under the covers.
+
+[Example]{.bt}
+```lua
+local a, b = Array{1,2,3}, Array{1,2,3}             -- <1>
+putln("a: %t", a)                                   -- <2>
+putln("b: %t", b)
+putln("a:eq(b)       returns: %s", a:eq(b))         -- <3>
+putln("rawequal(a,b) returns: %s", rawequal(a,b))   -- <4>
+putln("a == b        returns: %s", a == b)          -- <5>
+```
+1. Set up two simple `Array` instances with identical content.
+2. We use `putln` from {lulu.scribe} for formatted output.
+3. The `eq` method checks that `a` is the same type and has the same content as `b`.
+4. By default, a statement like `a == b` uses Lua's `rawequal` call that looks the memory addresses for `a` and `b`.
+5. However, we overrode `a == b` so that it instead uses `a:eq(b)` under the covers.
+
+[Output]{.bt}
+```txt
+a: [ 1, 2, 3 ]
+b: [ 1, 2, 3 ]
+a:eq(b)       returns: true     # <1>
+rawequal(a,b) returns: false    # <2>
+a == b        returns: true     # <3>
+```
+1. Here `a` and  `b` have identical elements so `eq` returns `true`.
+2. The two arrays occupy separate memory regions so `rawequal(a,b)` return `false`.
+3. Nevertheless, `a == b` returns the intuitively correct `true` answer.
+
+[Another Example]{.bt}
+```lua
+local a, b = Array{{1,2,3}, {4,5,6}}, Array{{1,2,3}, {4,5,6}} -- <1>
+putln("a: %t", a)
+putln("b: %t", b)
+putln("a:eq(b)       returns: %s", a:eq(b))
+putln("rawequal(a,b) returns: %s", rawequal(a,b))
+putln("a == b        returns: %s", a == b)
+```
+1. Once again, `a` and `b` have identical content. However, in this case, the array elements are themselves Lua tables.
+
+[Output]{.bt}
+```txt
+a: [ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
+b: [ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
+a:eq(b)       returns: true     # <1>
+rawequal(a,b) returns: false    # <2>
+a == b        returns: true     # <3>
+```
+1. The *deep* check for content equality passes as we'd expect.
+2. `a` and  `b` occupy separate memory regions so this check for *address* equality fails.
+3. Once again, `a == b` returns the intuitively correct `true` answer.
+
+[An Example with a Cycle]{.bt}
+```lua
+local a, b = Array{ 1,2,3} , Array{ 1,2,3 }
+a[4] = a                                        -- <1>
+b[4] = b
+putln("a: %t", a)
+putln("b: %t", b)
+putln("a:eq(b)       returns: %s", a:eq(b))
+putln("rawequal(a,b) returns: %s", rawequal(a,b))
+putln("a == b        returns: %s", a == b)
+```
+1. We add a fourth elements to the `Arrays` that is a (spurious) self-reference.
+
+[Output]{.bt}
+```txt
+a: <table> = [ 1, 2, 3, <table> ]
+b: <table> = [ 1, 2, 3, <table> ]
+a:eq(b)       returns: true             # <1>
+rawequal(a,b) returns: false            # <2>
+a == b        returns: true             # <3>
+```
+1. The self-references are handled without any stack overflow and the `eq` method sees that the *content* of `a` and `b` matches.
+2. `a` and  `b` occupy separate memory regions so this check for *address* equality fails.
+3. Once again, `a == b` returns the intuitively correct `true` answer as we've overridden the default Lua behaviour.
+
+## See Also
+
+{Array.copy}

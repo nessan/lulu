@@ -1,0 +1,273 @@
+---
+title: Lulu --- Array Class
+---
+
+## Introduction
+
+Lua *arrays* are tables where the keys are successive integers starting at 1. <br>
+Internally, Lua treats those tables very efficiently.
+
+The `lulu.Array` module provides a specific *class* for this commonest of data structures.
+
+You can import the class with the line:
+```lua
+local Array = require('lulu.Array')
+```
+
+The class has a rich interface with quite a few methods.
+In practice, each belongs to a functional group, and we first list them by those groupings.
+The method names within any group follow a consistent scheme.
+
+The complete list of all the methods is also available in [alphabetic order](#all-methods).
+
+## Metamethods etc.
+
+Method                      | Brief Description
+--------------------------- | ---------------------------------------------------------------------
+{Array.__call}              | Metamethod that points `Array(...)` to {Array.new}.
+{Array.__concat}            | Metamethod that joins two `Arrays` using the Lua notation `a .. b`.
+{Array.__eq}                | Metamethod that checks for deep equality between two `Arrays` using  `a == b`.
+{Array.__name}              | A piece of string metadata that is set to "Array" in the base class.
+{Array.__tostring}          | Metamethod that points `tostring(a)` to {Array.stringify}.
+{Array.is_instance}         | Checks whether the argument is an instance of the `Array` class or a subclass.
+{Array.name}                | Returns the name of the class or subclass from `Array.__name`.
+: {.bordered .striped .hover .responsive tbl-colwidths="[27,73]"}
+
+## Constructors
+
+Method                      | Brief Description
+--------------------------- | ---------------------------------------------------------------------
+{Array.new}                 | Create an `Array` instance in various ways.
+{Array.new_instance}        | Create a new instance of the same class as the calling `Array`.
+{Array.rep}                 | Create an `Array` with a specified size and repeated initial value.
+{Array.range}               | Create an `Array` as a range of numbers.
+{Array.subclass}            | Create a subclass of `Array` or a sub-subclass etc.
+: {.bordered .striped .hover .responsive tbl-colwidths="[27,73]"}
+
+## Copying & Comparing
+
+Method                      | Brief Description
+--------------------------- | ---------------------------------------------------------------------
+{Array.clone}               | Create a shallow copy of an `Array`.
+{Array.copy}                | Create a deep copy of an `Array`.
+{Array.eq}                  | Returns `true` if an `Array` is deeply equal to another `Array`.
+: {.bordered .striped .hover .responsive tbl-colwidths="[27,73]"}
+
+## Queries
+
+Method                      | Brief Description
+--------------------------- | ---------------------------------------------------------------------
+{Array.size}                | Returns the number of elements in an `Array`.
+{Array.is_empty}            | Returns `true` if an `Array` is empty.
+{Array.first}               | Returns the first element or a default value if an `Array` is empty.
+{Array.final}               | Returns the final element or a default value if an `Array` is empty.
+{Array.at}                  | Returns a specific `Array` element.
+{Array.random}              | Returns a random value from an `Array`.
+{Array.extreme}             | Returns the index & value of the "extreme" element according to a comparator function.
+{Array.max}                 | Returns the index & value of the "maximum" element.
+{Array.min}                 | Returns the index & value of the "minimum" element.
+: {.bordered .striped .hover .responsive tbl-colwidths="[27,73]"}
+
+## Element Types
+
+We often are interested in arrays where the elements are all of one type or of some specific type.
+
+Method                       |  Brief Description
+---------------------------- | ---------------------------------------------------------------------
+{Array.is_array_of}          | Are all the elements some specific type?
+{Array.is_array_of_numbers}  | Returns `true` if the elements are all numbers.
+{Array.is_array_of_one_type} | Returns `true` if all the elements have the same type.
+{Array.is_array_of_strings}  | Returns `true` if the elements are all strings.
+: {.bordered .striped .hover .responsive tbl-colwidths="[27,73]"}
+
+NOTE: In these methods, the element type is determined by the {lulu.types} method which slightly expands on the Lua standard `type` function.
+
+## Changing
+
+Method                      | Brief Description
+--------------------------- | ---------------------------------------------------------------------
+{Array.clear}               | Clears an `Array` in place from an optional `start index`.
+{Array.push}                | Add a value to the end of an `Array`.
+{Array.pop}                 | Remove the value from the end of and `Array` & return the value removed.
+{Array.insert}              | Insert a value at a given position.
+{Array.remove}              | Remove the value at position `pos` & return the value removed.
+{Array.append}              | Append the passed arguments to the end of an `Array`.
+{Array.sort}                | Sorts an `Array` in place.
+{Array.shuffle}             | Shuffles an `Array` in place.
+{Array.reverse}             | Reverses the elements of an `Array` in place.
+{Array.reversed}            | Returns a new `Array` that has as `Array`'s elements in reverse order.
+{Array.delete}              | Efficiently deletes the a range of elements from an `Array`.
+{Array.delete_if}           | Efficiently deletes all elements from an `Array` that pass a predicate test.
+{Array.keep}                | Efficiently deletes all values from an `Array` except those in a range.
+{Array.keep_if}             | Efficiently deletes all values from an `Array` except those that pass a predicate test.
+: {.bordered .striped .hover .responsive tbl-colwidths="[27,73]"}
+
+## Sub-Arrays
+
+Method                      | Brief Description
+--------------------------- | ---------------------------------------------------------------------
+{Array.drop}                | Returns a new `Array` that is a copy with a range of elements removed.
+{Array.drop_duplicates}     | Returns a new `Array` that contains only the non-duplicated elements.
+{Array.drop_if}             | Returns a new `Array` that is a copy without any elements that pass a predicate test.
+{Array.take}                | Returns a new `Array` that is a sub-array of this one.
+{Array.take_if}             | Returns a new `Array` that is a copy of the elements that pass a predicate test.
+{Array.most}                | Returns a new `Array` that is a copy of this one without the final element.
+{Array.rest}                | Returns a new `Array` that is a copy of this one without the first element.
+: {.bordered .striped .hover .responsive tbl-colwidths="[27,73]"}
+
+These methods typically return a reference to `self` to allow for method chaining.
+
+## Searches
+
+Method                      | Brief Description
+--------------------------- | ---------------------------------------------------------------------
+{Array.all}                 | Checks whether *all* elements in an `Array` pass a predicate test.
+{Array.any}                 | Checks whether *any* element in an `Array` pass a predicate test.
+{Array.none}                | Checks whether *no* elements in an `Array` pass a predicate test.
+{Array.find}                | Returns the index of the first element which matches a value or `nil` if the search fails.
+{Array.find_if}             | Returns the index of the first element that satisfies a predicate function or `nil`  if the search fails.
+{Array.find_reverse}        | Returns the index of the first element which matches a value or `nil` if the search fails. Search is done in reverse from the end of the `Array`.
+{Array.find_if_reverse}     | Returns the index of the first element that satisfies a predicate function or `nil`  if the search fails. Search is done in reverse from the end of the `Array`.
+: {.bordered .striped .hover .responsive tbl-colwidths="[27,73]"}
+
+## Counts etc.
+
+Method                      | Brief Description
+--------------------------- | ---------------------------------------------------------------------
+{Array.counts}              | Returns a *map* of the values in an `Array` to the number of times they occur.
+{Array.to_map}              | Returns a *map* of the values in an `Array` to their indices.
+{Array.to_set}              | Creates a *set* from the elements in an `Array`.
+: {.bordered .striped .hover .responsive tbl-colwidths="[27,73]"}
+
+## Folding and Reducing
+
+Method                      | Brief Description
+--------------------------- | ---------------------------------------------------------------------
+{Array.fold}                | Returns a new `Array` which is the result of "folding" a function over an `Array`.
+{Array.reduce}              | Reduce an `Array` to a single value by applying a function to each element and accumulating the result.
+: {.bordered .striped .hover .responsive tbl-colwidths="[27,73]"}
+
+## Mapping
+
+Method                      | Brief Description
+--------------------------- | --------------------------------------------------------------------
+{Array.map}                 | Returns a new `Array` which is the result of applying a function to each element.
+{Array.transform}           | Transform an `Array` in place by applying a function to each element
+: {.bordered .striped .hover .responsive tbl-colwidths="[27,73]"}
+
+## Combining
+
+Methods to find values in common between arrays etc.
+These methods only consider the values of array elements when considering commonality and differences.
+
+Method                    | Brief Description
+------------------------- | --------------------------------------------------------------
+{Array.union}             | Returns the union of two or more `Arrays`. <br> Elements are identified by their values *only*.
+{Array.intersection}      | Returns the intersection of two or more `Arrays`. <br> Elements are identified by their values *only*.
+{Array.difference}        | Returns the difference between two `Arrays`. <br> Elements are identified by their values *only*. <br> Optionally can return the symmetric difference.
+: {.bordered .striped .hover .responsive tbl-colwidths="[27,73]"}
+
+## Stringifying
+
+Method                      | Brief Description
+--------------------------- | ---------------------------------------------------------------------
+{Array.inline}              | Returns a one-line string representation of an `Array`.
+{Array.pretty}              | Returns a "pretty" multiline string representation of an `Array`.
+{Array.alt}                 | Returns an alternate "pretty" multiline string representation of an `Array`.
+{Array.__tostring}          | Returns a string representation of this `Array`.
+: {.bordered .striped .hover .responsive tbl-colwidths="[27,73]"}
+
+## Miscellaneous
+
+Method                      | Brief Description
+--------------------------- | ---------------------------------------------------------------------
+{Array.flatten}             | Returns a new `Array` which is a flattened version of this one.
+{Array.zip}                 | Returns a new `Array` formed by zipping this one with other arguments.
+: {.bordered .striped .hover .responsive tbl-colwidths="[27,73]"}
+
+## All Methods
+
+Here is a table of all the class methods in alphabetical order:
+
+Method                      | Brief Description
+--------------------------- | ---------------------------------------------------------------------
+{Array.__call}              | Metamethod that points `Array(...)` to {Array.new}.
+{Array.__concat}            | Metamethod that joins two `Arrays` using the Lua notation `a .. b`.
+{Array.__eq}                | Metamethod that checks for deep equality between two `Arrays` using  `a == b`.
+{Array.__name}              | A piece of string metadata that is set to "Array" in the base class.
+{Array.__tostring}          | Metamethod that points `tostring(a)` to {Array.stringify}.
+{Array.all}                 | Checks whether *all* elements in an `Array` pass a predicate test.
+{Array.alt}                 | Returns an alternate "pretty" multiline string representation of an `Array`.
+{Array.any}                 | Checks whether *any* element in an `Array` pass a predicate test.
+{Array.append}              | Append the passed arguments to the end of an `Array`.
+{Array.at}                  | Returns a specific `Array` element.
+{Array.clear}               | Clears an `Array` in place from an optional `start index`.
+{Array.clone}               | Create a shallow copy of an `Array`.
+{Array.copy}                | Create a deep copy of an `Array`.
+{Array.counts}              | Returns a *map* of the values in an `Array` to the number of times they occur.
+{Array.delete}              | Efficiently deletes the a range of elements from an `Array`.
+{Array.delete_if}           | Efficiently deletes all elements from an `Array` that pass a predicate test.
+{Array.difference}          | Returns the difference between two `Arrays`.
+{Array.drop}                | Returns a new `Array` that is a copy with a range of elements removed.
+{Array.drop_duplicates}     | Returns a new `Array` that contains only the non-duplicated elements.
+{Array.drop_if}             | Returns a new `Array` that is a copy without any elements that pass a predicate test.
+{Array.eq}                  | Returns `true` if an `Array` is deeply equal to another `Array`.
+{Array.extreme}             | Returns the index & value of the "extreme" element according to a comparator function.
+{Array.final}               | Returns the final element or a default value if an `Array` is empty.
+{Array.find}                | Returns the index of the first element which matches a value or `nil` if the search fails.
+{Array.find_if}             | Returns the index of the first element that satisfies a predicate function or `nil`  if the search fails.
+{Array.find_if_reverse}     | Returns the index of the first element that satisfies a predicate function or `nil`  if the search fails. Search is done in reverse from the end of the `Array`.
+{Array.find_reverse}        | Returns the index of the first element which matches a value or `nil` if the search fails. Search is done in reverse from the end of the `Array`.
+{Array.first}               | Returns the first element or a default value if an `Array` is empty.
+{Array.flatten}             | Returns a new `Array` which is a flattened version of this one.
+{Array.fold}                | Returns a new `Array` which is the result of "folding" a function over an `Array`.
+{Array.inline}              | Returns a one-line string representation of an `Array`.
+{Array.inline_json}         | Returns a one-line JSON string representation of an `Array`.
+{Array.insert}              | Insert a value at a given position.
+{Array.intersection}      | Returns the intersection of two or more `Arrays`. <br> Elements are identified by their values *only*.
+{Array.is_array_of}         | Are all the elements some specific type?
+{Array.is_array_of_numbers} | Returns `true` if the elements are all numbers.
+{Array.is_array_of_one_type} | Returns `true` if all the elements have the same type.
+{Array.is_array_of_strings} | Returns `true` if the elements are all strings.
+{Array.is_empty}            | Returns `true` is an `Array` is empty.
+{Array.is_instance}         | Checks whether the argument is an instance of the `Array` class or a subclass.
+{Array.json}                | Returns a JSON string representation of an `Array`.
+{Array.keep}                | Efficiently deletes all values from an `Array` except those in a range.
+{Array.keep_if}             | Efficiently deletes all values from an `Array` except those that pass a predicate test.
+{Array.map}                 | Returns a new `Array` which is the result of applying a function to each element.
+{Array.max}                 | Returns the index & value of the "maximum" element.
+{Array.min}                 | Returns the index & value of the "minimum" element.
+{Array.most}                | Returns a new `Array` that is a copy of this one without the final element.
+{Array.name}                | Returns the name of the class or subclass from `Array.__name`.
+{Array.new}                 | Create an `Array` instance in various ways.
+{Array.new_instance}        | Create a new instance of the same class as the calling `Array`.
+{Array.none}                | Checks whether *no* elements in an `Array` pass a predicate test.
+{Array.pop}                 | Remove the value from the end of and `Array` & return the value removed.
+{Array.pretty}              | Returns a "pretty" multiline string representation of an `Array`.
+{Array.push}                | Add a value to the end of an `Array`.
+{Array.random}              | Returns a random value from an `Array`.
+{Array.range}               | Create an `Array` as a range of numbers.
+{Array.reduce}              | Reduce an `Array` to a single value by applying a function to each element and accumulating the result.
+{Array.remove}              | Remove the value at position `pos` & return the value removed.
+{Array.rep}                 | Create an `Array` with a specified size and repeated initial value.
+{Array.reverse}             | Reverses the elements of an `Array` in place.
+{Array.reversed}            | Returns a new `Array` that has as `Array`'s elements in reverse order.
+{Array.rest}                | Returns a new `Array` that is a copy of this one without the first element.
+{Array.shuffle}             | Shuffles an `Array` in place.
+{Array.size}                | Returns the number of elements in an `Array`.
+{Array.sort}                | Sorts an `Array` in place.
+{Array.subclass}            | Create a subclass of `Array` or a sub-subclass etc.
+{Array.take}                | Returns a new `Array` that is a sub-array of this one.
+{Array.take_if}             | Returns a new `Array` that is a copy of the elements that pass a predicate test.
+{Array.to_map}              | Returns a *map* of the values in an `Array` to their indices.
+{Array.to_set}              | Creates a *set* from the elements in an `Array`.
+{Array.transform}           | Transform an `Array` in place by applying a function to each element
+{Array.union}               | Returns the union of two or more `Arrays`.
+{Array.zip}                 | Returns a new `Array` formed by zipping this one with other arguments.
+: {.bordered .striped .hover .responsive tbl-colwidths="[27,73]"}
+
+## See Also
+
+{lulu.table}     <br>
+{lulu.types}     <br>
+{lulu.scribe}

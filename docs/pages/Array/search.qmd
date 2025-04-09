@@ -1,0 +1,173 @@
+---
+title: Lulu Arrays --- Searches
+---
+
+## Introduction
+
+If you have imported the {lulu.Array} class as
+```lua
+local Array = require 'lulu.Array'
+```
+Then, you can use the following methods:
+
+**`Array:all(predicate,...)`** <br>
+Returns `true` if *all* of the elements from `self` pass a `predicate` test.
+
+**`Array:any(predicate,...)`** <br>
+Returns `true` if *any* element from `self` passes a `predicate` test.
+
+**`Array:none(predicate,...)`** <br>
+Returns `true` if *none* of the elements from `self` passes a `predicate` test.
+
+**`Array:find(value ,start_index)`** <br>
+Returns the index of the first element that matches `value` or `nil` if the search fails.
+
+**`Array:find_reverse(value ,start_index)`** <br>
+Returns the index of the first element that matches `value` or `nil` if the search fails. <br>
+The search is done in reverse, starting from the end of `self`.
+
+**`Array:find_if(predicate, start_index,...)`** <br>
+Returns the index of the first element that satisfies a predicate or `nil` if that is not found.
+
+**`Array:fin_if_reverse(predicate, start_index,...)`** <br>
+Returns the index of the first element that satisfies a predicate or `nil` if that is not found. <br>
+The search is done in reverse, starting from the end of `self`.
+
+NOTE: The `start_index` argument is optional.
+It sets the index where we start our searches.
+By default, we begin at the beginning of the array for regular searches, while the default for reverse searches is at the end.
+A negative `start_index` means starting at a spot from the end of the array for regular searches and from the start for reverse searches.
+You can use the `start_index` argument to iterate through multiple matches to `value` in the array.
+
+## `Array:all`, `Array:any`, `Array:none`
+
+```lua
+local arr =Array:range(-5,5)
+putln("arr: %s", arr)
+putln("all  > 0: %s", arr:all(">", 0))
+putln("any  > 0: %s", arr:any(">", 0))
+putln("none > 0: %s", arr:none(">", 0))
+```
+
+Outputs:
+```txt
+arr: [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5]
+all  > 0: false
+any  > 0: true
+none > 0: false
+```
+
+## `Array:find` & `Array:find_reverse`
+
+These are the simplest search-for-a-value methods.
+
+[Example: Forward searches]{.bt}
+```lua
+local arr = Array{'a', 'b', 'a', 'c', 'b', 'a'}     -- <1>
+putln("%t contains a 'c': %s", arr, arr:has_value('c'))
+
+local i = arr:find('a')                            -- <2>
+while i do
+    print("Found an 'a' at index:", i)
+    i = arr:find('a', i+1)                         -- <3>
+end
+```
+1. An `Array` with repeated values.
+2. Look for the first 'a' in the array.
+3. Look for successive values of 'a' starting beyond the last successful search.
+
+Outputs:
+```txt
+["a", "b", "a", "c", "b", "a"] contains a 'c': true
+Found an 'a' at index:	1
+Found an 'a' at index:	3
+Found an 'a' at index:	6
+```
+
+[Example: Reverse searches]{.bt}
+```lua
+local arr = Array{'a', 'b', 'a', 'c', 'b', 'a'}
+local i = arr:find_reverse('a')
+while i do
+    print("Found an 'a' at index:", i)
+    i = arr:find_reverse('a', i-1)
+end
+```
+
+Outputs:
+```txt
+Found an 'a' at index:	6
+Found an 'a' at index:	3
+Found an 'a' at index:	1
+```
+
+## `Array:find_if` & `Array:find_if_reverse`
+
+These functions find the first index on or after the `start_index,` where the corresponding value passes a predicate test.
+They also return the value found and what the predicate evaluated to --- though, of course, you are free to ignore those extra outputs if they aren't helpful.
+
+[Example: Forward predicate search]{.bt}
+```lua
+local arr = Array:range(-5,5)
+local i,v = arr:find_if("|v| v > 0")
+while i do
+    putln("Found the positive value %d at index %d.", v, i)
+    i,v = arr:find_if("|v| v > 0", i+1)
+end
+```
+
+Outputs:
+```txt
+Found the positive value 1 at index 7.
+Found the positive value 2 at index 8.
+Found the positive value 3 at index 9.
+Found the positive value 4 at index 10.
+Found the positive value 5 at index 11.
+```
+
+[Example: Reverse predicate search]{.bt}
+```lua
+local arr = Array:range(-5,5)
+local i,v = arr:find_if_reverse("|v| v > 0")
+while i do
+    putln("Found the positive value %d at index %d.", v, i)
+    i,v = arr:find_if_reverse("|v| v > 0", i-1)
+end
+```
+Outputs:
+```txt
+Found the positive value 5 at index 11.
+Found the positive value 4 at index 10.
+Found the positive value 3 at index 9.
+Found the positive value 2 at index 8.
+Found the positive value 1 at index 7.
+```
+
+## Predicate Functions
+
+The predicate function will be called as `predicate(arr[i],...)` for each element `arr[i]` in the array `arr`.
+It should return `true` if that element is considered to have passed the test.
+
+The function is passed any extra `...` arguments that were given to the original class method call.
+Of course, it may ignore those.
+
+The "function" can come in several forms.
+For example, the predicate to test for positivity can be written as:
+
+1. `arr:index_where(function(v) return v > 0 end)`
+2. `arr:index_where(">", 1, 0)`
+3. `arr:index_where("|v| v > 0")`
+4. You can pass a “table” that is *callable*, i.e., it has a `__call()` metamethod that does the appropriate thing.
+
+There is more detail on the second and third options in the documentation for the {lulu.callable} module.
+
+TIP: For some of these methods, we have an optional `start_index` that comes before those `...` arguments to our predicate.
+This makes the second string operator option above less desirable.
+
+## See Also
+
+{Array.delete_if} <br>
+{Array.keep_if}   <br>
+{Array.take_if}   <br>
+{Array.drop_if}   <br>
+{lulu.callable}

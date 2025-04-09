@@ -1,0 +1,141 @@
+---
+title: Function Arguments in the `lulu` Library
+---
+
+## Introduction
+
+Many methods in the `lulu` library are passed a *function* as one of their arguments.
+
+For example, the {lulu.Array} class has various search and filter methods that expect to be passed a *predicate function* that will pick out specific elements in an array.
+
+If `a` is an `Array` we can use `a:take_if` to extract elements that satisfy some predicate.
+```lua
+local a = Array{1,0,2,0,0,3}
+local non_zero = a:take_if(function(x) return x > 0 end)
+putln("%s has non-zero elements %s", a, non_zero)
+```
+This will output `[1, 0, 2, 0, 0, 3] has non-zero elements [1, 2, 3]` where we are using the {scribe} module for easy formatted output printing.
+
+Similarly, we have *mapping and transformation functions* like:
+```lua
+local a = Array{1,0,2,0,0,3}
+local b = a:map(function(x) return 2*x end)
+putln("%s doubles to %s", a, b)
+```
+This outputs `[1, 0, 2, 0, 0, 3] doubles to [2, 0, 4, 0, 0, 6]`.
+
+As shown, these methods are happy to be passed complete Lua function definitions, which allow you to do arbitrarily complex things.
+However, the arguments to higher-order functions like these are often quite simple, so we also support the idea of functions as string operators and string lambdas—anonymous functions, if you will.
+
+The first example above can be written in a simpler and more readily understood form:
+```lua
+local a = Array{1,0,2,0,0,3}
+local non_zero = a:take_if(">", 0)
+putln("%s has non-zero elements %s", a, non_zero)
+```
+The second becomes:
+```lua
+local a = Array{1,0,2,0,0,3}
+local b = a:map("|x| 2*x")
+putln("%s doubles to %s", a, b)
+```
+Or even more, simply using anonymous arguments (i.e. using `_` in place of the named argument `x`)
+```lua
+local a = Array{1,0,2,0,0,3}
+local b = a:map("2 * _")
+putln("%s doubles to %s", a, b)
+```
+
+## Module Methods and Data
+
+If you have imported the module as
+```lua
+local callable = require 'lulu.callable'
+```
+You have access to the following methods.
+
+**`callable.from(fun, fatal_on_error)`** <br>
+This is the master method that tries to return a Lua function from the `fun` argument, which can be:
+
+1. Al Lua function.
+2. A *callable* object like a `table` with a `__call(...)` metamethod.
+3. A string that we can interpret as a *lambda* function.
+4. A string that we can interpret as a standard Lua *operator*.
+
+If the optional boolean `fatal_on_error` argument is `true` (which it is by default), then we raise a fatal error if `fun` cannot be interpreted as a function.
+
+TIP: The simple function call `callable(fun)` is identical to `callable.from(fun)`.
+
+**`callable.is_callable(fun)`** <br>
+Returns `true` if the `fun` argument will return a Lua function when passed to `callable.from(fun)`.
+**`callable[op]`** <br>
+
+The `callable` module also maps standard operator "names" to their definition in the form of a Lua function.
+
+Key               | Corresponding Lua Function
+----------------- | -------------------------------------------------------------------------------
+`callable['+']`   | `function(a,b) return a + b end,`
+`callable['-']`   | `function(a,b) return a - b end,`
+`callable['*']`   | `function(a,b) return a * b end,`
+`callable['/']`   | `function(a,b) return a / b end,`
+`callable['%']`   | `function(a,b) return a % b end,`
+`callable['^']`   | `function(a,b) return a ^ b end,`
+`callable['==']`  | `function(a,b) return a == b end,`
+`callable['~=']`  | `function(a,b) return a ~= b end,`
+`callable['<']`   | `function(a,b) return a < b end,`
+`callable['<=']`  | `function(a,b) return a <= b end,`
+`callable['>']`   | `function(a,b) return a > b end,`
+`callable['>=']`  | `function(a,b) return a >= b end,`
+`callable['and']` | `function(a,b) return a and b end,`
+`callable['or']`  | `function(a,b) return a or b end,`
+`callable['()']`  | `function(fn, ...) return fn(...) end,`
+`callable['{}']`  | `function(...) return {...} end,`
+`callable['[]']`  | `function(t, k) return t[k] end,`
+`callable['#']`   | `function(a) return #a end,`
+`callable['..']`  | `function(a,b) return a .. b end,`
+`callable['~']`   | `function(a,b) return string.find(a, b) ~= nil end,`
+`callable['']`    | `function(...) return ... end`
+: {.bordered .striped .hover .responsive tbl-colwidths="[20,80]"}
+
+We had the example above `a:take_if(">", 0)`.
+The `take_if` signature is `take_if(fun, ...)` and that call works as follows:
+
+1. The `callable` module looks up that first string argument ">" in its table and finds a corresponding value `function(x,y) return x > y end`, a function of two arguments `x` and `y`.
+2. Then `take_if` calls that function as `fun(a[i], ...)` iterating through the elements of `a` for the first argument and passing any trailing arguments it received after that. There was just one of those --- the number `0`.
+
+NOTE: You can call Lua functions with many more arguments than they expect and those are just ignored.
+
+**`callable.lambda(str, issue_warnings)`** <br>
+This tries to create a Lua function using either named or anonymous arguments from a lambda string.
+
+If the optional boolean `issue_warnings` argument is `true` (which it is by default), then we issue a warning if `fun` cannot be interpreted as a function and then return `nil`.
+
+The syntax used is similar to that from other languages like Rust: `|args| body` or `body` with `_` marking a single argument.
+
+## Examples
+
+```lua
+local f = callable.lambda("|a| a + 1")
+local g = callable.lambda("|a,b| a * b")
+local h = callable.lambda("_ + 1")
+print(f(10), g(10,11), h(10))
+```
+Outputs `11 110 11` as expected.
+
+NOTE: The shorthand `callable("|a| a + 1")` will return the same function as `callable.lambda("|a| a + 1")`
+
+String            | Lua Function
+:---------------: | -------------------------------------------------------------------------------
+`|a| a + 1`       | `function(a) return a + 1 end`
+`|a, b| a * b`    | `function(a, b) return a * b end`
+`_ + 1 `          | `function(_) return _ + 1 end`
+
+## Acknowledgement
+
+Like many items in the `lulu` library, this was inspired by {penlight}.
+
+## See Also
+
+{lulu.table}  <br>
+{lulu.string} <br>
+{lulu.Array}

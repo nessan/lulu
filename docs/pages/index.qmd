@@ -1,0 +1,76 @@
+---
+title: The `lulu` Library
+---
+
+## Project Overview
+
+`lulu` is a collection of Lua utility modules and classes.
+It includes a full-featured `Array` class, an `Enum` class, and a variety of utility functions and classes.
+
+It also includes a copy of {scribe}, a Lua module for converting Lua objects to strings that can gracefully handle recursive and shared tables.
+
+## Available Modules
+
+Module              | Purpose
+------------------- | -----------------------------------------------------------------------------
+{lulu.Array}        | A full-featured `Array` class for Lua.
+{lulu.Enum}         | An `Enum` class for Lua.
+{lulu.callable}     | Building "anonymous" functions from strings etc.
+{lulu.messages}     | Informational and error messages used throughout `lulu`.
+{lulu.scribe}       | Convert Lua objects to strings. Gracefully handles recursive and shared tables.
+{lulu.table}        | Lua `table` extensions that work on *any* table.
+{lulu.string}       | Lua `string` extensions that are added to all string objects.
+{lulu.lpeg}         | An extended `lpeg` module with predefined patterns and useful functions.
+{lulu.paths}        | Rudimentary path query methods.
+{lulu.types}        | Type-checking methods.
+: {.bordered .striped .hover .responsive tbl-colwidths="[20,80]"}
+
+## Installation & Use
+
+`lulu` has no dependencies. Copy the `lulu` directory and start using it.
+
+Released versions will also be uploaded to the luarocks repository, so you should be able to install them using:
+
+```bash
+luarocks install lulu
+```
+
+Assuming your path allows it, you can `require('lulu.lulu')` and have access to all the modules:
+```lua
+require('lulu.lulu')
+local Suit = Enum {
+    Clubs    = { abbrev = 'C', color = 'black', icon = '♣', ordinal = 0 },
+    Diamonds = { abbrev = 'D', color = 'red',   icon = '♦', ordinal = 1 },
+    Hearts   = { abbrev = 'H', color = 'red',   icon = '♥', ordinal = 2 },
+    Spades   = { abbrev = 'S', color = 'black', icon = '♠', ordinal = 3 }
+}
+Suit:set_type('Suit')
+scribe.putln("%T", Suit)
+```
+
+That will output:
+```txt
+Suit:
+ [0] Clubs = { abbrev = "C", color = "black", icon = "♣" },
+ [1] Diamonds = { abbrev = "D", color = "red", icon = "♦" },
+ [2] Hearts = { abbrev = "H", color = "red", icon = "♥" },
+ [3] Spades = { abbrev = "S", color = "black", icon = "♠" }
+```
+
+## Documentation
+
+Here is a link to the project's source code {repo}. <br>
+This {docs} site was constructed using the static website generator {quarto}.
+
+## Acknowledgements
+
+This library owes a lot to {Penlight} and the many questions that have been answered over the years on sites like StackOverflow and Reddit.
+
+## Contact
+
+You can contact me by {email}
+
+## Copyright and License
+
+Copyright (c) 2025-present Nessan Fitzmaurice. <br>
+You can use this software under the {mit-license}

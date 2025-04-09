@@ -1,0 +1,119 @@
+---
+title: Lua LPEG --- Extensions
+---
+
+## Introduction
+
+The `lulu.xpeg` module *extends* the standard`lpeg` module with predefined patterns and useful functions.
+
+## Patterns
+
+If you have imported the module as
+```lua
+local lpeg = require 'lulu.xpeg'
+```
+You then have access to many "standard" LPEG patterns in the `lpeg.patterns` table.
+
+For convenience define:
+```lua
+local p = lpeg.patterns
+```
+Then:
+
+Pattern                     | Description
+--------------------------- | ---------------------------------------------------------------------
+`p.any`                     | Matches any character.
+`p.eos`                     | Matches the end of the subject or string.
+`p.esc`                     | Matches the standard escape character --- the backslash.
+`p.alpha`                   | Matches alphabetic characters.
+`p.digit`                   | Matches decimal digits.
+`p.alphanumeric`            | Matches alphanumeric characters.
+`p.lower`                   | Matches lowercase letters.
+`p.upper`                   | Matches uppercase letters.
+`p.graph`                   | Matches printable characters.
+`p.punctuation`             | Matches non-alphanumeric printable chars.
+`p.hs`                      | Matches horizontal space.
+`p.ws`                      | Matches whitespace including newlines.
+`p.non_hs`                  | Matches non-horizontal space characters.
+`p.non_ws`                  | Matches non-whitespace characters.
+`p.nl`                      | Matches newlines (DOS and Unix).
+`p.non_nl`                  | Matches non-newline characters (DOS & Unix).
+`p.eol`                     | Matches end-of-line or end-of-subject.
+`p.non_eol`                 | Matches non-end-of-line characters.
+`p.sign`                    | Matches plus or minus signs.
+`p.bin_digit`               | Matches binary digits without digit separators.
+`p.oct_digit`               | Matches octal digits without digit separators.
+`p.dec_digit`               | Matches decimal digits without digit separators.
+`p.hex_digit`               | Matches hexadecimal digits without digit separators.
+`p.dec`                     | Matches any decimal number without digit separators.
+`p.hex`                     | Matches any hexadecimal number without digit separators.
+`p.oct`                     | Matches an octal number without digit separators.
+`p.bin`                     | Matches any binary number without digit separators.
+`p.int`                     | Matches any integer without digit separators.
+`p.float`                   | Matches any floating point number without digit separators.
+`p.num`                     | Matches any number without digit separators.
+`p.ws_trim`                 | Capture pattern that ignores leading and trailing whitespace.
+`p.ws_collapse`             | Substitution capture that trims and collapses **all** contiguous interior white-spaces to a single space.
+`p.ws_delete`               | Substitution capture that removes all whitespace.
+`p.blocks`                  | Table capture all the text blocks/paragraphs in a subject string. <br> A block/paragraph is text followed by one or more empty lines or the end of the string.
+`p.single_quoted`           | Matches single quoted strings.
+`p.double_quoted`           | Matches double quoted strings.
+`p.quoted`                  | Matches either single *or* double quoted strings.
+`p.single_quoted_content`   | Capture content inside single quotes.
+`p.double_quoted_content`   | Capture content inside double quotes.
+`p.quoted_content`          | Capture content inside single *or* double quotes.
+`p.careful_collapse_ws`     | Substitution capture that trims and collapses contiguous interior white-spaces to one space but not inside quotes.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
+
+## Methods
+
+If you have imported the module as
+```lua
+local lpeg = require 'lulu.lpeg'
+```
+You also have access to the following methods:
+
+Pattern                     | Description
+--------------------------- | ---------------------------------------------------------------------
+`lpeg.dec_number(sep)`      | Match unsigned decimal integers with optional digit group separators.
+`lpeg.hex_number(sep)`      | Match unsigned hexadecimal integers with optional digit group separators.
+`lpeg.oct_number(sep)`      | Match unsigned octal integers with optional digit group separators.
+`lpeg.bin_number(sep)`      | Match unsigned binary integers with optional digit group separators.
+`lpeg.int_number(sep)`      | Match any form of signed integer with optional digit group separators.
+`lpeg.float_number(sep)`    | Match any form of signed float with optional digit group separators.
+`lpeg.number(sep)`          | Match any form of signed number with optional digit group separators.
+`lpeg.is_pattern(ptn)`      | Query to see if an argument is an lpeg pattern.
+`lpeg.anywhere(ptn)`        | Creates a pattern that allows `ptn` to work anywhere in a subject string.
+`lpeg.change(ptn,to)`       | Creates a substitution pattern that acts on strings so matches to `ptn` are changed to `to`.
+`lpeg.is_escaped(esc)`      | Creates a pattern that checks whether a string starts with an escape character. <br> The default escape character is the backslash.
+`lpeg.unescape(chars, esc)` | Creates a pattern that turns escaped characters into unescaped ones. <br> The default `chars` is `"`, the default `esc` is the backslash.
+`lpeg.to_eol(from)`         | Creates a pattern that matches starting with string/pattern `from` until the end of the line.
+`lpeg.tokenizer(sep)`       | Creates a table capture pattern to split a string into tokens based on a separator/pattern.
+`lpeg.before(sep)`          | Creates a capture pattern for all content before the first occurrence of a separator/pattern.
+`lpeg.after(sep)`           | Creates a capture pattern for all content after the first occurrence of a separator/pattern.
+`lpeg.delimited(l,r,line)`  | Creates a pattern to *match* delimited content.
+`lpeg.delimited_content(l,r,line)` | Creates a pattern to *capture* delimited content.
+`lpeg.after_set(set,ptn,skip)`| Creates a new pattern where `ptn` is only matched if it is preceded by a character in the `set` string. The `skip` string is used to skip over characters between the `set` and the `ptn` match (default whitespace).
+`lpeg.after_newline(ptn, allow_indent)` | Creates a new pattern where `ptn` is only matched if it is preceded by a newline character.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
+
+### Notes
+
+An example of the `sep` character for the various `lpeg.*_number(sep)` might be a comma.
+
+In the `lpeg.delimited*(l, r, line)` methods, `l` is the left delimiter, `r` is the right delimiter. <br>
+If the final boolean `line` is `true` (default is `false`) then the match stops at the first newline.
+
+- If neither delimiter is given then we default to using double quotes: "...".
+- If only one delimiter is given and it's a single character (e.g. "'") then we use that for both: '...'.
+- If only one delimiter is given with an even number of characters (e.g. "{}") then we split it in half '{' and '}'.
+- You can of course specify the left and right delimiters separately.
+- If `l == r` then escaped delimiters aren't matched: "inner \"quote\" here" matches the whole string.
+- If `l != r` then we 'balance' so "{}" applied to "{123{45}67}" matches on '123{45}67'.
+
+## See Also
+
+These patterns and methods can be used on a stand-alone basis.
+In many cases, they act as the engine driving methods in the {lulu.string} module which extends Lua's `string` class.
+
+{lulu.string}

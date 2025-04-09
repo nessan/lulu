@@ -1,0 +1,123 @@
+---
+title: Lulu Enums --- Enumerator Metatables
+---
+
+## The Base Metatable for Enumerators
+
+The enumerators within an `Enum` all share a common metatable.
+
+That metatable inherits from a *base* `Enumerator` metatable.
+
+The base metatable provides the following methods for all enumerators:
+
+Method                     | Brief Description
+-------------------------- | ----------------------------------------------------------------------
+`tostring()`               | Returns the name of the enumerator. <br> Enumerator names are unique within an `Enum`.
+`tonumber()`               | Returns the ordinal value of the enumerator. <br> By default, ordinals are consecutive integers starting at 1. <br> However, they can be set to other values and need not be unique.
+`is_a(enum)`               | Returns `true` if the `Enumerator` belongs to the argument `enum`.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
+
+For example if we have
+```lua
+local Suit = Enum{ 'Clubs', 'Diamonds', 'Hearts', 'Spades' }
+local s = Suit.Clubs     -- <1>
+```
+1. The `s` variable is an `Enumerator` instance so its metatable inherits from the base `Enumerator` metatable.
+
+Then `s:tostring()` is "Clubs", `s:tonumber()` is 1, and `s:is_a(Suit)` is `true`.
+
+## Base Metamethods
+
+The base metatable also provides the following metamethods for all enumerators:
+
+Method                     | Brief Description
+-------------------------- | ----------------------------------------------------------------------
+`.__index(key)`            | This metamethod allows direct access to any *associated* data for the enumerator.
+`.__newindex(key, val)`    | This metamethod prevents attempts to set values in an enumerator.
+`.__tostring()`            | Connects Lua's `tostring()` and `print` methods to the `Enumerator:tostring()` method.
+`.__eq(lhs, rhs)`          | Returns `true` if the two arguments agree on their ordinal values.
+`.__le(lhs, rhs)`          | Returns `true` if the first argument is numerically less than or equal to the second.
+`.__lt(lhs, rhs)`          | Returns `true` if the first argument is numerically less than the second.
+: {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
+
+For example, if we have
+```lua
+local Suit = Enum({
+    Clubs    = { abbrev = 'C', color = 'black', icon = '♣', ordinal = 0 },
+    Diamonds = { abbrev = 'D', color = 'red',   icon = '♦', ordinal = 1 },
+    Hearts   = { abbrev = 'H', color = 'red',   icon = '♥', ordinal = 2 },
+    Spades   = { abbrev = 'S', color = 'black', icon = '♠', ordinal = 3 }
+})
+local s = Suit.Hearts
+```
+Then `print(Suit.Clubs)` is "Clubs", while `print(Suit.Diamonds < Suit.Clubs)` is `false`.
+
+You can use the `__eq` metamethod to check if two enumerators are the same:
+```lua
+if s == Suit.Clubs then
+    ...
+elseif s == Suit.Diamonds then
+    ...
+elseif s == Suit.Hearts then
+    ...
+elseif s == Suit.Spades then
+    ...
+end
+```
+This is a slightly wordy version of the C switch statement.
+
+The `__index` metamethod allows you to directly     access the *associated* data for an enumerator.
+
+For example, if we have
+```lua
+local s = Suit.Hearts
+```
+Then `s.abbrev` is "H" and `s.color` is "red".
+
+The `__newindex` metamethod prevents you from setting values in an enumerator.
+
+For example, if we have
+```lua
+local s = Suit.Hearts
+s.abbrev = "X"
+```
+We get an error:
+```txt
+[WARNING] from 'newindex' (Enum.lua:73): Enumerators are immutable -- ignoring attempt to set `Hearts.abbrev` to  "X".
+```
+
+## Custom Metatables: `Enum:mt`
+
+While enumerators all share a common base metatable, each `Enum` provides a specific metatable for its enumerators.
+That metatable is returned by the `Enum:mt()` method.
+
+NOTE: All the enumerators in an `Enum` share the same metatable.
+That metatable is a clone of the base `Enumerator` metatable.
+
+By accessing the `Enum:mt()` metatable you can add your own methods to all the enumerators in the `Enum` *without* affecting other enums you may have created.
+
+For example, if we have
+```lua
+local Suit = Enum[[Clubs, Diamonds, Hearts, Spades]]
+```
+We can add a method to all the enumerators in the `Suit` enum:
+```lua
+local mt = Suit:mt()
+function mt.is_red(self)
+    return self == Suit.Diamonds or self == Suit.Hearts
+end
+```
+Now all the enumerators in the `Suit` enum have the `is_red` method:
+```lua
+print(Suit.Diamonds:is_red())  -- true
+print(Suit.Hearts:is_red())    -- true
+print(Suit.Clubs:is_red())     -- false
+print(Suit.Spades:is_red())    -- false
+```
+
+Note that only the enumerators in the `Suit` enum have the `is_red` method.
+The enumerators in other enums do not have it.
+
+## See Also
+
+{Enum.mt}

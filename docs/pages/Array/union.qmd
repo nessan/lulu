@@ -1,0 +1,104 @@
+---
+title: Lulu Arrays --- Unions, Intersections, Differences
+---
+
+## Introduction
+
+If you have imported the {lulu.Array} class as
+```lua
+local Array = require 'lulu.Array'
+```
+Then, you can use the following methods to combine `Arrays`:
+
+**`Array:union(...)`** <br>
+Returns a new `Array` that has all the values from the arguments (without any duplicates). <br>
+Any non-table argument will be treated as single element array.
+
+**`Array:intersection(...)`** <br>
+Returns a new `Array` that holds the common values from the arguments (without any duplicates). <br>
+Any non-table argument will be treated as single element array.
+
+**`Array:difference(other, symmetric)`** <br>
+Returns a new `Array` that holds the elements of `self` that are not in `other` where `other` can be an `Array` or a plain Lua array.
+
+NOTE: These methods only consider each clement's *value* when looking for commonality and differences.
+This contrasts with the {table.union}, {table.intersection} and {table.difference} methods which consider *both* the element index and the value.
+
+Generally `a:difference(b)  ~= b:difference(a)`.
+
+We sometimes refer to `a:difference(b)` as $a - b$.
+
+By default, the boolean `symmetric` argument is `false`.
+You can set it to `true` to get the *symmetric difference* between $a$ and $b$:
+$$
+a - b \cup b - a.
+$$
+That is the array of the elements that occurs only in *one* of `a` or `b`.
+
+## Example
+
+```lua
+local a1 = Array{1,2,3,4}
+local a2 = Array{3,4,5,6}
+putln("a1:                          %t", a1)
+putln("a2:                          %t", a2)
+putln("Union         a1,  a2:       %t", a1:union(a2))
+putln("Append        a1,  a2:       %t", a1:append(a2))
+putln("Intersection  a1,  a2:       %t", a1:intersection(a2))
+putln("Difference    a1 - a2:       %t", a1:difference(a2))
+putln("Difference    a2 - a1:       %t", a2:difference(a1))
+putln("Symmetric difference a1, a2: %t", a1:difference(a2, true))
+putln("Symmetric difference a2, a1: %t", a2:difference(a1, true))
+```
+
+Outputs:
+```txt
+a1:                          [1, 2, 3, 4]
+a2:                          [3, 4, 5, 6]
+Union         a1,  a2:       [1, 2, 3, 4, 5, 6]
+Append        a1,  a2:       [1, 2, 3, 4, 3, 4, 5, 6]   # <1>
+Intersection  a1,  a2:       [3, 4, 5, 6]
+Difference    a1 - a2:       [1, 2]
+Difference    a2 - a1:       []
+Symmetric difference a1, a2: [1, 2]
+Symmetric difference a2, a1: [1, 2]
+```
+1. The `Array:append` method just appends `a2` to `a1` which means there is duplication in this example.
+
+Now look at the same example using `table.union`, `table.intersection` and `table.difference`.
+
+```lua
+local a1 = Array{1,2,3,4}
+local a2 = Array{3,4,5,6}
+putln("a1:                          %t", a1)
+putln("a2:                          %t", a2)
+putln("Union         a1,  a2:       %t", table.union(a1, a2))
+putln("Intersection  a1,  a2:       %t", table.intersection(a1, a2))
+putln("Difference    a1 - a2:       %t", table.difference(a1, a2))
+putln("Difference    a2 - a1:       %t", table.difference(a2, a1))
+putln("Symmetric difference a1, a2: %t", table.difference(a1, a2, true))
+putln("Symmetric difference a1, a2: %t", table.difference(a2, a1, true))
+```
+
+Outputs
+```txt
+a1:                          [1, 2, 3, 4]
+a2:                          [3, 4, 5, 6]
+Union         a1,  a2:       {{1, 3}, {2, 4}, {3, 5}, {4, 6}}   # <1>
+Intersection  a1,  a2:       {}                                 # <2>
+Difference    a1 - a2:       {1, 2, 3, 4}
+Difference    a2 - a1:       {3, 4, 5, 6}
+Symmetric difference a1, a2: {{1, 3}, {2, 4}, {3, 5}, {4, 6}}
+Symmetric difference a1, a2: {{3, 1}, {4, 2}, {5, 3}, {6, 4}}
+```
+1. There are multiple values for the index *keys* 1,2,3 and 4.
+2. The common values are not at the same *index position* in the two arrays so the intersection is empty as far as `table` is concerned.
+
+## See Also
+
+{Array.append}         <br>
+{Array.__concat}       <br>
+{table.union}          <br>
+{table.intersection}   <br>
+{table.difference}     <br>
+{table.common_values}

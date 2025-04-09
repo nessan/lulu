@@ -1,0 +1,94 @@
+---
+title: Lulu Arrays -- Zipping Collections
+---
+
+## Introduction
+
+If you have imported the {lulu.Array} class as
+```lua
+local Array = require 'lulu.Array'
+```
+Then, you can use "zip" to combine two or more arrays.
+
+**`Array:zip(...)`**  <br>
+Returns a new `Array` formed by zipping `self` with other arguments.
+
+[Simplest Example:]{.bt}
+```lua
+local a1, a2 = Array{1,2,3}, Array{4,5,6}
+putln("%t:zip(%t) = %t", a1, a2, a1:zip(a2))    -- <1>
+```
+1. We use {format.putln} for formatted printing.
+
+Outputs:
+```txt
+[ 1, 2, 3 ]:zip([ 4, 5, 6 ]) = [ [ 1, 4 ], [ 2, 5 ], [ 3, 6 ] ]
+```
+
+In that example `a1` must be an `Array` instance but `a2` could be a plain Lua array:
+
+```lua
+local a1, a2 = Array{1,2,3}, {4,5,6}            -- <1>
+putln("%t:zip(%t) = %t", a1, a2, a1:zip(a2))
+```
+1. `a2` is now a plain Lua array.
+
+Outputs:
+```txt
+[ 1, 2, 3 ]:zip([ 4, 5, 6 ]) = [ [ 1, 4 ], [ 2, 5 ], [ 3, 6 ] ]
+```
+
+[Multiple Arguments of the Same Length:]{.bt}
+```lua
+local a1, a2, a3 = Array{1,2,3}, {4,5,6}, {7,8,9}
+putln("%t:zip(%t,%t) = %t", a1, a2, a3, a1:zip(a2,a3))
+```
+Outputs:
+```txt
+[ 1, 2, 3 ]:zip([ 4, 5, 6 ],[ 7, 8, 9 ]) = [ [ 1, 4, 7 ], [ 2, 5, 8 ], [ 3, 6, 9 ] ]
+```
+
+## Unequal Lengths
+
+The method also handles arguments that are not all the same length.
+
+The number of "rows" in the return value is always the same as the number of elements in the longest argument.
+If the input arrays are of different lengths, we cycle through the shorter arrays to fill the gaps.
+
+[Simplest Example:]{.bt}
+```lua
+local a1, a2 = Array{1,2,3}, {4,5}
+putln("%t:zip(%t) = %t", a1, a2, a1:zip(a2))
+```
+Outputs:
+```txt
+[ 1, 2, 3 ]:zip([ 4, 5 ]) = [ [ 1, 4 ], [ 2, 5 ], [ 3, 4 ] ]
+```
+
+[Multiple Argument Example:]{.bt}
+```lua
+local a1, a2, a3 = Array{1,2}, {4,5}, {7,8,9}
+putln("%t:zip(%t, %t) = %t", a1, a2, a3, a1:zip(a2,a3))
+```
+Outputs:
+```txt
+[ 1, 2 ]:zip([ 4, 5 ], [ 7, 8, 9 ]) = [ [ 7, 4, 1 ], [ 8, 5, 2 ], [ 9, 4, 1 ] ]
+```
+
+## Scalar Arguments
+
+You can also pass non-table arguments, which are simply treated as single-element arrays in this function.
+
+[Example:]{.bt}
+```lua
+local a1, a2, a3 = Array{1,2,3}, 4, 5
+putln("%t:zip(%d, %d) = %t", a1, a2, a3, a1:zip(a2, a3))
+```
+Outputs:
+```txt
+[ 1, 2, 3 ]:zip(4, 5) = [ [ 1, 4, 5 ], [ 2, 4, 5 ], [ 3, 4, 5 ] ]
+```
+
+## See Also
+
+{Array.flatten}

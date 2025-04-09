@@ -1,0 +1,45 @@
+---
+title: Lulu Enums --- Count and Iteration
+---
+
+## Introduction
+
+The `Enum` class has two methods that allow you to count and iterate over the enumerators.
+
+## `Enum:count`
+
+The `Enum:count()` method returns the number of enumerators in the `Enum`.
+
+[Example]{.bt}
+```lua
+ENUM 'Suit' { 'Clubs', 'Diamonds', 'Hearts', 'Spades' }
+putln("There are %d enumerators in the enum %q.", Suit:count(), Suit:type())
+```
+This outputs:
+```txt
+There are 4 enumerators in the enum "Suit".
+```
+
+## `Enum:iter`
+
+The `Enum:iter()` method returns an iterator that traverses the enumerators of the `Enum` in sorted order.
+
+[Example]{.bt}
+```lua
+ENUM 'Suit' { 'Clubs', 'Diamonds', 'Hearts', 'Spades' }
+for e in Suit:iter() do
+    putln("Enumerator: %s has ordinal value %d", e, e:tonumber())
+end
+```
+This outputs:
+```txt
+Enumerator: Clubs has ordinal value 1
+Enumerator: Diamonds has ordinal value 2
+Enumerator: Hearts has ordinal value 3
+Enumerator: Spades has ordinal value 4
+```
+
+## See Also
+
+{Enum.new} <br>
+{ENUM}

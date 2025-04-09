@@ -1,0 +1,154 @@
+---
+title: Lulu Enums --- Constructors
+---
+
+## Introduction
+
+**`Enum:new(...)`** and **`Enum(...)`**
+
+These functions create an `Enum` instance from various sources:
+
+TIP: The function call `Enum(...)` is a synonym for `Enum:new(...)`.
+
+1. The arguments can be an array of strings which are the enumerator names. <br> The strings can optionally have ordinal values for the enumerators embedded in them.
+2. The argument can be a single long string from which we parse enumerator names. <br> The string can optionally have ordinal values for the enumerators embedded in it.
+3. The argument can be a Lua table with string keys and and number values. <br> The table keys are the enumerator names and the table values are the ordinal values.
+4. The argument can be a Lua table with string keys and arbitrary associated data for the corresponding enumerators. <br> The table keys are the enumerator names and the table values are the arbitrary associated data. <br> The ordinals can be specified or generated as consecutive integers starting at 1.
+5. The argument can be missing. <br> `Enum()`returns an empty `Enum` instance that you can fill using the `add_enumerator` method.
+
+NOTE: In all cases, the enumerator names must be **unique**. <br>
+The enumerator ordinals can have duplicates. <br>
+If the ordinals are not specified we use consecutive integers starting at 1. <br>
+If you set a custom ordinal value for an enumerator the rest of the ordinal values increment from there.
+
+## From Strings
+
+```lua
+Suit_1 = Enum{ 'Clubs', 'Diamonds', 'Hearts', 'Spades' }                    -- <1>
+Suit_2 = Enum{ 'Clubs', 'Diamonds = 20', 'Hearts', 'Spades = 40' }          -- <2>
+Suit_3 = Enum{ 'Clubs = 1', 'Diamonds = 2', 'Hearts = 4', 'Spades = 8' }    -- <3>
+Suit_4 = Enum[[Clubs, Diamonds, Hearts, Spades]]                            -- <4>
+Suit_5 = Enum[[Clubs = 0, Diamond, Hearts = 3, Spades = 3]]                 -- <5>
+```
+1. The default ordinal values are `1, 2, 3, 4`.
+2. The ordinal values are `1, 20, 21, 40`.
+3. The ordinal values are `1, 2, 4, 8`.
+4. The ordinal values are `1, 2, 3, 4`.
+5. The ordinal values are `0, 1, 3, 3`.
+
+NOTE: In each case, the default type of the `Enum` instance is `Enum`.
+If you want a different type you can set it using the `Enum:set_type` method.
+
+```lua
+Suit_1:set_type('Suit_1')
+Suit_2:set_type('Suit_2')
+Suit_3:set_type('Suit_3')
+Suit_4:set_type('Suit_4')
+Suit_5:set_type('Suit_5')
+```
+
+If we print those `Enum` instances we get:
+```txt
+Suit_1: [1] Clubs, [2] Diamonds, [3] Hearts, [4] Spades         # <1>
+Suit_2: [1] Clubs, [20] Diamonds, [21] Hearts, [40] Spades
+Suit_3: [1] Clubs, [2] Diamonds, [4] Hearts, [8] Spades
+Suit_4: [1] Clubs, [2] Diamonds, [3] Hearts, [4] Spades
+Suit_5: [0] Clubs, [1] Diamond, [3] Hearts, [3] Spades
+```
+1. As promised, the ordinal values are `1, 2, 3, 4` etc.
+
+## From Tables
+
+You can create an `Enum` instance from a table with string keys and number values:
+```lua
+Suit_6 = Enum{ Clubs = 0, Diamonds = 1, Hearts = 2, Spades = 3 }            -- <1>
+```
+1. The ordinal values are `0, 1 2, 3`.
+
+More complex enums can have *associated data* for each enumerator:
+```lua
+Suit_7 = Enum{
+    Clubs    = { abbrev = 'C', colour = 'black', icon = '♣' },    -- <1>
+    Diamonds = { abbrev = 'D', colour = 'red',   icon = '♦' },    -- <2>
+    Hearts   = { abbrev = 'H', colour = 'red',   icon = '♥' },
+    Spades   = { abbrev = 'S', colour = 'black', icon = '♠' },
+}
+Suit_7:set_type('Suit_7')
+print(Suit_7:pretty())
+```
+Output:
+```txt
+Suit_7:
+    [1] Diamonds = { abbrev = "D", colour = "red", icon = "♦" },   # <1>
+    [2] Spades = { abbrev = "S", colour = "black", icon = "♠" },
+    [3] Hearts = { abbrev = "H", colour = "red", icon = "♥" },
+    [4] Clubs = { abbrev = "C", colour = "black", icon = "♣" }
+```
+1. The ordinal values are automatically generated as `1, 2, 3, 4`.
+
+You can retrieve any of the associated data for an enumerator using the `abbrev`, `color`, or `icon` fields respectively.
+For example, `Suit.Diamonds.abbrev` returns `'D'`.
+
+Here's an example of an enum with manually set ordinal values:
+```lua
+Suit_8 = Enum{
+    Clubs    = { abbrev = 'C', colour = 'black', icon = '♣', ordinal = 1 },    -- <1>
+    Diamonds = { abbrev = 'D', colour = 'red',   icon = '♦', ordinal = 2 },
+    Hearts   = { abbrev = 'H', colour = 'red',   icon = '♥', ordinal = 4 },
+    Spades   = { abbrev = 'S', colour = 'black', icon = '♠', ordinal = 8 },
+}
+Suit_8:set_type('Suit_8')
+putln("%T", Suit_8)
+```
+Output:
+```txt
+Suit_8:
+    [1] Clubs = { abbrev = "C", colour = "black", icon = "♣" },            # <1>
+    [2] Diamonds = { abbrev = "D", colour = "red", icon = "♦" },
+    [4] Hearts = { abbrev = "H", colour = "red", icon = "♥" },
+    [8] Spades = { abbrev = "S", colour = "black", icon = "♠" }
+```
+1. The ordinal values were manually set to `1, 2, 4, 8`.
+
+WARNING: If you are using enums with associated data and custom ordinal values, you should set *all* the ordinal values when you create the `Enum` instance.
+
+## Using the `ENUM` Function
+
+The `lulu.Enum` module exports the `Enum` class.
+
+It also exports an `ENUM` function that gives you another way to create an `Enum` instances with preset types.
+
+```lua
+ENUM 'Suit' { 'Clubs', 'Diamonds', 'Hearts', 'Spades' }
+```
+This is equivalent to:
+```lua
+local Suit = Enum:new{ 'Clubs', 'Diamonds', 'Hearts', 'Spades' }
+Suit:set_type('Suit')
+```
+A more complex example:
+```lua
+ENUM 'Suit' {
+    Clubs    = { abbrev = 'C', colour = 'black', icon = '♣', ordinal = 1 },
+    Diamonds = { abbrev = 'D', colour = 'red',   icon = '♦', ordinal = 2 },
+    Hearts   = { abbrev = 'H', colour = 'red',   icon = '♥', ordinal = 4 },
+    Spades   = { abbrev = 'S', colour = 'black', icon = '♠', ordinal = 8 },
+}
+```
+This is equivalent to:
+```lua
+local Suit = Enum:new{
+    Clubs    = { abbrev = 'C', colour = 'black', icon = '♣', ordinal = 1 },
+    Diamonds = { abbrev = 'D', colour = 'red',   icon = '♦', ordinal = 2 },
+    Hearts   = { abbrev = 'H', colour = 'red',   icon = '♥', ordinal = 4 },
+    Spades   = { abbrev = 'S', colour = 'black', icon = '♠', ordinal = 8 },
+}
+Suit:set_type('Suit')
+```
+
+## See Also
+
+{Enum.add_enumerator}   <br>
+{Enum.set_type}         <br>
+{Enum.type}             <br>
+{Enum.tostring}
