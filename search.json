@@ -1006,14 +1006,14 @@
     "href": "index.html",
     "title": "The lulu Library",
     "section": "",
-    "text": "lulu is a collection of Lua utility modules and classes. It includes a full-featured Array class, an Enum class, and a variety of utility functions and classes.\nIt also includes a copy of Scribe, a Lua module for converting Lua objects to strings that can gracefully handle recursive and shared tables."
+    "text": "lulu is a collection of Lua utility modules and classes. It includes a full-featured Array class, an Enum class, and a variety of other utility functions and extensions.\nIt also includes a copy of Scribe, a Lua module for converting Lua objects to strings that can gracefully handle recursive and shared tables."
   },
   {
     "objectID": "index.html#project-overview",
     "href": "index.html#project-overview",
     "title": "The lulu Library",
     "section": "",
-    "text": "lulu is a collection of Lua utility modules and classes. It includes a full-featured Array class, an Enum class, and a variety of utility functions and classes.\nIt also includes a copy of Scribe, a Lua module for converting Lua objects to strings that can gracefully handle recursive and shared tables."
+    "text": "lulu is a collection of Lua utility modules and classes. It includes a full-featured Array class, an Enum class, and a variety of other utility functions and extensions.\nIt also includes a copy of Scribe, a Lua module for converting Lua objects to strings that can gracefully handle recursive and shared tables."
   },
   {
     "objectID": "index.html#available-modules",
@@ -1027,7 +1027,14 @@
     "href": "index.html#installation-use",
     "title": "The lulu Library",
     "section": "Installation & Use",
-    "text": "Installation & Use\nlulu has no dependencies. Copy the lulu directory and start using it.\nReleased versions will also be uploaded to the luarocks repository, so you should be able to install them using:\nluarocks install lulu\nAssuming your path allows it, you can require('lulu.lulu') and have access to all the modules:\nrequire('lulu.lulu')\nlocal Suit = Enum {\n    Clubs    = { abbrev = 'C', color = 'black', icon = '♣', ordinal = 0 },\n    Diamonds = { abbrev = 'D', color = 'red',   icon = '♦', ordinal = 1 },\n    Hearts   = { abbrev = 'H', color = 'red',   icon = '♥', ordinal = 2 },\n    Spades   = { abbrev = 'S', color = 'black', icon = '♠', ordinal = 3 }\n}\nSuit:set_type('Suit')\nscribe.putln(\"%T\", Suit)\nThat will output:\nSuit:\n [0] Clubs = { abbrev = \"C\", color = \"black\", icon = \"♣\" },\n [1] Diamonds = { abbrev = \"D\", color = \"red\", icon = \"♦\" },\n [2] Hearts = { abbrev = \"H\", color = \"red\", icon = \"♥\" },\n [3] Spades = { abbrev = \"S\", color = \"black\", icon = \"♠\" }"
+    "text": "Installation & Use\nlulu has no dependencies. Copy the lulu directory and start using it.\nReleased versions will also be uploaded to the luarocks repository, so you should be able to install them using:\nluarocks install lulu"
+  },
+  {
+    "objectID": "index.html#usage",
+    "href": "index.html#usage",
+    "title": "The lulu Library",
+    "section": "Usage",
+    "text": "Usage\nAssuming your path allows it, you can require('lulu.lulu') and have access to all the modules:\nrequire('lulu.lulu')\nlocal Suit = Enum {\n    Clubs    = { abbrev = 'C', color = 'black', icon = '♣', ordinal = 0 },\n    Diamonds = { abbrev = 'D', color = 'red',   icon = '♦', ordinal = 1 },\n    Hearts   = { abbrev = 'H', color = 'red',   icon = '♥', ordinal = 2 },\n    Spades   = { abbrev = 'S', color = 'black', icon = '♠', ordinal = 3 }\n}\nSuit:set_type('Suit')\nscribe.putln(\"%T\", Suit)\nThat will output:\nSuit:\n [0] Clubs = { abbrev = \"C\", color = \"black\", icon = \"♣\" },\n [1] Diamonds = { abbrev = \"D\", color = \"red\", icon = \"♦\" },\n [2] Hearts = { abbrev = \"H\", color = \"red\", icon = \"♥\" },\n [3] Spades = { abbrev = \"S\", color = \"black\", icon = \"♠\" }\nAlternatively, you can access the modules individually:\nlocal scribe = require('lulu.scribe')\nlocal Array  = require('lulu.Array')\nlocal arr = Array:new({1, 2, 3})\narr:transform(\"*\", 10)\nscribe.putln(\"%t\", arr)\nThis will output:\n[ 10, 20, 30 ]"
   },
   {
     "objectID": "index.html#documentation",
@@ -1062,7 +1069,7 @@
     "href": "pages/index.html",
     "title": "The lulu Library",
     "section": "",
-    "text": "lulu is a collection of Lua utility modules and classes. It includes a full-featured Array class, an Enum class, and a variety of utility functions and classes.\nIt also includes a copy of Scribe, a Lua module for converting Lua objects to strings that can gracefully handle recursive and shared tables.",
+    "text": "lulu is a collection of Lua utility modules and classes. It includes a full-featured Array class, an Enum class, and a variety of other utility functions and extensions.\nIt also includes a copy of Scribe, a Lua module for converting Lua objects to strings that can gracefully handle recursive and shared tables.",
     "crumbs": [
       "Home",
       "Library Overview"
@@ -1073,7 +1080,7 @@
     "href": "pages/index.html#project-overview",
     "title": "The lulu Library",
     "section": "",
-    "text": "lulu is a collection of Lua utility modules and classes. It includes a full-featured Array class, an Enum class, and a variety of utility functions and classes.\nIt also includes a copy of Scribe, a Lua module for converting Lua objects to strings that can gracefully handle recursive and shared tables.",
+    "text": "lulu is a collection of Lua utility modules and classes. It includes a full-featured Array class, an Enum class, and a variety of other utility functions and extensions.\nIt also includes a copy of Scribe, a Lua module for converting Lua objects to strings that can gracefully handle recursive and shared tables.",
     "crumbs": [
       "Home",
       "Library Overview"
@@ -1095,7 +1102,18 @@
     "href": "pages/index.html#installation-use",
     "title": "The lulu Library",
     "section": "Installation & Use",
-    "text": "Installation & Use\nlulu has no dependencies. Copy the lulu directory and start using it.\nReleased versions will also be uploaded to the luarocks repository, so you should be able to install them using:\nluarocks install lulu\nAssuming your path allows it, you can require('lulu.lulu') and have access to all the modules:\nrequire('lulu.lulu')\nlocal Suit = Enum {\n    Clubs    = { abbrev = 'C', color = 'black', icon = '♣', ordinal = 0 },\n    Diamonds = { abbrev = 'D', color = 'red',   icon = '♦', ordinal = 1 },\n    Hearts   = { abbrev = 'H', color = 'red',   icon = '♥', ordinal = 2 },\n    Spades   = { abbrev = 'S', color = 'black', icon = '♠', ordinal = 3 }\n}\nSuit:set_type('Suit')\nscribe.putln(\"%T\", Suit)\nThat will output:\nSuit:\n [0] Clubs = { abbrev = \"C\", color = \"black\", icon = \"♣\" },\n [1] Diamonds = { abbrev = \"D\", color = \"red\", icon = \"♦\" },\n [2] Hearts = { abbrev = \"H\", color = \"red\", icon = \"♥\" },\n [3] Spades = { abbrev = \"S\", color = \"black\", icon = \"♠\" }",
+    "text": "Installation & Use\nlulu has no dependencies. Copy the lulu directory and start using it.\nReleased versions will also be uploaded to the luarocks repository, so you should be able to install them using:\nluarocks install lulu",
+    "crumbs": [
+      "Home",
+      "Library Overview"
+    ]
+  },
+  {
+    "objectID": "pages/index.html#usage",
+    "href": "pages/index.html#usage",
+    "title": "The lulu Library",
+    "section": "Usage",
+    "text": "Usage\nAssuming your path allows it, you can require('lulu.lulu') and have access to all the modules:\nrequire('lulu.lulu')\nlocal Suit = Enum {\n    Clubs    = { abbrev = 'C', color = 'black', icon = '♣', ordinal = 0 },\n    Diamonds = { abbrev = 'D', color = 'red',   icon = '♦', ordinal = 1 },\n    Hearts   = { abbrev = 'H', color = 'red',   icon = '♥', ordinal = 2 },\n    Spades   = { abbrev = 'S', color = 'black', icon = '♠', ordinal = 3 }\n}\nSuit:set_type('Suit')\nscribe.putln(\"%T\", Suit)\nThat will output:\nSuit:\n [0] Clubs = { abbrev = \"C\", color = \"black\", icon = \"♣\" },\n [1] Diamonds = { abbrev = \"D\", color = \"red\", icon = \"♦\" },\n [2] Hearts = { abbrev = \"H\", color = \"red\", icon = \"♥\" },\n [3] Spades = { abbrev = \"S\", color = \"black\", icon = \"♠\" }\nAlternatively, you can access the modules individually:\nlocal scribe = require('lulu.scribe')\nlocal Array  = require('lulu.Array')\nlocal arr = Array:new({1, 2, 3})\narr:transform(\"*\", 10)\nscribe.putln(\"%t\", arr)\nThis will output:\n[ 10, 20, 30 ]",
     "crumbs": [
       "Home",
       "Library Overview"

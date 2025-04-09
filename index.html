@@ -325,6 +325,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
   <li><a href="#project-overview" id="toc-project-overview" class="nav-link active" data-scroll-target="#project-overview">Project Overview</a></li>
   <li><a href="#available-modules" id="toc-available-modules" class="nav-link" data-scroll-target="#available-modules">Available Modules</a></li>
   <li><a href="#installation-use" id="toc-installation-use" class="nav-link" data-scroll-target="#installation-use">Installation &amp; Use</a></li>
+  <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
   <li><a href="#documentation" id="toc-documentation" class="nav-link" data-scroll-target="#documentation">Documentation</a></li>
   <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements">Acknowledgements</a></li>
   <li><a href="#contact" id="toc-contact" class="nav-link" data-scroll-target="#contact">Contact</a></li>
@@ -356,7 +357,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 
 <section id="project-overview" class="level2">
 <h2 class="anchored" data-anchor-id="project-overview">Project Overview</h2>
-<p><code>lulu</code> is a collection of Lua utility modules and classes. It includes a full-featured <code>Array</code> class, an <code>Enum</code> class, and a variety of utility functions and classes.</p>
+<p><code>lulu</code> is a collection of Lua utility modules and classes. It includes a full-featured <code>Array</code> class, an <code>Enum</code> class, and a variety of other utility functions and extensions.</p>
 <p>It also includes a copy of <a href="https://nessan.github.io/scribe">Scribe</a>, a Lua module for converting Lua objects to strings that can gracefully handle recursive and shared tables.</p>
 </section>
 <section id="available-modules" class="level2">
@@ -423,6 +424,9 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 <p><code>lulu</code> has no dependencies. Copy the <code>lulu</code> directory and start using it.</p>
 <p>Released versions will also be uploaded to the luarocks repository, so you should be able to install them using:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">luarocks</span> install lulu</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="usage" class="level2">
+<h2 class="anchored" data-anchor-id="usage">Usage</h2>
 <p>Assuming your path allows it, you can <code>require('lulu.lulu')</code> and have access to all the modules:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span><span class="op">(</span><span class="st">'lulu.lulu'</span><span class="op">)</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">Suit</span> <span class="op">=</span> Enum <span class="op">{</span></span>
@@ -439,6 +443,14 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a> [1] Diamonds = { abbrev = "D", color = "red", icon = "♦" },</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a> [2] Hearts = { abbrev = "H", color = "red", icon = "♥" },</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a> [3] Spades = { abbrev = "S", color = "black", icon = "♠" }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Alternatively, you can access the modules individually:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">scribe</span> <span class="op">=</span> <span class="fu">require</span><span class="op">(</span><span class="st">'lulu.scribe'</span><span class="op">)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">Array</span>  <span class="op">=</span> <span class="fu">require</span><span class="op">(</span><span class="st">'lulu.Array'</span><span class="op">)</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">arr</span> <span class="op">=</span> <span class="va">Array</span><span class="op">:</span>new<span class="op">({</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">})</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="va">arr</span><span class="op">:</span>transform<span class="op">(</span><span class="st">"*"</span><span class="op">,</span> <span class="dv">10</span><span class="op">)</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="va">scribe</span><span class="op">.</span>putln<span class="op">(</span><span class="st">"%t"</span><span class="op">,</span> <span class="va">arr</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will output:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>[ 10, 20, 30 ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="documentation" class="level2">
 <h2 class="anchored" data-anchor-id="documentation">Documentation</h2>
