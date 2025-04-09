@@ -1,26 +1,26 @@
 # lulu
 
 `lulu` is a collection of Lua utility modules and classes.
-It includes a full-featured `Array` class, an `Enum` class, and a variety of utility functions and classes.
+It includes a full-featured `Array` class, an `Enum` class, and a variety of other utility functions and extensions.
 
 It also includes a copy of [`scribe`](https://nessan.github.io/scribe), a Lua module for formatted output that gracefully handles Lua tables.
 
 ## Available Modules
 
-Module              | Purpose
-------------------- | -----------------------------------------------------------------------------
-`lulu.Array`        | A full-featured `Array` class for Lua.
-`lulu.Enum`         | An `Enum` class for Lua.
-`lulu.callable`     | Builds "anonymous" functions from strings etc.
-`lulu.messages`     | Informational and error messages used throughout `lulu`.
-`lulu.scribe`       | Converts Lua objects to strings. Gracefully handles recursive and shared tables.
-`lulu.table`        | Lua `table` extensions that work on *any* table.
-`lulu.string`       | Lua `string` extensions that are added to all string objects.
-`lulu.xpeg`         | An extended `lpeg` module with predefined patterns and useful functions.
-`lulu.paths`        | Some rudimentary path query methods.
-`lulu.types`        | Type-checking methods.
+| Module          | Purpose                                                                          |
+| --------------- | -------------------------------------------------------------------------------- |
+| `lulu.Array`    | A full-featured `Array` class for Lua.                                           |
+| `lulu.Enum`     | An `Enum` class for Lua.                                                         |
+| `lulu.callable` | Builds "anonymous" functions from strings etc.                                   |
+| `lulu.messages` | Informational and error messages used throughout `lulu`.                         |
+| `lulu.scribe`   | Converts Lua objects to strings. Gracefully handles recursive and shared tables. |
+| `lulu.table`    | Lua `table` extensions that work on _any_ table.                                 |
+| `lulu.string`   | Lua `string` extensions that are added to all string objects.                    |
+| `lulu.xpeg`     | An extended `lpeg` module with predefined patterns and useful functions.         |
+| `lulu.paths`    | Some rudimentary path query methods.                                             |
+| `lulu.types`    | Type-checking methods.                                                           |
 
-## Installation & Use
+## Installation
 
 `lulu` has no dependencies. Copy the `lulu` directory and start using it.
 
@@ -29,6 +29,8 @@ Released versions of `lulu` will be uploaded to [LuaRocks](https://luarocks.org)
 ```bash
 luarocks install lulu
 ```
+
+## Usage
 
 Assuming your path allows it, you can `require('lulu.lulu')` and have access to all the modules:
 
@@ -52,6 +54,22 @@ Suit:
  [1] Diamonds = { abbrev = "D", color = "red", icon = "♦" },
  [2] Hearts = { abbrev = "H", color = "red", icon = "♥" },
  [3] Spades = { abbrev = "S", color = "black", icon = "♠" }
+```
+
+Alternatively, you can access the modules individually:
+
+```lua
+local scribe = require('lulu.scribe')
+local Array  = require('lulu.Array')
+local arr = Array:new({1, 2, 3})
+arr:transform("*", 10)
+scribe.putln("%t", arr)
+```
+
+This will output:
+
+```txt
+[ 10, 20, 30 ]
 ```
 
 ## Documentation

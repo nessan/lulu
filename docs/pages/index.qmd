@@ -5,7 +5,7 @@ title: The `lulu` Library
 ## Project Overview
 
 `lulu` is a collection of Lua utility modules and classes.
-It includes a full-featured `Array` class, an `Enum` class, and a variety of utility functions and classes.
+It includes a full-featured `Array` class, an `Enum` class, and a variety of other utility functions and extensions.
 
 It also includes a copy of {scribe}, a Lua module for converting Lua objects to strings that can gracefully handle recursive and shared tables.
 
@@ -35,6 +35,8 @@ Released versions will also be uploaded to the luarocks repository, so you shoul
 luarocks install lulu
 ```
 
+## Usage
+
 Assuming your path allows it, you can `require('lulu.lulu')` and have access to all the modules:
 ```lua
 require('lulu.lulu')
@@ -55,6 +57,19 @@ Suit:
  [1] Diamonds = { abbrev = "D", color = "red", icon = "♦" },
  [2] Hearts = { abbrev = "H", color = "red", icon = "♥" },
  [3] Spades = { abbrev = "S", color = "black", icon = "♠" }
+```
+
+Alternatively, you can access the modules individually:
+```lua
+local scribe = require('lulu.scribe')
+local Array  = require('lulu.Array')
+local arr = Array:new({1, 2, 3})
+arr:transform("*", 10)
+scribe.putln("%t", arr)
+```
+This will output:
+```txt
+[ 10, 20, 30 ]
 ```
 
 ## Documentation
