@@ -355,7 +355,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>The enumerators for an <code>Enum</code> instance are usually specified when the <code>Enum</code> is created.</p>
-<p>However, you can add an enumerator to an existing <code>Enum</code> using the <code>Enum:add_enumerator</code> method. We use this feature when we are using <code>lulu</code> to create domain specific languages and want to add an enumerator for a new domain.</p>
+<p>However, you can add an enumerator to an existing <code>Enum</code> using the <code>Enum:add_enumerator</code> method. We use this feature when using <code>lulu</code> to create domain-specific languages and want to add an enumerator for a new domain.</p>
 <p>The <code>add_enumerator(name, ...)</code> method has several forms:</p>
 </section>
 <section id="one-argument" class="level2">
@@ -410,7 +410,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
     
 In the two argument form, the second argument <strong>must</strong> be either a number or a table.
 </td></tr></tbody></table></div>
-<p><strong><code>Enum:add_enumerator(name, ordinal)</code></strong> <br> If the second argument is a number we add an enumerator to the <code>Enum</code> instance with the specified ordinal value.</p>
+<p><strong><code>Enum:add_enumerator(name, ordinal)</code></strong> <br> If the second argument is a number, we add an enumerator to the <code>Enum</code> instance with the specified ordinal value.</p>
 <p><span class="bt">Example</span></p>
 <div class="sourceCode" id="annotated-cell-5"><pre class="sourceCode lua code-annotation-code code-with-copy code-annotated"><code class="sourceCode lua"><span id="annotated-cell-5-1"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a>ENUM <span class="st">'Suit'</span> <span class="op">{}</span></span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-5-2" class="code-annotation-target"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a><span class="va">Suit</span><span class="op">:</span>add_enumerator<span class="op">(</span><span class="st">'Clubs'</span><span class="op">,</span>    <span class="dv">1</span><span class="op">)</span></span>
@@ -426,7 +426,7 @@ In the two argument form, the second argument <strong>must</strong> be either a 
 </dl>
 <p>This outputs:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Suit: [1] Clubs, [2] Diamonds, [4] Hearts, [8] Spades</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong><code>Enum:add_enumerator(name, associated_data)</code></strong> <br> If the second argument is a table we add an enumerator to the <code>Enum</code> instance with the specified associated data. The ordinal value can be specified in the table of associated data under the <code>ordinal</code> field or it will be automatically generated as the next consecutive integer in the existing sequence.</p>
+<p><strong><code>Enum:add_enumerator(name, associated_data)</code></strong> <br> If the second argument is a table, we add an enumerator to the <code>Enum</code> instance using the specified associated data. The ordinal value can be specified in the associated data table under the <code>ordinal</code> field or automatically generated as the next consecutive integer in the existing sequence.</p>
 <p><span class="bt">Example</span></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ENUM <span class="st">'Suit'</span> <span class="op">{}</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="va">Suit</span><span class="op">:</span>add_enumerator<span class="op">(</span><span class="st">'Clubs'</span><span class="op">,</span>    <span class="op">{</span> <span class="va">color</span> <span class="op">=</span> <span class="st">'black'</span> <span class="op">})</span></span>
@@ -470,7 +470,7 @@ In the two argument form, the second argument <strong>must</strong> be either a 
 </section>
 <section id="three-arguments" class="level2">
 <h2 class="anchored" data-anchor-id="three-arguments">Three Arguments</h2>
-<p><strong><code>Enum:add_enumerator(name, ordinal, associated_data)</code></strong> <br> In this form, the ordinal value is specified explicitly, and must be a number. The associated data must be a table. Any ordinal field in the associated data is ignored.</p>
+<p><strong><code>Enum:add_enumerator(name, ordinal, associated_data)</code></strong> <br> In this form, the ordinal value is specified explicitly and must be a number. The associated data must be a table. Any ordinal field in the associated data is ignored.</p>
 <p><span class="bt">Example</span></p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ENUM <span class="st">'Suit'</span> <span class="op">{}</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="va">Suit</span><span class="op">:</span>add_enumerator<span class="op">(</span><span class="st">'Clubs'</span><span class="op">,</span>    <span class="dv">1</span><span class="op">,</span> <span class="op">{</span> <span class="va">color</span> <span class="op">=</span> <span class="st">'black'</span> <span class="op">})</span></span>
@@ -501,10 +501,10 @@ In the two argument form, the second argument <strong>must</strong> be either a 
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-14" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-14" data-code-lines="2" data-code-annotation="1">Here the ordinal values from the associated data are not used as we specified the ordinal values explicitly.</span>
+<span data-code-cell="annotated-cell-14" data-code-lines="2" data-code-annotation="1">Here, the ordinal values from the associated data are not used as we specified the ordinal values explicitly.</span>
 </dd>
 </dl>
-<p>You are free to specify <em>some</em> of the the ordinal values in the associated data or have them automatically generated.</p>
+<p>You are free to specify <em>some</em> of the ordinal values in the associated data or have them automatically generated.</p>
 <p><span class="bt">Example</span></p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ENUM <span class="st">'Suit'</span> <span class="op">{}</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="va">Suit</span><span class="op">:</span>add_enumerator<span class="op">(</span><span class="st">'Clubs'</span><span class="op">,</span>    <span class="dv">1</span><span class="op">,</span> <span class="op">{</span> <span class="va">color</span> <span class="op">=</span> <span class="st">'black'</span><span class="op">,</span> <span class="va">ordinal</span> <span class="op">=</span> <span class="dv">10</span> <span class="op">})</span></span>
@@ -521,11 +521,11 @@ In the two argument form, the second argument <strong>must</strong> be either a 
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-16" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-16" data-code-lines="2" data-code-annotation="1">The ordinal value in the associated data is ignored as we specified the value in the second argument.</span>
+<span data-code-cell="annotated-cell-16" data-code-lines="2" data-code-annotation="1">The ordinal value in the associated data is ignored, as the value was given in the second argument.</span>
 </dd>
 <dt data-target-cell="annotated-cell-16" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-16" data-code-lines="3" data-code-annotation="2">The ordinal value in the associated data is ignored as we specified the value in the second argument.</span>
+<span data-code-cell="annotated-cell-16" data-code-lines="3" data-code-annotation="2">The ordinal value in the associated data is ignored, as the value was given in the second argument.</span>
 </dd>
 <dt data-target-cell="annotated-cell-16" data-target-annotation="3">3</dt>
 <dd>

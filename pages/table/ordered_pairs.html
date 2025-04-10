@@ -357,7 +357,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>If you have imported the <a href="../../pages/table/index.html"><code>lulu.table</code></a> module as</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span> <span class="st">'lulu.table'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>then, you have access to a new iterator maker:</p>
+<p>Then, you have access to a new iterator maker:</p>
 <p><strong><code>table.ordered_pairs(comparator)</code></strong> <br> Returns an iterator maker — a function that takes a table and returns an iterator. The iterator returns key-value pairs in a fixed order determined by the <code>comparator</code> argument.</p>
 <p>Lau supplies a standard <a href="https://www.lua.org/manual/5.4/manual.html#6.6"><code>pairs</code></a> method that iterates through all the key-value pairs in any <code>table</code>. However, that traversal is done in an undefined order and can vary from run to run.</p>
 <div class="admonition caution">
@@ -367,7 +367,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
     
 Lua has no defined order for the keys in a general <code>table</code>. This contrasts with the keys in a pure Lua array where the indices are always stored in their natural order from 1 on.
 </td></tr></tbody></table></div>
-<p>We supply a counterpart iterator <code>table.ordered_pairs(comparator)</code> that returns an iterator that traverses the keys in the table in a fixed order. By default, keys are sorted by type and then by value, so numeric keys come first in their natural order, and those are followed by the others where strings are sorted alphabetically.</p>
+<p>We supply a counterpart iterator, <code>table.ordered_pairs(comparator)</code> that returns an iterator that traverses the keys in the table in a fixed order. By default, keys are sorted by type and then by value, so numeric keys come first in their natural order, and those are followed by the others where strings are sorted alphabetically.</p>
 <p>If you supply a <code>comparator</code> argument it should take two key arguments <code>k1, k2</code> and return <code>true</code> if you want <code>k1</code> to appear before <code>k2</code>.</p>
 <p><span class="bt">Example</span></p>
 <div class="sourceCode" id="annotated-cell-2"><pre class="sourceCode lua code-annotation-code code-with-copy code-annotated"><code class="sourceCode lua"><span id="annotated-cell-2-1"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">tbl</span> <span class="op">=</span> <span class="op">{</span> <span class="va">frog</span> <span class="op">=</span> <span class="dv">1</span><span class="op">,</span> <span class="va">badger</span> <span class="op">=</span> <span class="dv">2</span><span class="op">,</span> <span class="va">eagle</span> <span class="op">=</span> <span class="dv">3</span> <span class="op">}</span></span>
@@ -387,11 +387,11 @@ Lua has no defined order for the keys in a general <code>table</code>. This cont
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="5" data-code-annotation="2">Here, the <code>ordered_pairs</code> method uses the default key comparator function.</span>
+<span data-code-cell="annotated-cell-2" data-code-lines="5" data-code-annotation="2">The <code>ordered_pairs</code> method uses the default key comparator function.</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="9" data-code-annotation="3">Here, the <code>ordered_pairs</code> method uses a custom key comparator “function”.</span>
+<span data-code-cell="annotated-cell-2" data-code-lines="9" data-code-annotation="3">The <code>ordered_pairs</code> method uses a custom key comparator “function”.</span>
 </dd>
 </dl>
 <p>outputs</p>
@@ -427,14 +427,14 @@ Lua has no defined order for the keys in a general <code>table</code>. This cont
 <li>You can use Lua functions like <code>table.ordered_pairs(function(a,b) return a &gt; b end)</code>.</li>
 <li>You can use a string operator like <code>table.ordered_pairs("&gt;")</code>.</li>
 <li>You can use a string {lulu.anon} like <code>table.ordered_pairs("|a,b| a &gt; b")</code>.</li>
-<li>You can pass a “table” that happens to be *callable, i.e., it has a <code>__call()</code> metamethod that takes two items and compares them.</li>
+<li>You can pass a “table” that happens to be *callable, i.e., it has a <code>__call()</code> metamethod that takes and compares two items.</li>
 </ol>
-<p>There is more detail on the second and third options in the documentation for the <a href="../../pages/callable/index.html"><code>lulu.callable</code></a> module.</p>
+<p>There is more detail on the second and third options in the documentation for <a href="../../pages/callable/index.html"><code>lulu.callable</code></a>.</p>
 </section>
 </section>
 <section id="table.compareab" class="level2">
 <h2 class="anchored" data-anchor-id="table.compareab"><code>table.compare(a,b)</code></h2>
-<p>The <code>table.compare</code> function is the default comparator used by the <code>table.ordered_pairs</code> method. It compares two values <code>a</code> and <code>b</code> by type first and then by value.</p>
+<p>The <code>table.compare</code> function is the default comparator used by the <code>table.ordered_pairs</code> method. It compares two values, <code>a</code> and <code>b</code>, by type first and then by value.</p>
 <p>Numeric keys come first and are sorted in natural order. String keys are sorted alphabetically.</p>
 </section>
 <section id="see-also" class="level2">

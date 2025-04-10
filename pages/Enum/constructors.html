@@ -364,18 +364,18 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 The function call <code>Enum(...)</code> is a synonym for <code>Enum:new(...)</code>.
 </td></tr></tbody></table></div>
 <ol type="1">
-<li>The arguments can be an array of strings which are the enumerator names. <br> The strings can optionally have ordinal values for the enumerators embedded in them.</li>
-<li>The argument can be a single long string from which we parse enumerator names. <br> The string can optionally have ordinal values for the enumerators embedded in it.</li>
-<li>The argument can be a Lua table with string keys and and number values. <br> The table keys are the enumerator names and the table values are the ordinal values.</li>
-<li>The argument can be a Lua table with string keys and arbitrary associated data for the corresponding enumerators. <br> The table keys are the enumerator names and the table values are the arbitrary associated data. <br> The ordinals can be specified or generated as consecutive integers starting at 1.</li>
-<li>The argument can be missing. <br> <code>Enum()</code>returns an empty <code>Enum</code> instance that you can fill using the <code>add_enumerator</code> method.</li>
+<li>The arguments can be an array of strings, which are the enumerator names. <br> The strings can optionally have ordinal values for the enumerators embedded in them.</li>
+<li>The argument can be a long string from which we parse enumerator names. <br> The string can optionally have ordinal values for the enumerators embedded in it.</li>
+<li>The argument can be a Lua table with string keys and number values. <br> The table keys are the enumerator names, and the table values are the ordinals.</li>
+<li>The argument can be a Lua table with string keys and arbitrary associated data for the corresponding enumerators. <br> The table keys are the enumerator names, and the table values are the arbitrary associated data. <br> The ordinals can be specified or generated as consecutive integers starting at 1.</li>
+<li>The argument can be missing. <br> <code>Enum()</code>returns an empty <code>Enum</code> instance you can fill using the <code>add_enumerator</code> method.</li>
 </ol>
 <div class="admonition note">
     <table><tbody><tr>
     <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
     <td class="content">
     
-In all cases, the enumerator names must be <strong>unique</strong>. <br> The enumerator ordinals can have duplicates. <br> If the ordinals are not specified we use consecutive integers starting at 1. <br> If you set a custom ordinal value for an enumerator the rest of the ordinal values increment from there.
+In all cases, the enumerator names must be <strong>unique</strong>. <br> The enumerator ordinals can have duplicates. <br> If the ordinals are not specified, we use consecutive integers starting at 1. <br> If you set a custom ordinal value for an enumerator the rest of the ordinal values increment from there.
 </td></tr></tbody></table></div>
 </section>
 <section id="from-strings" class="level2">
@@ -463,7 +463,7 @@ In each case, the default type of the <code>Enum</code> instance is <code>Enum</
 <span data-code-cell="annotated-cell-6" data-code-lines="2" data-code-annotation="1">The ordinal values are automatically generated as <code>1, 2, 3, 4</code>.</span>
 </dd>
 </dl>
-<p>You can retrieve any of the associated data for an enumerator using the <code>abbrev</code>, <code>color</code>, or <code>icon</code> fields respectively. For example, <code>Suit.Diamonds.abbrev</code> returns <code>'D'</code>.</p>
+<p>You can retrieve any associated data for an enumerator using the <code>abbrev</code>, <code>color</code>, or <code>icon</code> fields. For example, <code>Suit.Diamonds.abbrev</code> returns <code>'D'</code>.</p>
 <p>Here’s an example of an enum with manually set ordinal values:</p>
 <div class="sourceCode" id="annotated-cell-7"><pre class="sourceCode lua code-annotation-code code-with-copy"><code class="sourceCode lua"><span id="annotated-cell-7-1"><a href="#annotated-cell-7-1" aria-hidden="true" tabindex="-1"></a><span class="va">Suit_8</span> <span class="op">=</span> Enum<span class="op">{</span></span>
 <span id="annotated-cell-7-2"><a href="#annotated-cell-7-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">Clubs</span>    <span class="op">=</span> <span class="op">{</span> <span class="va">abbrev</span> <span class="op">=</span> <span class="st">'C'</span><span class="op">,</span> <span class="va">colour</span> <span class="op">=</span> <span class="st">'black'</span><span class="op">,</span> <span class="va">icon</span> <span class="op">=</span> <span class="st">'♣'</span><span class="op">,</span> <span class="va">ordinal</span> <span class="op">=</span> <span class="dv">1</span> <span class="op">},</span></span>
@@ -496,7 +496,7 @@ If you are using enums with associated data and custom ordinal values, you shoul
 <section id="using-the-enum-function" class="level2">
 <h2 class="anchored" data-anchor-id="using-the-enum-function">Using the <code>ENUM</code> Function</h2>
 <p>The <code>lulu.Enum</code> module exports the <code>Enum</code> class.</p>
-<p>It also exports an <code>ENUM</code> function that gives you another way to create an <code>Enum</code> instances with preset types.</p>
+<p>It also exports an <code>ENUM</code> function that gives you another way to create an <code>Enum</code> instance with preset types.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ENUM <span class="st">'Suit'</span> <span class="op">{</span> <span class="st">'Clubs'</span><span class="op">,</span> <span class="st">'Diamonds'</span><span class="op">,</span> <span class="st">'Hearts'</span><span class="op">,</span> <span class="st">'Spades'</span> <span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This is equivalent to:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">Suit</span> <span class="op">=</span> <span class="va">Enum</span><span class="op">:</span>new<span class="op">{</span> <span class="st">'Clubs'</span><span class="op">,</span> <span class="st">'Diamonds'</span><span class="op">,</span> <span class="st">'Hearts'</span><span class="op">,</span> <span class="st">'Spades'</span> <span class="op">}</span></span>

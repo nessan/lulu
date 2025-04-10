@@ -358,12 +358,12 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 <div class="sourceCode" id="cb1"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span> <span class="st">'lulu.table'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>then, you can search for particular keys and values in any <code>table</code> using the following methods.</p>
 <p><strong><code>table.find(tbl,value)</code></strong> <br> Returns the first key found in <code>tbl</code> where <code>tbl[key]</code> is <em>identical in content</em> to <code>value</code>. <br> This is a top-level search that returns <code>nil</code> on failure.</p>
-<p><strong><code>table.contains(tbl,value)</code></strong> <br> Returns <code>true</code> if there is a top-level value in <code>tbl</code> that is <em>identical in content</em> to <code>value</code>.</p>
+<p><strong><code>table.contains(tbl,value)</code></strong> <br> Returns <code>true</code> if a top-level value in <code>tbl</code> is <em>identical in content</em> to <code>value</code>.</p>
 <p><strong><code>table.find_if(tbl,predicate,...)</code></strong> <br> Returns a <code>key, value, p</code> trio where <code>p = predicate(value,...)</code> is not <code>nil</code> and <code>value = tbl[key]</code>. <br> This is a top-level search that returns <code>nil</code> on failure.</p>
 </section>
 <section id="table.find-table.contains" class="level2">
 <h2 class="anchored" data-anchor-id="table.find-table.contains"><code>table.find</code> &amp; <code>table.contains</code></h2>
-<p>The <code>table.find</code> method searches the top-level keys in <code>tbl</code> for the one whose corresponding value matches the searched-for item. The matches are done using <a href="../../pages/table/eq.html"><code>table.eq</code></a> so, if the hunted-for object is a table, we look for one identical in content, not just occupying the same memory blocks.</p>
+<p>The <code>table.find</code> method searches the top-level keys in <code>tbl</code> for the one whose corresponding value matches the searched-for item. The matches use <a href="../../pages/table/eq.html"><code>table.eq</code></a> so, if the hunted-for object is a table, we look for one identical in content, not just occupying the same memory blocks.</p>
 <div class="admonition note">
     <table><tbody><tr>
     <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
@@ -389,7 +389,7 @@ The search stops on the first match. The concept of “first” is nebulous for 
 <section id="table.find_if" class="level2">
 <h2 class="anchored" data-anchor-id="table.find_if"><code>table.find_if</code></h2>
 <p>The <code>table.find_if(tbl ,predicate,...)</code> method allows for more complex searches.</p>
-<p>It looks for a top-level <code>key</code> in <code>tbl</code> such that <code>predicate(tbl[key], ...) ~= nil</code>. <br> On success, it returns the trio <code>key, tbl[key], predicate(tbl[key],...)</code>. <br> On failure, it returns the trio <code>nil, nil, nil</code>.</p>
+<p>It looks for a top-level <code>key</code> in <code>tbl</code> such that <code>predicate(tbl[key], ...) ~= nil</code>. <br> On success, it returns the trio <code>key, tbl[key], predicate(tbl[key],...)</code>. <br> It returns the trio <code>nil, nil, nil</code> on failure.</p>
 <div class="admonition note">
     <table><tbody><tr>
     <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
@@ -401,7 +401,7 @@ The search stops on the first non-nil return from the predicate function. As not
 <p>Here, we search for the “first” value in a table that is larger than 42:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">tbl</span> <span class="op">=</span> <span class="op">{</span><span class="va">foo</span> <span class="op">=</span> <span class="dv">41</span><span class="op">,</span> <span class="va">boo</span> <span class="op">=</span> <span class="dv">42</span><span class="op">,</span> <span class="va">bar</span> <span class="op">=</span> <span class="dv">43</span><span class="op">,</span> <span class="va">baba</span> <span class="op">=</span> <span class="dv">44</span><span class="op">}</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span><span class="op">(</span><span class="va">table</span><span class="op">.</span>find_if<span class="op">(</span><span class="va">tbl</span><span class="op">,</span> <span class="st">"&gt;"</span><span class="op">,</span> <span class="dv">42</span><span class="op">))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>If you run this multiple times, you will get the trio: bar 43 true or baba 44 true. There is no fixed storage order for items in general Lua tables.</p>
+<p>You will get the trio: bar 43 true or baba 44 true if you run this multiple times. There is no fixed storage order for items in general Lua tables.</p>
 <p>We also note that the returned third element will never be of interest in this example.</p>
 <p><span class="bt">Example: Lua array</span></p>
 <p>The same example for a Lua array:</p>

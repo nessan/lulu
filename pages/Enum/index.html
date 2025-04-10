@@ -355,7 +355,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>Enums are a way of specifying that a variable can only take on one of a limited number of choices.</p>
+<p>Enums specify that a variable can only take on one of a limited number of choices.</p>
 <p>For example, in C++ you might define the <code>Suit</code> for a card game as:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> <span class="kw">class</span> Suit <span class="op">=</span> <span class="op">{</span> Clubs<span class="op">,</span> Diamonds<span class="op">,</span> Hearts<span class="op">,</span> Spades <span class="op">};</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This declaration defines <code>Suit</code> as an enumerated <em>type</em>, an <em>enumeration</em> or <em>enum</em> for short, whose instances can only be one of the four allowed choices.</p>
@@ -371,7 +371,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 <p>It is evident that, even for our simple example, using the <code>enum Suit</code> type makes the code much more self-documenting. For this reason, most modern programming languages support some form of <em>enumerated type</em> as a core concept in the language itself.</p>
 <p>Moreover, languages usually have specific constructs designed to work naturally with their idea of what an enumerated type should be — the <code>switch</code> statement in C and C++, or various <code>match</code> statements in other languages. Those constructs may be more generally applicable, but their core design has the language’s enumerated type as their core raison d’etre.</p>
 <p>Programming languages have implemented the idea of an enum in various ways.</p>
-<p>They can be very simple, like in C and C++ where every enumerator is an integer of some sort. Other languages like Rust and Swift allow enumerators to own arbitrary <em>associated</em> data and methods. There will still be an underlying <em>ordinal</em> somewhere (perhaps a compiler construct) that defines an ordering of the enumerators.</p>
+<p>They can be straightforward, like in C and C++ where every enumerator is an integer. Other languages like Rust and Swift allow enumerators to own arbitrary <em>associated</em> data and methods. There will still be an underlying <em>ordinal</em> somewhere (perhaps a compiler construct) that defines an ordering of the enumerators.</p>
 <p>Lua does not have a native enumerated type or anything like a multi-armed <code>switch</code> or <code>match</code> block.</p>
 <p>It only has one complex native type, the all-powerful <code>table</code>. So you might have code like:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="va">Suit</span> <span class="op">=</span> <span class="op">{</span> <span class="va">Clubs</span> <span class="op">=</span> <span class="dv">1</span><span class="op">,</span> <span class="va">Diamonds</span> <span class="op">=</span> <span class="dv">2</span><span class="op">,</span> <span class="va">Hearts</span> <span class="op">=</span> <span class="dv">3</span><span class="op">,</span> <span class="va">Spades</span> <span class="op">=</span> <span class="dv">4</span> <span class="op">}</span></span>
@@ -382,7 +382,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">s</span> <span class="op">=</span> <span class="va">Suit</span><span class="op">.</span><span class="va">Diamonds</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span><span class="op">(</span><span class="st">"Suit"</span><span class="op">,</span> <span class="va">s</span><span class="op">,</span> <span class="st">" is black:"</span><span class="op">,</span> is_black<span class="op">(</span><span class="va">s</span><span class="op">))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This outputs <code>Suit 2 is black: false</code>.</p>
-<p>This works but isn’t suitable for anything except the trivial scripts. For one thing, the <code>Suit</code> table is not constant and can easily be changed by mistake.</p>
+<p>This works but isn’t suitable for anything except the trivial scripts. The <code>Suit</code> table is not constant and can easily be changed by mistake.</p>
 </section>
 <section id="the-enum-class" class="level2">
 <h2 class="anchored" data-anchor-id="the-enum-class">The <code>Enum</code> Class</h2>
@@ -390,7 +390,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 <p>Our enums have constant enumerators that cannot easily be changed.</p>
 <p>If you have imported the <code>lulu.Enum</code> module as:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">Enum</span> <span class="op">=</span> <span class="fu">require</span> <span class="st">'lulu.Enum'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>then, you have access to the following methods:</p>
+<p>Then, you have access to the following methods:</p>
 <div class="table-responsive">
 <table class="table-bordered table-striped table-hover caption-top table">
 <colgroup>
@@ -430,7 +430,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 </tr>
 <tr class="odd">
 <td><a href="../../pages/Enum/iter.html"><code>Enum:iter</code></a></td>
-<td>Returns an iterator that traverses the enumerators of an <code>Enum</code> in sorted order.</td>
+<td>Returns an iterator that traverses an <code>Enums</code> enumerators in sorted order.</td>
 </tr>
 <tr class="even">
 <td><a href="../../pages/Enum/mt.html"><code>Enum:mt</code></a></td>

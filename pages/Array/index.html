@@ -325,7 +325,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#metamethods-etc." id="toc-metamethods-etc." class="nav-link" data-scroll-target="#metamethods-etc.">Metamethods etc.</a></li>
+  <li><a href="#metamethods-etc." id="toc-metamethods-etc." class="nav-link" data-scroll-target="#metamethods-etc.">Metamethods, etc.</a></li>
   <li><a href="#constructors" id="toc-constructors" class="nav-link" data-scroll-target="#constructors">Constructors</a></li>
   <li><a href="#copying-comparing" id="toc-copying-comparing" class="nav-link" data-scroll-target="#copying-comparing">Copying &amp; Comparing</a></li>
   <li><a href="#queries" id="toc-queries" class="nav-link" data-scroll-target="#queries">Queries</a></li>
@@ -369,14 +369,14 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>Lua <em>arrays</em> are tables where the keys are successive integers starting at 1. <br> Internally, Lua treats those tables very efficiently.</p>
-<p>The <code>lulu.Array</code> module provides a specific <em>class</em> for this commonest of data structures.</p>
+<p>The <code>lulu.Array</code> module provides a specific <em>class</em> for this most common data structure.</p>
 <p>You can import the class with the line:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">Array</span> <span class="op">=</span> <span class="fu">require</span><span class="op">(</span><span class="st">'lulu.Array'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The class has a rich interface with quite a few methods. In practice, each belongs to a functional group, and we first list them by those groupings. The method names within any group follow a consistent scheme.</p>
-<p>The complete list of all the methods is also available in <a href="#all-methods">alphabetic order</a>.</p>
+<p>The complete methods list is also available in <a href="#all-methods">alphabetic order</a>.</p>
 </section>
 <section id="metamethods-etc." class="level2">
-<h2 class="anchored" data-anchor-id="metamethods-etc.">Metamethods etc.</h2>
+<h2 class="anchored" data-anchor-id="metamethods-etc.">Metamethods, etc.</h2>
 <div class="table-responsive">
 <table class="table-bordered table-striped table-hover caption-top table">
 <colgroup>
@@ -404,7 +404,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 </tr>
 <tr class="even">
 <td><a href="../../pages/Array/meta.html"><code>Array.__name</code></a></td>
-<td>A piece of string metadata that is set to “Array” in the base class.</td>
+<td>A piece of string metadata set to “Array” in the base class.</td>
 </tr>
 <tr class="odd">
 <td><a href="../../pages/Array/meta.html"><code>Array.__tostring</code></a></td>
@@ -647,7 +647,7 @@ In these methods, the element type is determined by the <a href="../../pages/typ
 </tr>
 <tr class="odd">
 <td><a href="../../pages/Array/change.html"><code>Array:delete</code></a></td>
-<td>Efficiently deletes the a range of elements from an <code>Array</code>.</td>
+<td>Efficiently deletes a range of elements from an <code>Array</code>.</td>
 </tr>
 <tr class="even">
 <td><a href="../../pages/Array/change.html"><code>Array:delete_if</code></a></td>
@@ -682,7 +682,7 @@ In these methods, the element type is determined by the <a href="../../pages/typ
 <tbody>
 <tr class="odd">
 <td><a href="../../pages/Array/sub.html"><code>Array:drop</code></a></td>
-<td>Returns a new <code>Array</code> that is a copy with a range of elements removed.</td>
+<td>Returns a new <code>Array</code>, a copy with a range of elements removed.</td>
 </tr>
 <tr class="even">
 <td><a href="../../pages/Array/sub.html"><code>Array:drop_duplicates</code></a></td>
@@ -690,7 +690,7 @@ In these methods, the element type is determined by the <a href="../../pages/typ
 </tr>
 <tr class="odd">
 <td><a href="../../pages/Array/sub.html"><code>Array:drop_if</code></a></td>
-<td>Returns a new <code>Array</code> that is a copy without any elements that pass a predicate test.</td>
+<td>Returns a new <code>Array</code>, a copy without any elements that pass a predicate test.</td>
 </tr>
 <tr class="even">
 <td><a href="../../pages/Array/sub.html"><code>Array:take</code></a></td>
@@ -808,7 +808,7 @@ In these methods, the element type is determined by the <a href="../../pages/typ
 <tbody>
 <tr class="odd">
 <td><a href="../../pages/Array/fold.html"><code>Array:fold</code></a></td>
-<td>Returns a new <code>Array</code> which is the result of “folding” a function over an <code>Array</code>.</td>
+<td>Returns a new <code>Array</code> resulting from “folding” a function over an <code>Array</code>.</td>
 </tr>
 <tr class="even">
 <td><a href="../../pages/Array/fold.html"><code>Array:reduce</code></a></td>
@@ -835,7 +835,7 @@ In these methods, the element type is determined by the <a href="../../pages/typ
 <tbody>
 <tr class="odd">
 <td><a href="../../pages/Array/map.html"><code>Array:map</code></a></td>
-<td>Returns a new <code>Array</code> which is the result of applying a function to each element.</td>
+<td>Returns a new <code>Array</code> resulting from applying a function to each element.</td>
 </tr>
 <tr class="even">
 <td><a href="../../pages/Array/map.html"><code>Array:transform</code></a></td>
@@ -929,7 +929,7 @@ In these methods, the element type is determined by the <a href="../../pages/typ
 <tbody>
 <tr class="odd">
 <td><a href="../../pages/Array/flatten.html"><code>Array:flatten</code></a></td>
-<td>Returns a new <code>Array</code> which is a flattened version of this one.</td>
+<td>Returns a new <code>Array</code>, a flattened version of this one.</td>
 </tr>
 <tr class="even">
 <td><a href="../../pages/Array/zip.html"><code>Array:zip</code></a></td>
@@ -969,7 +969,7 @@ In these methods, the element type is determined by the <a href="../../pages/typ
 </tr>
 <tr class="even">
 <td><a href="../../pages/Array/meta.html"><code>Array.__name</code></a></td>
-<td>A piece of string metadata that is set to “Array” in the base class.</td>
+<td>A piece of string metadata set to “Array” in the base class.</td>
 </tr>
 <tr class="odd">
 <td><a href="../../pages/Array/meta.html"><code>Array.__tostring</code></a></td>
@@ -1013,7 +1013,7 @@ In these methods, the element type is determined by the <a href="../../pages/typ
 </tr>
 <tr class="odd">
 <td><a href="../../pages/Array/change.html"><code>Array:delete</code></a></td>
-<td>Efficiently deletes the a range of elements from an <code>Array</code>.</td>
+<td>Efficiently deletes a range of elements from an <code>Array</code>.</td>
 </tr>
 <tr class="even">
 <td><a href="../../pages/Array/change.html"><code>Array:delete_if</code></a></td>
@@ -1025,7 +1025,7 @@ In these methods, the element type is determined by the <a href="../../pages/typ
 </tr>
 <tr class="even">
 <td><a href="../../pages/Array/sub.html"><code>Array:drop</code></a></td>
-<td>Returns a new <code>Array</code> that is a copy with a range of elements removed.</td>
+<td>Returns a new <code>Array</code>, acopy with a range of elements removed.</td>
 </tr>
 <tr class="odd">
 <td><a href="../../pages/Array/sub.html"><code>Array:drop_duplicates</code></a></td>
@@ -1033,7 +1033,7 @@ In these methods, the element type is determined by the <a href="../../pages/typ
 </tr>
 <tr class="even">
 <td><a href="../../pages/Array/sub.html"><code>Array:drop_if</code></a></td>
-<td>Returns a new <code>Array</code> that is a copy without any elements that pass a predicate test.</td>
+<td>Returns a new <code>Array</code>, a copy without any elements that pass a predicate test.</td>
 </tr>
 <tr class="odd">
 <td><a href="../../pages/Array/eq.html"><code>Array:eq</code></a></td>
@@ -1069,11 +1069,11 @@ In these methods, the element type is determined by the <a href="../../pages/typ
 </tr>
 <tr class="odd">
 <td><a href="../../pages/Array/flatten.html"><code>Array:flatten</code></a></td>
-<td>Returns a new <code>Array</code> which is a flattened version of this one.</td>
+<td>Returns a new <code>Array</code>, a flattened version of this one.</td>
 </tr>
 <tr class="even">
 <td><a href="../../pages/Array/fold.html"><code>Array:fold</code></a></td>
-<td>Returns a new <code>Array</code> which is the result of “folding” a function over an <code>Array</code>.</td>
+<td>Returns a new <code>Array</code>, which results from “folding” a function over an <code>Array</code>.</td>
 </tr>
 <tr class="odd">
 <td><a href="../../pages/Array/to_string.html"><code>Array:inline</code></a></td>
@@ -1129,7 +1129,7 @@ In these methods, the element type is determined by the <a href="../../pages/typ
 </tr>
 <tr class="even">
 <td><a href="../../pages/Array/map.html"><code>Array:map</code></a></td>
-<td>Returns a new <code>Array</code> which is the result of applying a function to each element.</td>
+<td>Returns a new <code>Array</code> resulting from applying a function to each element.</td>
 </tr>
 <tr class="odd">
 <td><a href="../../pages/Array/max.html"><code>Array:max</code></a></td>
@@ -1161,7 +1161,7 @@ In these methods, the element type is determined by the <a href="../../pages/typ
 </tr>
 <tr class="even">
 <td><a href="../../pages/Array/change.html"><code>Array:pop</code></a></td>
-<td>Remove the value from the end of and <code>Array</code> &amp; return the value removed.</td>
+<td>Remove the value from the end of an <code>Array</code> &amp; return the value removed.</td>
 </tr>
 <tr class="odd">
 <td><a href="../../pages/Array/to_string.html"><code>Array:pretty</code></a></td>
@@ -1197,7 +1197,7 @@ In these methods, the element type is determined by the <a href="../../pages/typ
 </tr>
 <tr class="odd">
 <td><a href="../../pages/Array/change.html"><code>Array:reversed</code></a></td>
-<td>Returns a new <code>Array</code> that has as <code>Array</code>’s elements in reverse order.</td>
+<td>Returns a new <code>Array</code> with yhe elements in reverse order.</td>
 </tr>
 <tr class="even">
 <td><a href="../../pages/Array/sub.html"><code>Array:rest</code></a></td>

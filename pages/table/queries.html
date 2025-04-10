@@ -351,7 +351,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 
 <p>If you have imported the module as</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span> <span class="st">'lulu.table'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>then you have access to the following query methods:</p>
+<p>Then you have access to the following query methods:</p>
 <div class="table-responsive">
 <table class="table-bordered table-striped table-hover caption-top table">
 <colgroup>
@@ -395,7 +395,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 </tr>
 <tr class="even">
 <td><code>table.metadata(tbl)</code></td>
-<td>Returns a table of metadata about <code>tbl</code>.</td>
+<td>Returns a metadata table about <code>tbl</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -410,7 +410,7 @@ A Lua array is a Lua table where the keys are consecutive integers starting at 1
 <section id="metadata" class="level2">
 <h2 class="anchored" data-anchor-id="metadata">Metadata</h2>
 <p>The <code>table.metadata(tbl)</code> function returns a table of metadata about a table <code>tbl</code>.</p>
-<p>The returned table, <code>md</code>, has a sub-table <code>md[t]</code> for each sub-table <code>t</code> encountered in <code>tbl</code> including <code>tbl</code> itself.</p>
+<p>The returned table, <code>md</code>, has a sub-table <code>md[t]</code> for each sub-table <code>t</code> encountered in <code>tbl</code>, including <code>tbl</code> itself.</p>
 <p>The <code>md[t]</code> sub-table has the following fields:</p>
 <div class="table-responsive">
 <table class="table-bordered table-striped table-hover caption-top table">
@@ -439,12 +439,12 @@ A Lua array is a Lua table where the keys are consecutive integers starting at 1
 </tr>
 <tr class="even">
 <td><code>md[t].refs</code></td>
-<td>Number of references to <code>t</code>. Greater than 1 if <code>t</code> is shared.</td>
+<td>Number of references to <code>t</code>. Greater than one if <code>t</code> is shared.</td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>This metadata is useful for understanding the structure of a table. The <code>metadata</code> function can handle tables that contain circular references.</p>
+<p>This metadata helps understand the structure of a table. The <code>metadata</code> function can handle tables that contain circular references.</p>
 </section>
 <section id="see-also" class="level2">
 <h2 class="anchored" data-anchor-id="see-also">See Also</h2>

@@ -353,7 +353,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>Copying a Lua table using the assignment operator doesn’t copy anything! All you get is another <em>pointer</em> to the same block of memory.</p>
+<p>Copying a Lua table using the assignment operator doesn’t copy anything! All you get is another <em>pointer</em> to the same memory block.</p>
 <p>We can illustrate that using the following example:</p>
 <div class="sourceCode" id="annotated-cell-1"><pre class="sourceCode lua code-annotation-code code-with-copy code-annotated"><code class="sourceCode lua"><span id="annotated-cell-1-1"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">original</span> <span class="op">=</span> <span class="op">{</span><span class="va">a</span> <span class="op">=</span> <span class="st">'alpha'</span><span class="op">,</span> <span class="va">b</span> <span class="op">=</span> <span class="st">'beta'</span><span class="op">}</span></span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-1-2" class="code-annotation-target"><a href="#annotated-cell-1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">copy</span> <span class="op">=</span> <span class="va">original</span></span>
@@ -373,19 +373,19 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 <span data-code-cell="annotated-cell-1" data-code-lines="4" data-code-annotation="3">Check the <code>original</code> and get the output, <code>GAMMA</code>!</span>
 </dd>
 </dl>
-<p>This shows that <code>original</code> and <code>copy</code> are just two references to the <em>same</em> memory block.</p>
+<p>This shows that <code>original</code> and <code>copy</code> refers to the <em>same</em> memory block.</p>
 </section>
 <section id="table.clone-table.copy" class="level2">
 <h2 class="anchored" data-anchor-id="table.clone-table.copy"><code>table.clone</code> &amp; <code>table.copy</code></h2>
 <p>If you have imported the <a href="../../pages/table/index.html"><code>lulu.table</code></a> module as</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span> <span class="st">'lulu.table'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>then, you can make copies of any Lua table using the following two methods:</p>
+<p>Then, you can make copies of any Lua table using the following two methods:</p>
 <p><strong><code>table.clone(tbl)</code></strong> <br> Returns a <em>shallow</em> copy of <code>tbl</code>. It does not copy any metatable.</p>
 <p><strong><code>table.copy(tbl)</code></strong> <br> Returns a <em>deep</em> copy of <code>tbl,</code> including metatables.</p>
 </section>
 <section id="shallow-vs.-deep" class="level2">
 <h2 class="anchored" data-anchor-id="shallow-vs.-deep">Shallow vs.&nbsp;Deep</h2>
-<p>The <code>clone</code> and <code>copy</code> methods both start by creating a new empty table.</p>
+<p>The <code>clone</code> and <code>copy</code> methods create a new empty table.</p>
 <p>A shallow <code>clone</code> then inserts copies of the <em>top-level</em> elements from <code>tbl</code> into that new table.</p>
 <p>On the other hand, a deep <code>copy</code> copies <em>all</em> the elements from the <code>tbl</code> argument by recursively visiting all sub-tables, sub-sub-tables, and on.</p>
 <div class="admonition tip">
@@ -489,11 +489,11 @@ The methods give identical results for arguments without sub-tables.
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-5" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-5" data-code-lines="1" data-code-annotation="1">Here, we have somewhat spuriously introduced sub-tables instead of setting <code>orig.a = "alpha"</code> we have <code>orig.a[1] = "alpha"</code>etc.</span>
+<span data-code-cell="annotated-cell-5" data-code-lines="1" data-code-annotation="1">Here, we have spuriously introduced sub-tables instead of setting <code>orig.a = "alpha"</code> we have <code>orig.a[1] = "alpha"</code>etc.</span>
 </dd>
 <dt data-target-cell="annotated-cell-5" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-5" data-code-lines="10" data-code-annotation="2">Deep copies are entirely independent, so this change will only affect <code>deep</code>.</span>
+<span data-code-cell="annotated-cell-5" data-code-lines="10" data-code-annotation="2">Deep copies are independent, so this change will only affect <code>deep</code>.</span>
 </dd>
 <dt data-target-cell="annotated-cell-5" data-target-annotation="3">3</dt>
 <dd>
@@ -520,7 +520,7 @@ The methods give identical results for arguments without sub-tables.
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="11" data-code-annotation="2">In contrast, a change to a sub-element is seen in the shallow copy and also in the original table.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="11" data-code-annotation="2">In contrast, a change to a sub-element is seen in the shallow copy and the original table.</span>
 </dd>
 </dl>
 <div class="admonition note">
@@ -528,7 +528,7 @@ The methods give identical results for arguments without sub-tables.
     <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
     <td class="content">
     
-The only native complex type in Lua is a table, so every non-trivial data structure will have tables with sub-tables. For this reason, it is essential to understand the distinction between having multiple references by assignment, shallow cloning, and deep copying.
+The only native complex type in Lua is a table so every non-trivial data structure will have tables with sub-tables. For this reason, it is essential to understand the distinction between having multiple references by assignment, shallow cloning, and deep copying.
 </td></tr></tbody></table></div>
 </section>
 <section id="see-also" class="level2">

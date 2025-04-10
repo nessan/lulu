@@ -388,7 +388,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>If you have imported the module as</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span> <span class="st">'lulu.table'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>then you have access to the following methods to combine general tables:</p>
+<p>Then you have access to the following methods to combine general tables:</p>
 <div class="table-responsive">
 <table class="table-bordered table-striped table-hover caption-top table">
 <colgroup>
@@ -422,7 +422,7 @@ window.Quarto = {
     <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
     <td class="content">
     
-These <code>table</code> methods take into account a table’s keys <strong>and</strong> values when looking for commonalities and differences! Both must match (or differ as the case may be).
+These <code>table</code> methods consider a table’s keys <strong>and</strong> values when looking for commonalities and differences! Both must match (or differ as the case may be).
 </td></tr></tbody></table></div>
 <p>There are also methods to look at the keys and values separately:</p>
 <div class="table-responsive">
@@ -456,11 +456,11 @@ These <code>table</code> methods take into account a table’s keys <strong>and<
 </tr>
 <tr class="odd">
 <td><code>table.unique_values(...)</code></td>
-<td>Returns an array of the values that are unique to each table argument.</td>
+<td>Returns an array of the unique values to each table argument.</td>
 </tr>
 <tr class="even">
 <td><code>table.unique_keys(...)</code></td>
-<td>Returns an array of the keys that are unique to each table argument.</td>
+<td>Returns an array of unique keys to each table argument.</td>
 </tr>
 </tbody>
 </table>
@@ -570,12 +570,12 @@ The values in the union arrays are unique, so in the example, there is just one 
 </section>
 <section id="table.difference" class="level2">
 <h2 class="anchored" data-anchor-id="table.difference"><code>table.difference</code></h2>
-<p>The difference between two tables captures the elements in one but not the other. Like the other methods on this page this function takes into account <em>both</em> the key and the value of an element when looking for equality.</p>
+<p>The difference between two tables captures the elements in one but not the other. Like the other methods on this page, this function considers <em>both</em> the key and the value of an element when looking for equality.</p>
 <p>Generally <code>table.difference(t1, t2) ~= table.difference(t2, t1)</code>.</p>
 <p>We sometimes refer to <code>table.difference(t1, t2)</code> as <span class="math inline">\(t_1 - t_2\)</span>.</p>
 <p>By default, the boolean <code>symmetric</code> argument is <code>false</code>. You can set it to <code>true</code> to get the <em>symmetric difference</em> between <span class="math inline">\(t_1\)</span> and <span class="math inline">\(t_2\)</span>: <span class="math display">\[
 t_1 - t_2 \cup t_2 - t_1.
-\]</span> That is the table of top-level elements that occurs only in <em>one</em> of <code>t1</code> or <code>t2</code>.</p>
+\]</span> That is the table of top-level elements that occur only in <em>one</em> of <code>t1</code> or <code>t2</code>.</p>
 <p><span class="bt">Example:</span></p>
 <div class="sourceCode" id="annotated-cell-10"><pre class="sourceCode lua code-annotation-code code-with-copy code-annotated"><code class="sourceCode lua"><span id="annotated-cell-10-1"><a href="#annotated-cell-10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">p1</span> <span class="op">=</span> <span class="op">{</span><span class="va">a</span> <span class="op">=</span> <span class="st">'alpha'</span><span class="op">,</span> <span class="va">b</span> <span class="op">=</span> <span class="st">'beta'</span><span class="op">}</span></span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-10-2" class="code-annotation-target"><a href="#annotated-cell-10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">p2</span> <span class="op">=</span> <span class="op">{</span><span class="va">a</span> <span class="op">=</span> <span class="st">'gamma'</span><span class="op">,</span> <span class="va">b</span> <span class="op">=</span> <span class="st">'beta'</span><span class="op">}</span></span>
@@ -686,7 +686,7 @@ t_1 - t_2 \cup t_2 - t_1.
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-19" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-19" data-code-lines="1" data-code-annotation="1">The only value that is in common between <code>a1</code> and <code>a2</code> is <code>4</code>. The location of the value is not important.</span>
+<span data-code-cell="annotated-cell-19" data-code-lines="1" data-code-annotation="1">The only value in common between <code>a1</code> and <code>a2</code> is <code>4</code>. The location of the value is not important.</span>
 </dd>
 </dl>
 </section>
@@ -743,7 +743,7 @@ t_1 - t_2 \cup t_2 - t_1.
 </section>
 <section id="see-also" class="level2">
 <h2 class="anchored" data-anchor-id="see-also">See Also</h2>
-<p><a href="../../pages/Array/index.html"><code>lulu.Array</code></a> <br> <a href="https://nessan.github.io/scribe">Scribe</a></p>
+<p><a href="../../pages/Array/index.html"><code>lulu.Array</code></a> <br> <a href="https://nessan.github.io/scribe"><code>lulu.scribe</code></a></p>
 
 
 </section>

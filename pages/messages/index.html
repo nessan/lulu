@@ -356,8 +356,8 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>The <code>lulu.messages</code> module has functions for emitting informational, warning, and fatal error messages. These are used throughout <code>lulu</code>.</p>
-<p>Messages can have arbitrary payloads and are generally decorated with a tag of some sort (a string like INFO, WARNING, or FATAL ERROR) and the source code location where the message was emitted.</p>
+<p>The <code>lulu.messages</code> module has functions for emitting informational, warning, and fatal error messages. These messages are used throughout <code>Lulu</code>.</p>
+<p>Messages can have arbitrary payloads decorated with a tag (a string like INFO, WARNING, or FATAL ERROR) and the source code location where the message was emitted.</p>
 </section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
@@ -434,7 +434,7 @@ The source code location is the filename, followed by a colon <code>:</code>, an
 </section>
 <section id="library-usage" class="level2">
 <h2 class="anchored" data-anchor-id="library-usage">Library Usage</h2>
-<p>If you’re writing a library, it is often helpful to have the source code location of the error point <strong>up</strong> the stack to where the library <em>user</em> made an erroneous call. While the error is detected in a library function, it is often the caller of that function you want to highlight to the user.</p>
+<p>If you’re writing a library, having the source code location of the error point <strong>up</strong> the stack to where the library <em>user</em> made an erroneous call is often helpful. While the error is detected in a library function, it is often the caller of that function you want to highlight to the user.</p>
 <p>This is best illustrated with an example.</p>
 <p>Suppose we have the following incredibly clever and important library function in a file called <code>double.lua</code>:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">messages</span> <span class="op">=</span> <span class="fu">require</span><span class="op">(</span><span class="st">"messages"</span><span class="op">)</span></span>
@@ -456,10 +456,10 @@ The source code location is the filename, followed by a colon <code>:</code>, an
 <p>When run, this prints the line “2*42 = 84” to your screen.</p>
 <p>Suppose we had a typo in <code>main.lua</code> and replaced the line <code>local x = 42</code> with <code>local x = 'hallo'</code>. Then, when we run the program, we will get the warning message:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>[WARNING] from 'double' (double.lua:4): Expected arg to be a number not a 'string'</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The message is clear, but the source code location information <code>(double.lua:4)</code> points to a file and line number inside our library, which is the location where the error was detected. It would be preferable to point instead to the source code location where the library’s caller made the error.</p>
+<p>The message is clear, but the source code location information <code>(double.lua:4)</code> points to a file and line number inside our library, which is the location where the error was detected. Pointing to the source code location where the library’s caller made the error instead would be preferable.</p>
 <p>The <code>messages</code> module makes this easy!</p>
-<p>All the message methods can be given an extra numeric <em>first</em> argument that tells <code>source_info</code> method to grab the appropriate location information from a point further up the Lau stack.</p>
-<p>The designer of the ambitious <code>double</code> library can write the very slightly different code:</p>
+<p>All the message methods can be passed an extra numeric <em>first</em> argument that tells the <code>source_info</code> method to grab the appropriate location information from a point further up the Lau stack.</p>
+<p>The designer of the ambitious <code>double</code> library can write very slightly different code:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">messages</span> <span class="op">=</span> <span class="fu">require</span><span class="op">(</span><span class="st">"messages"</span><span class="op">)</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="kw">function</span> double<span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="fu">type</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">~=</span> <span class="st">'number'</span> <span class="cf">then</span></span>
@@ -484,7 +484,7 @@ The source code location is the filename, followed by a colon <code>:</code>, an
     <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
     <td class="content">
     
-The module’s <code>source_info</code> method makes use of Lua’s introspection facilities and, in particular, <a href="https://www.lua.org/pil/23.1.html"><code>debug.getinfo</code></a>. That standard library function takes a <em>stack location</em> as its first argument.
+The module’s <code>source_info</code> method uses Lua’s introspection facilities, particularly <a href="https://www.lua.org/pil/23.1.html"><code>debug.getinfo</code></a>. That standard library function takes a <em>stack location</em> as its first argument.
 </td></tr></tbody></table></div>
 </section>
 <section id="see-also" class="level2">

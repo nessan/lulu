@@ -355,14 +355,14 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>The <code>lulu.xpeg</code> module <em>extends</em> the standard<code>lpeg</code> module with predefined patterns and useful functions.</p>
+<p>The <code>lulu.xpeg</code> module <em>extends</em> the standard<code>lpeg</code> module with predefined patterns and valuable functions.</p>
 </section>
 <section id="patterns" class="level2">
 <h2 class="anchored" data-anchor-id="patterns">Patterns</h2>
 <p>If you have imported the module as</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">lpeg</span> <span class="op">=</span> <span class="fu">require</span> <span class="st">'lulu.xpeg'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>You then have access to many “standard” LPEG patterns in the <code>lpeg.patterns</code> table.</p>
-<p>For convenience define:</p>
+<p>You can access many “standard” LPEG patterns in the <code>lpeg.patterns</code> table.</p>
+<p>For convenience, define:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">p</span> <span class="op">=</span> <span class="va">lpeg</span><span class="op">.</span><span class="va">patterns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Then:</p>
 <div class="table-responsive">
@@ -520,11 +520,11 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 </tr>
 <tr class="even">
 <td><code>p.double_quoted</code></td>
-<td>Matches double quoted strings.</td>
+<td>Matches double-quoted strings.</td>
 </tr>
 <tr class="odd">
 <td><code>p.quoted</code></td>
-<td>Matches either single <em>or</em> double quoted strings.</td>
+<td>Matches either single <em>or</em> double-quoted strings.</td>
 </tr>
 <tr class="even">
 <td><code>p.single_quoted_content</code></td>
@@ -540,7 +540,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 </tr>
 <tr class="odd">
 <td><code>p.careful_collapse_ws</code></td>
-<td>Substitution capture that trims and collapses contiguous interior white-spaces to one space but not inside quotes.</td>
+<td>Substitution capture that trims and collapses contiguous interior white spaces to one space but not inside quotes.</td>
 </tr>
 </tbody>
 </table>
@@ -663,7 +663,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 </section>
 <section id="see-also" class="level2">
 <h2 class="anchored" data-anchor-id="see-also">See Also</h2>
-<p>These patterns and methods can be used on a stand-alone basis. In many cases, they act as the engine driving methods in the <a href="../../pages/string/index.html"><code>lulu.string</code></a> module which extends Lua’s <code>string</code> class.</p>
+<p>The patterns and methods in this module can be used on a stand-alone basis. In many cases, they act as the engine driving methods in the <a href="../../pages/string/index.html"><code>lulu.string</code></a> module, which extends Lua’s <code>string</code> class.</p>
 <p><a href="../../pages/string/index.html"><code>lulu.string</code></a></p>
 
 

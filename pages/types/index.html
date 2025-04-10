@@ -355,13 +355,13 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>The <code>lulu.types</code> module has a few functions for checking the type of a value.</p>
+<p>The <code>lulu.types</code> module has some functions for checking the “type” of a value.</p>
 </section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
 <p>If you have imported the module as</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">types</span> <span class="op">=</span> <span class="fu">require</span> <span class="st">'lulu.types'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>then you have access to the following methods:</p>
+<p>Then you have access to the following methods:</p>
 <div class="table-responsive">
 <table class="table-bordered table-striped table-hover caption-top table">
 <colgroup>
@@ -394,11 +394,11 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 </tbody>
 </table>
 </div>
-<p>These functions are mostly self-explanatory, and mostly are simple one-liners.</p>
+<p>These functions are primarily self-explanatory and mostly are simple one-liners.</p>
 </section>
 <section id="types.type" class="level2">
 <h2 class="anchored" data-anchor-id="types.type"><code>types.type</code></h2>
-<p>For tables with a string field <code>__name</code> this returns that string. Otherwise it returns the output from the Lua standard <code>type</code> function.</p>
+<p>For tables with a string field <code>__name</code>, this returns that string. Otherwise, it returns the output from the Lua standard <code>type</code> function.</p>
 <div class="admonition note">
     <table><tbody><tr>
     <td class="icon"> <i class="fa icon-note" title="Note"></i></td>

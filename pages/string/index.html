@@ -362,9 +362,9 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 <p>The <code>lulu.string</code> module adds extra methods to the Lua <code>string</code> class.</p>
 <p>If you have imported the module as</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span> <span class="st">'lulu.string'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>You then have access to dozens of extra methods for any string <code>s</code>.</p>
+<p>You then can access dozens of extra methods for any string <code>s</code>.</p>
 <p>In practice, each method belongs to a functional group, and we first list them by those groupings. The method names within any group follow a consistent scheme.</p>
-<p>The complete list of all the methods is also available in <a href="#all-methods">alphabetic order</a>.</p>
+<p>The complete methods list is also available in <a href="#all-methods">alphabetic order</a>.</p>
 </section>
 <section id="queries" class="level2">
 <h2 class="anchored" data-anchor-id="queries">Queries</h2>
@@ -465,7 +465,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 </tbody>
 </table>
 </div>
-<p>There are a few other queries that deal with <a href="#delimited-text">delimited text</a>. We include them here for completeness but the details are in the later section.</p>
+<p>A few other queries deal with <a href="#delimited-text">delimited text</a>. We include them here for completeness. See a later section for all the details.</p>
 <div class="table-responsive">
 <table class="table-bordered table-striped table-hover caption-top table">
 <colgroup>
@@ -481,7 +481,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
 <tbody>
 <tr class="odd">
 <td><code>s:is_delimited(l, r, line)</code></td>
-<td>Returns <code>true</code> if <code>s</code> is is marked on the left by <code>l</code> and the right by <code>r</code>.</td>
+<td>Returns <code>true</code> if <code>s</code> is marked on the left by <code>l</code> and the right by <code>r</code>.</td>
 </tr>
 <tr class="even">
 <td><code>s:contains_delimited(l,r,line)</code></td>
@@ -507,7 +507,7 @@ gtag('config', 'G-DDG2B9HMD3', { 'anonymize_ip': true});
     <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
     <td class="content">
     
-Strings are never changed <em>in place</em> by these methods. <br> Instead a string copy with the relevant changes is returned.
+Strings are never changed <em>in place</em> by these methods. <br> Instead, a string copy with the relevant changes is returned.
 </td></tr></tbody></table></div>
 <div class="table-responsive">
 <table class="table-bordered table-striped table-hover caption-top table">
@@ -532,27 +532,27 @@ Strings are never changed <em>in place</em> by these methods. <br> Instead a str
 </tr>
 <tr class="odd">
 <td><code>s:ensure_end(suffix)</code></td>
-<td>Return <code>s</code> if it already ends with a specified suffix. Otherwise returns a new padded version that does indeed end with the required prefix.</td>
+<td>Return <code>s</code> if it already ends with a specified suffix. Otherwise, it returns a new padded version that does indeed end with the required prefix.</td>
 </tr>
 <tr class="even">
 <td><code>s:ensure_start(prefix)</code></td>
-<td>Return <code>s</code> if it already starts with a specified prefix. Otherwise returns a new padded version that does indeed start with the required prefix.</td>
+<td>Return <code>s</code> if it already starts with a specified prefix. Otherwise, it returns a new padded version that does indeed start with the required prefix.</td>
 </tr>
 <tr class="odd">
 <td><code>s:kill_from(p)</code></td>
-<td>Returns a copy of <code>s</code> where each line has from <code>p</code> to the end of that line removed. The <code>p</code> argument can be a number, a string, or an <code>lpeg</code> pattern.</td>
+<td>Returns a copy of <code>s</code> where each line has from <code>p</code> to the end of that line removed. The <code>p</code> argument can be a number, a string, or a <code>lpeg</code> pattern.</td>
 </tr>
 <tr class="even">
 <td><code>s:kill_to(p)</code></td>
-<td>Returns a copy of <code>s</code> where each line is killed from its start up to and including <code>p</code>. The <code>p</code> argument can be a number, a string, or an <code>lpeg</code> pattern.</td>
+<td>Returns a copy of <code>s</code> where each line is killed from its start up to and including <code>p</code>. The <code>p</code> argument can be a number, a string, or a <code>lpeg</code> pattern.</td>
 </tr>
 <tr class="odd">
 <td><code>s:pad_end(len,fill)</code></td>
-<td>Returns a copy of <code>s</code> that has a specified minimum length by padding <code>s</code> on the right. The default <code>fill</code> is a space.</td>
+<td>Return a copy of <code>s</code> with a specified minimum length by padding <code>s</code> on the right. The default <code>fill</code> is a space.</td>
 </tr>
 <tr class="even">
 <td><code>s:pad_start(len,fill)</code></td>
-<td>Returns a copy of <code>s</code> that has a specified minimum length by padding <code>s</code> on the left. The default <code>fill</code> is a space.</td>
+<td>Return a copy of <code>s</code> with a specified minimum length by padding <code>s</code> on the left. The default <code>fill</code> is a space.</td>
 </tr>
 <tr class="odd">
 <td><code>s:prepend(prefix)</code></td>
@@ -594,7 +594,7 @@ Strings are never changed <em>in place</em> by these methods. <br> Instead a str
     <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
     <td class="content">
     
-Strings are never changed <em>in place</em> by these methods. <br> Instead a copy with the relevant changes is returned.
+Strings are never changed <em>in place</em> by these methods. <br> Instead, a copy with the relevant changes is returned.
 </td></tr></tbody></table></div>
 <div class="table-responsive">
 <table class="table-bordered table-striped table-hover caption-top table">
@@ -611,11 +611,11 @@ Strings are never changed <em>in place</em> by these methods. <br> Instead a cop
 <tbody>
 <tr class="odd">
 <td><code>s:add_escapes(esc,specials)</code></td>
-<td>Returns a copy of <code>s</code> that has an escape character added before characters in the string <em>that need “escaping”</em>. The default <code>esc</code> character is a backslash. <br> By default, we add the <code>esc</code> character before all quotation marks and the backslash.</td>
+<td>Returns a copy of <code>s</code> with an escape character added before characters in the string <em>that need “escaping”</em>. The default <code>esc</code> character is a backslash. <br> We add the <code>esc</code> character before all quotation marks and the backslash by default.</td>
 </tr>
 <tr class="even">
 <td><code>s:change(from, to)</code></td>
-<td>Returns a new string that is a copy of <code>s</code> with all occurrences of <code>from</code> replaced with <code>to</code>. The <code>from</code> argument can be a string or an <code>lpeg</code> pattern.</td>
+<td>Returns a new string that is a copy of <code>s</code> with all occurrences of <code>from</code> replaced with <code>to</code>. The <code>from</code> argument can be a string or a <code>lpeg</code> pattern.</td>
 </tr>
 <tr class="odd">
 <td><code>s:collapse_ws(careful)</code></td>
@@ -651,7 +651,7 @@ Strings are never changed <em>in place</em> by these methods. <br> Instead a cop
 </tr>
 <tr class="odd">
 <td><code>s:to_bool()</code></td>
-<td>Tries to interpret <code>s</code> as a <code>boolean</code> value where we recognize yes/no, on/off etc. <br> The case of <code>s</code> does not matter.</td>
+<td>Tries to interpret <code>s</code> as a <code>boolean</code> value where we recognise yes/no, on/off, etc. <br> The case of <code>s</code> does not matter.</td>
 </tr>
 <tr class="even">
 <td><code>s:to_hex()</code></td>
@@ -663,7 +663,7 @@ Strings are never changed <em>in place</em> by these methods. <br> Instead a cop
 </tr>
 <tr class="even">
 <td><code>s:unescape(chars,esc)</code></td>
-<td>Returns a copy of <code>s</code> with <em>specific</em> add_escapes characters turned into remove_escapes ones. The default character to unescape is the double quotation mark and the default escape character is the backslash.</td>
+<td>Returns a copy of <code>s</code> with <em>specific</em> add_escapes characters turned into remove_escapes ones. The default character to unescape is the double quotation mark, and the default escape character is the backslash.</td>
 </tr>
 </tbody>
 </table>
@@ -706,11 +706,11 @@ Strings are never changed <em>in place</em> by these methods. <br> Instead a cop
 <tbody>
 <tr class="odd">
 <td><code>s:after(sep)</code></td>
-<td>Returns the text after the separator <code>sep</code>. <br> The separator can be a string or an <code>lpeg</code> pattern.</td>
+<td>Returns the text after the separator <code>sep</code>. <br> The separator can be a string or a <code>lpeg</code> pattern.</td>
 </tr>
 <tr class="even">
 <td><code>s:before(sep)</code></td>
-<td>Returns the text after the separator <code>sep</code>. <br> The separator can be a string or an <code>lpeg</code> pattern.</td>
+<td>Returns the text after the separator <code>sep</code>. <br> The separator can be a string or a <code>lpeg</code> pattern.</td>
 </tr>
 <tr class="odd">
 <td><code>s:split(sep)</code></td>
@@ -759,7 +759,7 @@ Strings are never changed <em>in place</em> by these methods. <br> Instead a cop
 </section>
 <section id="delimited-text" class="level2">
 <h2 class="anchored" data-anchor-id="delimited-text">Delimited Text</h2>
-<p>Given a block of text, you often need to extract substrings surrounded by markers of some sort. For example, given a block of C/C++ code, you might want to delete any multiline comment. In C/C++ multiline comments begin with the left delimiter <code>/*</code> and end with the right delimiter <code>*/</code>.</p>
+<p>Given a text block, you often need to extract substrings surrounded by markers. For example, given a block of C/C++ code, you might want to delete any multiline comment. C/C++ multiline comments begin with the left delimiter <code>/*</code> and end with the right delimiter <code>*/</code>.</p>
 <p>We have methods that work on text containing delimited strings. Some specialisations work on strings delimited by quotation marks, a typical case of interest.</p>
 <div class="table-responsive">
 <table class="table-bordered table-striped table-hover caption-top table">
@@ -792,19 +792,19 @@ Strings are never changed <em>in place</em> by these methods. <br> Instead a cop
 </tr>
 <tr class="odd">
 <td><code>s:contains_word(word)</code></td>
-<td>Does <code>s</code> contain a particular <code>word</code> which a string or any <code>lpeg</code> pattern surrounded by whitespace? This is the simplest form of delimited text.</td>
+<td>Does <code>s</code> contain a particular <code>word</code> which is a string or any <code>lpeg</code> pattern surrounded by whitespace? This is the simplest form of delimited text.</td>
 </tr>
 <tr class="even">
 <td><code>s:first_delimited(l,r,line)</code></td>
-<td>Returns the first delimited substring found in <code>s</code>.</td>
+<td>Returns the first delimited substring in <code>s</code>.</td>
 </tr>
 <tr class="odd">
 <td><code>s:first_quoted()</code></td>
-<td>Returns the first quoted substring found in <code>s</code>.</td>
+<td>Returns the first quoted substring in <code>s</code>.</td>
 </tr>
 <tr class="even">
 <td><code>s:is_delimited(l,r,line)</code></td>
-<td>Returns <code>true</code> if <code>s</code> is is marked on the left by <code>l</code> and the right by <code>r</code>.</td>
+<td>Returns <code>true</code> if <code>s</code> is marked on the left by <code>l</code> and the right by <code>r</code>.</td>
 </tr>
 <tr class="odd">
 <td><code>s:is_quoted()</code></td>
@@ -819,7 +819,7 @@ Strings are never changed <em>in place</em> by these methods. <br> Instead a cop
 <li>If neither is given, we set them to the default double quote character <code>"</code>.</li>
 <li>If only one is given and it’s a single character (e.g.&nbsp;<code>'</code>) then we use that for both delimiters.</li>
 <li>If only one is given and it has an <em>even</em> number of characters, then we split that into half. For example, if we are passed the single delimiter “{}”, then we split it in half, so in effect <code>l = '{'</code> and <code>r = '}'</code>.</li>
-<li>Finally, of course, you can specify <code>l</code> and <code>r</code> separately.</li>
+<li>Finally, you can specify <code>l</code> and <code>r</code> separately.</li>
 </ol>
 <p><span class="bt">Example</span></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode lua code-with-copy"><code class="sourceCode lua"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> <span class="va">s</span> <span class="op">=</span> <span class="st">"Here is a string with {text in braces}"</span></span>
@@ -847,7 +847,7 @@ Strings are never changed <em>in place</em> by these methods. <br> Instead a cop
 </section>
 <section id="all-methods" class="level2">
 <h2 class="anchored" data-anchor-id="all-methods">All Methods</h2>
-<p>Here is an alphabetic list of all the methods added by the <code>string</code> module to the Lua <code>string</code> class for any string <code>s</code>.</p>
+<p>Here is an alphabetic list of all the methods the <code>lulu.string</code> module adds to the Lua <code>string</code> class for any string <code>s</code>.</p>
 <p>Click on a method to jump to the documentation section for the corresponding functional group.</p>
 <ul>
 <li><a href="#general-changes"><code>s:add_escapes(esc, specials)</code></a></li>
