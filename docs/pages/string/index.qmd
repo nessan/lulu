@@ -10,12 +10,12 @@ If you have imported the module as
 ```lua
 require 'lulu.string'
 ```
-You then have access to dozens of extra methods for any string `s`.
+You then can access dozens of extra methods for any string `s`.
 
 In practice, each method belongs to a functional group, and we first list them by those groupings.
 The method names within any group follow a consistent scheme.
 
-The complete list of all the methods is also available in [alphabetic order](#all-methods).
+The complete methods list is also available in [alphabetic order](#all-methods).
 
 ## Queries
 
@@ -45,12 +45,13 @@ String Method                   | Description
 `s:starts_with(prefix)`         | Returns `true` if `s` starts with the specified prefix.
 : {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
 
-There are a few other queries that deal with [delimited text](#delimited-text).
-We include them here for completeness but the details are in the later section.
+A few other queries deal with [delimited text](#delimited-text).
+We include them here for completeness.
+See a later section for all the details.
 
 String Method                   | Description
 ------------------------------  | --------------------------------------------------------------------
-`s:is_delimited(l, r, line)`    | Returns `true` if `s` is is marked on the left by `l` and the right by `r`.
+`s:is_delimited(l, r, line)`    | Returns `true` if `s` is marked on the left by `l` and the right by `r`.
 `s:contains_delimited(l,r,line)`| Returns `true` if `s` contains delimited text anywhere inside it.
 `s:is_quoted()`                 | Returns `true` if `s` is surrounded by single or double quotes.
 `s:contains_quoted()`           | Returns `true` if `s` contains quoted text anywhere inside it.
@@ -61,18 +62,18 @@ String Method                   | Description
 We often need to check or perhaps change just the start or end of a string:
 
 NOTE: Strings are never changed *in place* by these methods. <br>
-Instead a string copy with the relevant changes is returned.
+Instead, a string copy with the relevant changes is returned.
 
 String Method                   | Description
 ------------------------------  | --------------------------------------------------------------------
 `s:append(suffix)`              | Returns a new string that is `s` with the `suffix` string appended to it.
 `s:ellipsis(n)`                 | Returns a copy of `s` truncated after `n` characters with a following " ..."
-`s:ensure_end(suffix)`          | Return `s` if it already ends with a specified suffix. Otherwise returns a new padded version that does indeed end with the required prefix.
-`s:ensure_start(prefix)`        | Return `s` if it already starts with a specified prefix. Otherwise returns a new padded version that does indeed start with the required prefix.
-`s:kill_from(p)`                | Returns a copy of `s` where each line has from `p` to the end of that line removed. The `p` argument can be a number, a string, or an `lpeg` pattern.
-`s:kill_to(p)`                  | Returns a copy of `s` where each line is killed from its start up to and including `p`. The `p` argument can be a number, a string, or an `lpeg` pattern.
-`s:pad_end(len,fill)`           | Returns a copy of `s` that has a specified minimum length by padding `s` on the right. The default `fill` is a space.
-`s:pad_start(len,fill)`         | Returns a copy of `s` that has a specified minimum length by padding `s` on the left. The default `fill` is a space.
+`s:ensure_end(suffix)`          | Return `s` if it already ends with a specified suffix. Otherwise, it returns a new padded version that does indeed end with the required prefix.
+`s:ensure_start(prefix)`        | Return `s` if it already starts with a specified prefix. Otherwise, it returns a new padded version that does indeed start with the required prefix.
+`s:kill_from(p)`                | Returns a copy of `s` where each line has from `p` to the end of that line removed. The `p` argument can be a number, a string, or a `lpeg` pattern.
+`s:kill_to(p)`                  | Returns a copy of `s` where each line is killed from its start up to and including `p`. The `p` argument can be a number, a string, or a `lpeg` pattern.
+`s:pad_end(len,fill)`           | Return a copy of `s` with a specified minimum length by padding `s` on the right. The default `fill` is a space.
+`s:pad_start(len,fill)`         | Return a copy of `s` with a specified minimum length by padding `s` on the left. The default `fill` is a space.
 `s:prepend(prefix)`             | Returns a new string that is `s` with the `prefix` string prepended to it.
 `s:strip_comments(char)`        | Returns a copy of `s` with any end-of-line comments erased from each line. <br> The default comment start `char` is the hash symbol `#`.
 `s:trim_end(chars)`             | Returns a copy of `s` that has `chars` trimmed from the right side. <br> The default `chars` is the Lua pattern for whitespace.
@@ -87,12 +88,12 @@ String Method                   | Description
 Other methods change strings anywhere as opposed to those above that only  effect the start or end.
 
 NOTE: Strings are never changed *in place* by these methods. <br>
-Instead a copy with the relevant changes is returned.
+Instead, a copy with the relevant changes is returned.
 
 String Method                   | Description
 ------------------------------  | --------------------------------------------------------------------
-`s:add_escapes(esc,specials)`   | Returns a copy of `s` that has an escape character added before characters in the string *that need "escaping"*. The default `esc` character is a backslash. <br> By default, we add the `esc` character before all quotation marks and the backslash.
-`s:change(from, to)`            | Returns a new string that is a copy of `s` with all occurrences of `from` replaced with `to`. The `from` argument can be a string or an `lpeg` pattern.
+`s:add_escapes(esc,specials)`   | Returns a copy of `s` with an escape character added before characters in the string *that need "escaping"*. The default `esc` character is a backslash. <br> We add the `esc` character before all quotation marks and the backslash by default.
+`s:change(from, to)`            | Returns a new string that is a copy of `s` with all occurrences of `from` replaced with `to`. The `from` argument can be a string or a `lpeg` pattern.
 `s:collapse_ws(careful)`        | Returns a copy of `s` with contiguous whitespaces converted to a single space. By default, quoted substrings in `s` are unaltered (`careful = true`).
 `s:dedent_lines(indent)`        | Returns a copy of `s` with each line's indentation removed. <br> The `indent` argument is the string to remove from the start of each line.
 `s:delete_ws()`                 | Returns a copy of `s` with all spaces removed.
@@ -101,10 +102,10 @@ String Method                   | Description
 `s:from_lua_pattern()`          | Returns a copy of `s` with all the '%' characters from a *Lua pattern* removed.
 `s:indent_lines(indent, ignore_first)` | Returns a copy of `s` with each line's indentation removed. <br> The `indent` argument is the string to add to the start of each line. <br> The `ignore_first` argument is a boolean that defaults to `false`. <br> If `true`, the first line is not indented.
 `s:remove_escapes(esc)`         | Returns a copy of `s` with any `esc` characters removed (default is a backslash).
-`s:to_bool()`                   | Tries to interpret `s` as a `boolean` value where we recognize yes/no, on/off etc. <br> The case of `s` does not matter.
+`s:to_bool()`                   | Tries to interpret `s` as a `boolean` value where we recognise yes/no, on/off, etc. <br> The case of `s` does not matter.
 `s:to_hex()`                    | Returns a hex-encoded version of `s` so e.g., "hello" -> "68656c6c6f"
 `s:to_lua_pattern()`            | Returns a new version `s` string that can be safely used in Lua's pattern matching functions.
-`s:unescape(chars,esc)`         | Returns a copy of `s` with *specific* add_escapes characters turned into remove_escapes ones. The default character to unescape is the double quotation mark and the default escape character is the backslash.
+`s:unescape(chars,esc)`         | Returns a copy of `s` with *specific* add_escapes characters turned into remove_escapes ones. The default character to unescape is the double quotation mark, and the default escape character is the backslash.
 : {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
 
 [Example:]{.bt}
@@ -117,9 +118,9 @@ print("str:unescape_chars('{}'): ",  str:unescape_chars('{}'))
 
 [Output]{.bt}
 ```txt
-str:                      	joe \{said\} \"no way\".
+str:                        joe \{said\} \"no way\".
 str:remove_escapes():       joe {said} "no way".        # <1>
-str:unescape_chars('{}'): 	joe {said} \"no way\".      # <2>
+str:unescape_chars('{}'):   joe {said} \"no way\".      # <2>
 ```
 1. All backslashes are removed from `str`.
 2. Only the backslashed braces `\{` and `\}` are altered.
@@ -131,8 +132,8 @@ We have several methods to help with that task:
 
 String Method                   | Description
 ------------------------------  | --------------------------------------------------------------------
-`s:after(sep)`                  | Returns the text after the separator `sep`. <br> The separator can be a string or an `lpeg` pattern.
-`s:before(sep)`                 | Returns the text after the separator `sep`. <br> The separator can be a string or an `lpeg` pattern.
+`s:after(sep)`                  | Returns the text after the separator `sep`. <br> The separator can be a string or a `lpeg` pattern.
+`s:before(sep)`                 | Returns the text after the separator `sep`. <br> The separator can be a string or a `lpeg` pattern.
 `s:split(sep)`                  | Returns an array of "tokens" in `s` split by a separator `sep`. <br> The default separator is the whitespace pattern.
 `s:to_blocks()`                 | Returns a table of all the text blocks/paragraphs in `s`. <br> Blocks/paragraphs are pieces of text delimited by one or more blank lines.
 `s:to_lines()`                  | Returns an array of all the "lines" in `s` by splitting on a newline character.
@@ -149,9 +150,9 @@ String Method                   | Description
 
 ## Delimited Text
 
-Given a block of text, you often need to extract substrings surrounded by markers of some sort.
+Given a text block, you often need to extract substrings surrounded by markers.
 For example, given a block of C/C++ code, you might want to delete any multiline comment.
-In C/C++ multiline comments begin with the left delimiter `/*` and end with the right delimiter `*/`.
+C/C++ multiline comments begin with the left delimiter `/*` and end with the right delimiter `*/`.
 
 We have methods that work on text containing delimited strings.
 Some specialisations work on strings delimited by quotation marks, a typical case of interest.
@@ -162,10 +163,10 @@ String Method                   | Description
 `s:all_quoted()`                | Returns an array of all quoted substrings in `s`
 `s:contains_delimited(l,r,line)`| Returns `true` if `s` contains delimited text anywhere inside it.
 `s:contains_quoted()`           | Returns `true` if `s` contains quoted text anywhere inside it.
-`s:contains_word(word)`         | Does `s` contain a particular `word` which a string or any `lpeg` pattern surrounded by whitespace? This is the simplest form of delimited text.
-`s:first_delimited(l,r,line)`   | Returns the first delimited substring found in `s`.
-`s:first_quoted()`              | Returns the first quoted substring found in `s`.
-`s:is_delimited(l,r,line)`      | Returns `true` if `s` is is marked on the left by `l` and the right by `r`.
+`s:contains_word(word)`         | Does `s` contain a particular `word` which is a string or any `lpeg` pattern surrounded by whitespace? This is the simplest form of delimited text.
+`s:first_delimited(l,r,line)`   | Returns the first delimited substring in `s`.
+`s:first_quoted()`              | Returns the first quoted substring in `s`.
+`s:is_delimited(l,r,line)`      | Returns `true` if `s` is marked on the left by `l` and the right by `r`.
 `s:is_quoted()`                 | Returns `true` if `s` is surrounded by single or double quotes.
 : {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
 
@@ -179,7 +180,7 @@ The full rules for delimiters are:
 1. If neither is given, we set them to the default double quote character `"`.
 2. If only one is given and it's a single character (e.g. `'`) then we use that for both delimiters.
 3. If only one is given and it has an *even* number of characters, then we split that into half. For example, if we are passed the single delimiter "{}", then we split it in half, so in effect `l = '{'` and `r = '}'`.
-4. Finally, of course, you can specify `l` and `r` separately.
+4. Finally, you can specify `l` and `r` separately.
 
 [Example]{.bt}
 ```lua
@@ -191,10 +192,10 @@ print("all_delimited:      ", table.concat(s:all_delimited("{}"), ", "))
 ```
 [Output]{.bt}
 ```txt
-is_delimited:       	false
-contains_delimited: 	true
-first_delimited:    	text in braces
-all_delimited:      	text in braces
+is_delimited:           false
+contains_delimited:     true
+first_delimited:        text in braces
+all_delimited:          text in braces
 ```
 
 [Another Example]{.bt}
@@ -207,17 +208,17 @@ print("all_delimited:      ", table.concat(s:all_delimited("{}"), ", "))
 ```
 [Output]{.bt}
 ```txt
-is_delimited:       	true
-contains_delimited: 	true
-first_delimited:    	Here
-all_delimited:      	Here, is a string, with, text in braces
+is_delimited:           true
+contains_delimited:     true
+first_delimited:        Here
+all_delimited:          Here, is a string, with, text in braces
 ```
 Note that in this case, `s` starts with a `"{"` and ends with a `"}"` so the entire string is indeed *delimited*.
 However, the `first_delimited` and `all_delimited` methods work in a *non-greedy* manner, which is almost certainly what you would want.
 
 ## All Methods
 
-Here is an alphabetic list of all the methods added by the `string` module to the Lua `string` class for any string `s`.
+Here is an alphabetic list of all the methods the `lulu.string` module adds to the Lua `string` class for any string `s`.
 
 Click on a method to jump to the documentation section for the corresponding functional group.
 

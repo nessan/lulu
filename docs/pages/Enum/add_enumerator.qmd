@@ -7,7 +7,7 @@ title: Lulu Enums --- `add_enumerator`
 The enumerators for an `Enum` instance are usually specified when the `Enum` is created.
 
 However, you can add an enumerator to an existing `Enum` using the `Enum:add_enumerator` method.
-We use this feature when we are using `lulu` to create domain specific languages and want to add an enumerator for a new domain.
+We use this feature when using `lulu` to create domain-specific languages and want to add an enumerator for a new domain.
 
 The `add_enumerator(name, ...)` method has several forms:
 
@@ -58,7 +58,7 @@ Suit: [1] Clubs, [2] Diamonds, [3] Hearts, [4] Spades
 TIP: In the two argument form, the second argument **must** be either a number or a table.
 
 **`Enum:add_enumerator(name, ordinal)`** <br>
-If the second argument is a number we add an enumerator to the `Enum` instance with the specified ordinal value.
+If the second argument is a number, we add an enumerator to the `Enum` instance with the specified ordinal value.
 
 [Example]{.bt}
 ```lua
@@ -77,8 +77,8 @@ Suit: [1] Clubs, [2] Diamonds, [4] Hearts, [8] Spades
 ```
 
 **`Enum:add_enumerator(name, associated_data)`** <br>
-If the second argument is a table we add an enumerator to the `Enum` instance with the specified associated data.
-The ordinal value can be specified in the table of associated data under the `ordinal` field or it will be automatically generated as the next consecutive integer in the existing sequence.
+If the second argument is a table, we add an enumerator to the `Enum` instance using the specified associated data.
+The ordinal value can be specified in the associated data table under the `ordinal` field or automatically generated as the next consecutive integer in the existing sequence.
 
 [Example]{.bt}
 ```lua
@@ -126,7 +126,7 @@ For example, `print(Suit.Spades:tonumber())` outputs `8`.
 ## Three Arguments
 
 **`Enum:add_enumerator(name, ordinal, associated_data)`** <br>
-In this form, the ordinal value is specified explicitly, and must be a number.
+In this form, the ordinal value is specified explicitly and must be a number.
 The associated data must be a table.
 Any ordinal field in the associated data is ignored.
 
@@ -167,9 +167,9 @@ Suit:
     [4] Hearts = { color = "red" },
     [8] Spades = { color = "black" }
 ```
-1. Here the ordinal values from the associated data are not used as we specified the ordinal values explicitly.
+1. Here, the ordinal values from the associated data are not used as we specified the ordinal values explicitly.
 
-You are free to specify *some* of the the ordinal values in the associated data or have them automatically generated.
+You are free to specify *some* of the ordinal values in the associated data or have them automatically generated.
 
 [Example]{.bt}
 ```lua
@@ -188,8 +188,8 @@ Suit:
     [30] Hearts = { color = "red" },            # <3>
     [31] Spades = { color = "black" }           # <4>
 ```
-1. The ordinal value in the associated data is ignored as we specified the value in the second argument.
-2. The ordinal value in the associated data is ignored as we specified the value in the second argument.
+1. The ordinal value in the associated data is ignored, as the value was given in the second argument.
+2. The ordinal value in the associated data is ignored,  as the value was given in the second argument.
 3. The ordinal value from the associated data is used as we did not specify the ordinal value explicitly.
 4. This ordinal value is automatically generated as the next consecutive integer in the existing sequence.
 

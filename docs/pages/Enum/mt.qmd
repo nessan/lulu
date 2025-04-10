@@ -17,12 +17,12 @@ Method                     | Brief Description
 `is_a(enum)`               | Returns `true` if the `Enumerator` belongs to the argument `enum`.
 : {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
 
-For example if we have
+For example, if we have
 ```lua
 local Suit = Enum{ 'Clubs', 'Diamonds', 'Hearts', 'Spades' }
 local s = Suit.Clubs     -- <1>
 ```
-1. The `s` variable is an `Enumerator` instance so its metatable inherits from the base `Enumerator` metatable.
+1. The `s` variable is an `Enumerator` instance, so its metatable inherits from the base `Enumerator` metatable.
 
 Then `s:tostring()` is "Clubs", `s:tonumber()` is 1, and `s:is_a(Suit)` is `true`.
 
@@ -66,7 +66,7 @@ end
 ```
 This is a slightly wordy version of the C switch statement.
 
-The `__index` metamethod allows you to directly     access the *associated* data for an enumerator.
+The `__index` metamethod allows you to access the *associated* data for an enumerator directly.
 
 For example, if we have
 ```lua
@@ -94,7 +94,7 @@ That metatable is returned by the `Enum:mt()` method.
 NOTE: All the enumerators in an `Enum` share the same metatable.
 That metatable is a clone of the base `Enumerator` metatable.
 
-By accessing the `Enum:mt()` metatable you can add your own methods to all the enumerators in the `Enum` *without* affecting other enums you may have created.
+By accessing the `Enum:mt()` metatable, you can add your methods to all the enumerators in the `Enum` *without* affecting other enums you may have created.
 
 For example, if we have
 ```lua
@@ -115,7 +115,7 @@ print(Suit.Clubs:is_red())     -- false
 print(Suit.Spades:is_red())    -- false
 ```
 
-Note that only the enumerators in the `Suit` enum have the `is_red` method.
+Only the enumerators in the `Suit` enum have the `is_red` method.
 The enumerators in other enums do not have it.
 
 ## See Also

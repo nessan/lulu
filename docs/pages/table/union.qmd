@@ -8,7 +8,7 @@ If you have imported the module as
 ```lua
 require 'lulu.table'
 ```
-then you have access to the following methods to combine general tables:
+Then you have access to the following methods to combine general tables:
 
 Method                              | Brief Description
 ----------------------------------- | -------------------------------------------------------------
@@ -17,7 +17,7 @@ Method                              | Brief Description
 `table.difference(t1,t2,symmetric)` | Returns a new table that is the *difference* between `t1` and `t2`.
 : {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
 
-NOTE: These `table` methods take into account a table's keys **and** values when looking for commonalities and differences!
+NOTE: These `table` methods consider a table's keys **and** values when looking for commonalities and differences!
 Both must match (or differ as the case may be).
 
 There are also methods to look at the keys and values separately:
@@ -28,8 +28,8 @@ Method                              | Brief Description
 `table.merged_keys(...)`            | Returns an *array* of all the keys from the table arguments.
 `table.common_values(...)`          | Returns an *array* of the values that are in common between the table arguments.
 `table.common_keys(...)`            | Returns an *array* of the keys that are in common between the table arguments.
-`table.unique_values(...)`          | Returns an array of the values that are unique to each table argument.
-`table.unique_keys(...)`            | Returns an array of the keys that are unique to each table argument.
+`table.unique_values(...)`          | Returns an array of the unique values to each table argument.
+`table.unique_keys(...)`            | Returns an array of unique keys to each table argument.
 : {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
 
 ## `table.union`
@@ -137,7 +137,7 @@ Then we get `Intersection a1, a2: { 4 = 4 }`.
 ## `table.difference`
 
 The difference between two tables captures the elements in one but not the other.
-Like the other methods on this page this function takes into account *both* the key and the value of an element when looking for equality.
+Like the other methods on this page, this function considers *both* the key and the value of an element when looking for equality.
 
 Generally `table.difference(t1, t2) ~= table.difference(t2, t1)`.
 
@@ -148,7 +148,7 @@ You can set it to `true` to get the *symmetric difference* between $t_1$ and $t_
 $$
 t_1 - t_2 \cup t_2 - t_1.
 $$
-That is the table of top-level elements that occurs only in *one* of `t1` or `t2`.
+That is the table of top-level elements that occur only in *one* of `t1` or `t2`.
 
 [Example:]{.bt}
 ```lua
@@ -246,7 +246,7 @@ putln("Common Values: a1, a2: %t", table.common_values(a1, a2))
 ```txt
 Common Values: a1, a2: [ 4 ]  # <1>
 ```
-1. The only value that is in common between `a1` and `a2` is `4`. The location of the value is not important.
+1. The only value in common between `a1` and `a2` is `4`. The location of the value is not important.
 
 ## `table.unique_values`, `table.unique_keys`
 
@@ -300,4 +300,4 @@ Keys only in one of p2 or p1:   {}
 ## See Also
 
 {lulu.Array}  <br>
-{scribe}
+{lulu.scribe}

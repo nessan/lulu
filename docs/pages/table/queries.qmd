@@ -6,7 +6,7 @@ If you have imported the module as
 ```lua
 require 'lulu.table'
 ```
-then you have access to the following query methods:
+Then you have access to the following query methods:
 
 Method                           | Brief Description
 -------------------------------- | ----------------------------------------------------------------
@@ -17,7 +17,7 @@ Method                           | Brief Description
 `table.is_array_of_one_type(tbl)`| Returns `true` if`tbl` is a Lua array where all the elements are of the same type.
 `table.is_array_of_numbers(tbl)` | Returns `true` if`tbl` is a Lua array where all the elements are numbers.
 `table.is_array_of_strings(tbl)` | Returns `true` if`tbl` is a Lua array where all the elements are strings.
-`table.metadata(tbl)`            | Returns a table of metadata about `tbl`.
+`table.metadata(tbl)`            | Returns a metadata table about `tbl`.
 : {.bordered .striped .hover .responsive tbl-colwidths="[30,70]"}
 
 NOTE: A Lua array is a Lua table where the keys are consecutive integers starting at 1 with no gaps.
@@ -26,7 +26,7 @@ NOTE: A Lua array is a Lua table where the keys are consecutive integers startin
 
 The `table.metadata(tbl)` function returns a table of metadata about a table `tbl`.
 
-The returned table, `md`, has a sub-table `md[t]` for each sub-table `t` encountered in `tbl` including `tbl` itself.
+The returned table, `md`, has a sub-table `md[t]` for each sub-table `t` encountered in `tbl`, including `tbl` itself.
 
 The `md[t]` sub-table has the following fields:
 
@@ -35,10 +35,10 @@ Field                         | Description
 `md[t].array`                 | Boolean that is `true` if `t` is a Lua array.
 `md[t].size`                  | Number of elements in `t`.
 `md[t].subs`                  | Number of proper sub-tables in `t`.
-`md[t].refs`                  | Number of references to `t`. Greater than 1 if `t` is shared.
+`md[t].refs`                  | Number of references to `t`. Greater than one if `t` is shared.
 : {.bordered .striped .hover .responsive tbl-colwidths="[30,70]"}
 
-This metadata is useful for understanding the structure of a table.
+This metadata helps understand the structure of a table.
 The `metadata` function can handle tables that contain circular references.
 
 ## See Also

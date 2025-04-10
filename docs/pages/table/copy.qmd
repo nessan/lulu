@@ -5,7 +5,7 @@ title: Lua Tables --- Deep & Shallow Copies
 ## Introduction
 
 Copying a Lua table using the assignment operator doesn't copy anything!
-All you get is another *pointer* to the same block of memory.
+All you get is another *pointer* to the same memory block.
 
 We can illustrate that using the following example:
 ```lua
@@ -18,7 +18,7 @@ print(original.a)                       -- <3>
 2. Alter the `copy`.
 3. Check the `original` and get the output, `GAMMA`!
 
-This shows that `original` and `copy` are just two references to the *same* memory block.
+This shows that `original` and `copy` refers to the *same* memory block.
 
 ## `table.clone` & `table.copy`
 
@@ -27,7 +27,7 @@ If you have imported the {lulu.table} module as
 ```lua
 require 'lulu.table'
 ```
-then, you can make copies of any Lua table using the following two methods:
+Then, you can make copies of any Lua table using the following two methods:
 
 **`table.clone(tbl)`** <br>
 Returns a *shallow* copy of `tbl`.
@@ -38,7 +38,7 @@ Returns a *deep* copy of `tbl,` including metatables.
 
 ## Shallow vs. Deep
 
-The `clone` and `copy` methods both start by creating a new empty table.
+The `clone` and `copy` methods create a new empty table.
 
 A shallow `clone` then inserts copies of the *top-level* elements from `tbl` into that new table.
 
@@ -120,8 +120,8 @@ putln("original     = %t", orig)
 putln("deep copy    = %t", deep)
 putln("shallow copy = %t", shallow)
 ```
-1. Here, we have somewhat spuriously introduced sub-tables instead of setting `orig.a = "alpha"` we have `orig.a[1] = "alpha"`etc.
-2. Deep copies are entirely independent, so this change will only affect `deep`.
+1. Here, we have spuriously introduced sub-tables instead of setting `orig.a = "alpha"` we have `orig.a[1] = "alpha"`etc.
+2. Deep copies are independent, so this change will only affect `deep`.
 3. Shallow clones are only independent at the top level so this change will affect both shallow and orig. Of course, it will not affect the independent `deep`.
 
 Now, when you run the program, you get:
@@ -141,9 +141,9 @@ deep copy    = {['a'] = {"GAMMA"}, ['b'] = {"beta"}}
 shallow copy = {['a'] = {"alpha"}, ['b'] = {"RHO"}}     # <2>
 ```
 1. As expected, a change to a sub-element is only seen `deep`.
-2. In contrast, a change to a sub-element is seen in the shallow copy and also in the original table.
+2. In contrast, a change to a sub-element is seen in the shallow copy and the original table.
 
-NOTE: The only native complex type in Lua is a table, so every non-trivial data structure will have tables with sub-tables.
+NOTE: The only native complex type in Lua is a table so every non-trivial data structure will have tables with sub-tables.
 For this reason, it is essential to understand the distinction between having multiple references by assignment, shallow cloning, and deep copying.
 
 ## See Also

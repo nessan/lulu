@@ -12,12 +12,12 @@ If you have imported the module as
 ```lua
 local paths = require 'lulu.paths'
 ```
-then you have access to the following methods:
+Then you have access to the following methods:
 
 Method                           | Description
 -------------------------------- | -----------------------------------------------------------------
 `paths.components(path)`         | Splits a path into a directory, basename, and extension.
-`paths.basename(path)`           | Returns the basename part of a path. This includes the file extension.
+`paths.basename(path)`           | Returns the basename part of a path, which includes the file extension.
 `paths.dirname(path)`            | Returns the directory part of a path.
 `paths.extension(path)`          | Returns the extension part of a path.
 `paths.filename(path)`           | Returns the basename for the path without its extension if there is one.

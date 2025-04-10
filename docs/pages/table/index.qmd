@@ -67,7 +67,7 @@ We supply an iterator maker that can be passed a comparator to order the keys in
 Method                       | Brief Description
 ---------------------------- | ---------------------------------------------------------------------
 {table.compare}              | The default comparison method used to sort a table's keys.
-{table.ordered_pairs}        | An iterator that traverses a table in a sorted key order.
+{table.ordered_pairs}        | An iterator that traverses a table in sorted key order.
 : {.bordered .striped .hover .responsive tbl-colwidths="[30,70]"}
 
 ## Searching
@@ -83,8 +83,8 @@ Method                       | Brief Description
 
 ## Unions etc.
 
-We have methods to find elements in common between tables etc.
-These methods look at *both* the keys *and* the values of table elements when considering commonality and differences.
+We have methods to find elements in common between tables, etc.
+When considering commonality and differences, these methods look at *both* the keys *and* the values of table elements.
 
 Method                       | Brief Description
 ---------------------------- | ---------------------------------------------------------------------
@@ -120,8 +120,8 @@ Here is a table of the module methods in alphabetical order.
 Method                       | Brief Description
 ---------------------------- | ---------------------------------------------------------------------
 {table.clone}                | Returns a *shallow* copy of a table.
-{table.common_keys}          | Returns the keys that are present in all tables passed as arguments.
-{table.common_values}        | Returns the values that are present in all tables passed as arguments.
+{table.common_keys}          | Returns the keys in all tables passed as arguments.
+{table.common_values}        | Returns the values in all tables passed as arguments.
 {table.compare}              | The default comparison method used to sort a table's keys.
 {table.contains}             | Returns `true` if a top-level value is present in a table.
 {table.copy}                 | Returns a *deep* copy of a table.
@@ -144,7 +144,7 @@ Method                       | Brief Description
 {table.merged_keys}          | Returns the merged keys of two or more tables.
 {table.merged_values}        | Returns the merged values of two or more tables.
 {table.metadata}             | Returns a table of metadata about a table.
-{table.ordered_pairs}        | An iterator that traverses a table in a sorted key order.
+{table.ordered_pairs}        | An iterator that traverses a table in sorted key order.
 {table.size}                 | Returns the number of top-level items in any table.
 {table.transform}            | Map a function over the top-level values & return a *new* table.
 {table.union}                | Returns the union of two or more tables.

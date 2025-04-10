@@ -4,7 +4,7 @@ title: Lulu --- Enums
 
 ## Introduction
 
-Enums are a way of specifying that a variable can only take on one of a limited number of choices.
+Enums specify that a variable can only take on one of a limited number of choices.
 
 For example, in C++ you might define the `Suit` for a card game as:
 ```cpp
@@ -38,7 +38,7 @@ Those constructs may be more generally applicable, but their core design has the
 
 Programming languages have implemented the idea of an enum in various ways.
 
-They can be very simple, like in C and C++ where every enumerator is an integer of some sort.
+They can be straightforward, like in C and C++ where every enumerator is an integer.
 Other languages like Rust and Swift allow enumerators to own arbitrary *associated* data and methods.
 There will still be an underlying *ordinal* somewhere (perhaps a compiler construct) that defines an ordering of the enumerators.
 
@@ -58,7 +58,7 @@ print("Suit", s, " is black:", is_black(s))
 This outputs `Suit 2 is black: false`.
 
 This works but isn't suitable for anything except the trivial scripts.
-For one thing, the `Suit` table is not constant and can easily be changed by mistake.
+The `Suit` table is not constant and can easily be changed by mistake.
 
 ## The `Enum` Class
 
@@ -70,7 +70,7 @@ If you have imported the `lulu.Enum` module as:
 ```lua
 local Enum = require 'lulu.Enum'
 ```
-then, you have access to the following methods:
+Then, you have access to the following methods:
 
 Method                     | Brief Description
 -------------------------- | ----------------------------------------------------------------------
@@ -80,7 +80,7 @@ Method                     | Brief Description
 {Enum.type}                | Get the type of an `Enum`. The default type is `Enum`.
 {Enum.is_instance}         | Check if an object is an instance of `Enum`.
 {Enum.count}               | Get the number of enumerators in an `Enum`.
-{Enum.iter}                | Returns an iterator that traverses the enumerators of an `Enum` in sorted order.
+{Enum.iter}                | Returns an iterator that traverses an `Enums` enumerators in sorted order.
 {Enum.mt}                  | Returns the metatable shared by all the *enumerators* of an `Enum`.
 {Enum.inline}              | Returns a one-line string representation of an `Enum`.
 {Enum.pretty}              | Returns a pretty-printed string representation of an `Enum`.

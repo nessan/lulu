@@ -10,15 +10,15 @@ These functions create an `Enum` instance from various sources:
 
 TIP: The function call `Enum(...)` is a synonym for `Enum:new(...)`.
 
-1. The arguments can be an array of strings which are the enumerator names. <br> The strings can optionally have ordinal values for the enumerators embedded in them.
-2. The argument can be a single long string from which we parse enumerator names. <br> The string can optionally have ordinal values for the enumerators embedded in it.
-3. The argument can be a Lua table with string keys and and number values. <br> The table keys are the enumerator names and the table values are the ordinal values.
-4. The argument can be a Lua table with string keys and arbitrary associated data for the corresponding enumerators. <br> The table keys are the enumerator names and the table values are the arbitrary associated data. <br> The ordinals can be specified or generated as consecutive integers starting at 1.
-5. The argument can be missing. <br> `Enum()`returns an empty `Enum` instance that you can fill using the `add_enumerator` method.
+1. The arguments can be an array of strings, which are the enumerator names. <br> The strings can optionally have ordinal values for the enumerators embedded in them.
+2. The argument can be a long string from which we parse enumerator names. <br> The string can optionally have ordinal values for the enumerators embedded in it.
+3. The argument can be a Lua table with string keys and number values. <br> The table keys are the enumerator names, and the table values are the ordinals.
+4. The argument can be a Lua table with string keys and arbitrary associated data for the corresponding enumerators. <br> The table keys are the enumerator names, and the table values are the arbitrary associated data. <br> The ordinals can be specified or generated as consecutive integers starting at 1.
+5. The argument can be missing. <br> `Enum()`returns an empty `Enum` instance you can fill using the `add_enumerator` method.
 
 NOTE: In all cases, the enumerator names must be **unique**. <br>
 The enumerator ordinals can have duplicates. <br>
-If the ordinals are not specified we use consecutive integers starting at 1. <br>
+If the ordinals are not specified, we use consecutive integers starting at 1. <br>
 If you set a custom ordinal value for an enumerator the rest of the ordinal values increment from there.
 
 ## From Strings
@@ -86,7 +86,7 @@ Suit_7:
 ```
 1. The ordinal values are automatically generated as `1, 2, 3, 4`.
 
-You can retrieve any of the associated data for an enumerator using the `abbrev`, `color`, or `icon` fields respectively.
+You can retrieve any associated data for an enumerator using the `abbrev`, `color`, or `icon` fields.
 For example, `Suit.Diamonds.abbrev` returns `'D'`.
 
 Here's an example of an enum with manually set ordinal values:
@@ -116,7 +116,7 @@ WARNING: If you are using enums with associated data and custom ordinal values, 
 
 The `lulu.Enum` module exports the `Enum` class.
 
-It also exports an `ENUM` function that gives you another way to create an `Enum` instances with preset types.
+It also exports an `ENUM` function that gives you another way to create an `Enum` instance with preset types.
 
 ```lua
 ENUM 'Suit' { 'Clubs', 'Diamonds', 'Hearts', 'Spades' }

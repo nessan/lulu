@@ -36,13 +36,12 @@ Assuming your path allows it, you can `require('lulu.lulu')` and have access to 
 
 ```lua
 require('lulu.lulu')
-local Suit = Enum {
+ENUM 'Suit' {
     Clubs    = { abbrev = 'C', color = 'black', icon = '♣', ordinal = 0 },
     Diamonds = { abbrev = 'D', color = 'red',   icon = '♦', ordinal = 1 },
     Hearts   = { abbrev = 'H', color = 'red',   icon = '♥', ordinal = 2 },
     Spades   = { abbrev = 'S', color = 'black', icon = '♠', ordinal = 3 }
 }
-Suit:set_type('Suit')
 scribe.putln("%T", Suit)
 ```
 
@@ -61,15 +60,15 @@ Alternatively, you can access the modules individually:
 ```lua
 local scribe = require('lulu.scribe')
 local Array  = require('lulu.Array')
-local arr = Array:new({1, 2, 3})
-arr:transform("*", 10)
-scribe.putln("%t", arr)
+local array  = Array(1, 2, 3)
+array:transform("*", 10)
+scribe.putln("array = %t", array)
 ```
 
 This will output:
 
 ```txt
-[ 10, 20, 30 ]
+array = [ 10, 20, 30 ]
 ```
 
 ## Documentation

@@ -8,7 +8,7 @@ If you have imported the {lulu.table} module as
 ```lua
 require 'lulu.table'
 ```
-then, you have access to a new iterator maker:
+Then, you have access to a new iterator maker:
 
 **`table.ordered_pairs(comparator)`** <br>
 Returns an iterator maker --- a function that takes a table and returns an iterator.
@@ -20,7 +20,7 @@ However, that traversal is done in an undefined order and can vary from run to r
 CAUTION: Lua has no defined order for the keys in a general `table`.
 This contrasts with the keys in a pure Lua array where the indices are always stored in their natural order from 1 on.
 
-We supply a counterpart iterator `table.ordered_pairs(comparator)` that returns an iterator that traverses the keys in the table in a fixed order.
+We supply a counterpart iterator, `table.ordered_pairs(comparator)` that returns an iterator that traverses the keys in the table in a fixed order.
 By default, keys are sorted by type and then by value, so numeric keys come first in their natural order, and those are followed by the others where strings are sorted alphabetically.
 
 If you supply a `comparator` argument it should take two key arguments `k1, k2` and return `true` if you want `k1` to appear before `k2`.
@@ -40,22 +40,22 @@ iter = table.ordered_pairs(">")                     -- <3>
 for k, v in iter(tbl) do print(k, v) end
 ```
 1. Lua's standard `pair` method.
-2. Here, the `ordered_pairs` method uses the default key comparator function.
-3. Here, the `ordered_pairs` method uses a custom key comparator "function".
+2. The `ordered_pairs` method uses the default key comparator function.
+3. The `ordered_pairs` method uses a custom key comparator "function".
 
 outputs
 ```txt
-eagle	3       # <1>
-frog	1
-badger	2
+eagle   3       # <1>
+frog    1
+badger  2
 --------
-badger	2       # <2>
-eagle	3
-frog	1
+badger  2       # <2>
+eagle   3
+frog    1
 --------
-frog	1       # <3>
-eagle	3
-badger	2
+frog    1       # <3>
+eagle   3
+badger  2
 ```
 1. The key-value pairs are output in whatever undefined order Lua stores them.
 2. The key-value pairs are output in our default increasing alphabetic order for the keys.
@@ -68,14 +68,14 @@ A custom comparator function can come in one of several forms:
 1. You can use Lua functions like `table.ordered_pairs(function(a,b) return a > b end)`.
 2. You can use a string operator like `table.ordered_pairs(">")`.
 3. You can use a string {lulu.anon} like `table.ordered_pairs("|a,b| a > b")`.
-4. You can pass a "table" that happens to be *callable, i.e., it has a `__call()` metamethod that takes two items and compares them.
+4. You can pass a "table" that happens to be *callable, i.e., it has a `__call()` metamethod that takes and compares two items.
 
-There is more detail on the second and third options in the documentation for the {lulu.callable} module.
+There is more detail on the second and third options in the documentation for {lulu.callable}.
 
 ## `table.compare(a,b)`
 
 The `table.compare` function is the default comparator used by the `table.ordered_pairs` method.
-It compares two values `a` and `b` by type first and then by value.
+It compares two values, `a` and `b`, by type first and then by value.
 
 Numeric keys come first and are sorted in natural order.
 String keys are sorted alphabetically.

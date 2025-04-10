@@ -4,7 +4,7 @@ title: Lulu Enums --- Enum Type Names
 
 ## Type Names
 
-The `Enum` class has a `__name` field that returns the type of the `Enum` instance.
+The `Enum` class has a `__name` field that returns the `Enum` instance type.
 
 NOTE: The default type is `Enum`.
 

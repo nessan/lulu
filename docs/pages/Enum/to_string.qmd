@@ -4,7 +4,7 @@ title: Lulu Enums --- Stringification
 
 ## Introduction
 
-We provide a number of methods for converting `Enum` instances to strings.
+We provide several methods for converting `Enum` instances to strings.
 
 Method                     | Brief Description
 -------------------------- | ----------------------------------------------------------------------
@@ -14,7 +14,7 @@ Method                     | Brief Description
 `Enum:__tostring()`        | A metamethod that connects Lua's `tostring` and `print` functions to the `Enum:inline` method.
 : {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
 
-The methods all show the enumerator names preceded by their ordinal values in square brackets.
+The methods show the enumerator names preceded by their ordinal values in square brackets.
 Associated data for the enumerators is also shown if present.
 
 These methods play nicely with the {putln} formatted output functions in the {scribe} module.

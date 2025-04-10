@@ -8,7 +8,7 @@ If you have imported the {lulu.table} module as
 ```lua
 require 'lulu.table'
 ```
-then you have access to the following methods:
+Then you have access to the following methods:
 
 **`table.map(tbl,fun,...)`** <br>
 Returns a *new* table, which results from applying `fun` to each value in a table.
@@ -58,7 +58,7 @@ Creates a *new* table by applying `fun` to pairs of values taken from two input 
 ```lua
 result[k] = fun(tbl1[k],tbl2[k],...).
 ```
-Note that the method skips past any keys that are not present in both the input tables.
+Note that the method skips past any keys not present in both the input tables.
 
 [Example:]{.bt}
 ```lua
@@ -87,7 +87,7 @@ At its simplest, it is similar to the `map` function above, and for every key-va
 ```lua
 result[k] = fun(k,v,...)
 ```
-This means that `fun` can do something different depending on `k`.
+This means `fun` can do something different depending on `k`.
 Here is an example that uses that feature:
 
 [Example: `kv_map` with a single output]{.bt}

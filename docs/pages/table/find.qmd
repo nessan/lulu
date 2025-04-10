@@ -15,7 +15,7 @@ Returns the first key found in `tbl` where `tbl[key]` is *identical in content* 
 This is a top-level search that returns `nil` on failure.
 
 **`table.contains(tbl,value)`** <br>
-Returns `true` if there is a top-level value in `tbl` that is *identical in content* to `value`.
+Returns `true` if a top-level value in `tbl` is *identical in content* to `value`.
 
 **`table.find_if(tbl,predicate,...)`** <br>
 Returns a `key, value, p` trio where `p = predicate(value,...)` is not `nil` and `value = tbl[key]`. <br>
@@ -24,7 +24,7 @@ This is a top-level search that returns `nil` on failure.
 ## `table.find` & `table.contains`
 
 The `table.find` method searches the top-level keys in `tbl` for the one whose corresponding value matches the searched-for item.
-The matches are done using {table.eq} so, if the hunted-for object is a table, we look for one identical in content, not just occupying the same memory blocks.
+The matches use {table.eq} so, if the hunted-for object is a table, we look for one identical in content, not just occupying the same memory blocks.
 
 NOTE: The search stops on the first match. The concept of "first" is nebulous for general Lua tables, as the elements are stored in an undefined order. The next time you run the search on a table with more than one match, you may get a different key. That will never happen for Lua arrays.
 
@@ -59,7 +59,7 @@ The `table.find_if(tbl ,predicate,...)` method allows for more complex searches.
 
 It looks for a top-level `key` in `tbl` such that `predicate(tbl[key], ...) ~= nil`. <br>
 On success, it returns the trio `key, tbl[key], predicate(tbl[key],...)`. <br>
-On failure, it returns the trio `nil, nil, nil`.
+It returns the trio `nil, nil, nil` on failure.
 
 NOTE: The search stops on the first non-nil return from the predicate function.
 As noted earlier, “first” is nebulous for general Lua tables, as the elements are stored in an undefined order.
@@ -71,7 +71,7 @@ Here, we search for the "first" value in a table that is larger than 42:
 local tbl = {foo = 41, boo = 42, bar = 43, baba = 44}
 print(table.find_if(tbl, ">", 42))
 ```
-If you run this multiple times, you will get the trio: bar 43 true or baba 44 true.
+You will get the trio: bar 43 true or baba 44 true if you run this multiple times.
 There is no fixed storage order for items in general Lua tables.
 
 We also note that the returned third element will never be of interest in this example.

@@ -4,7 +4,7 @@ title: Lua LPEG --- Extensions
 
 ## Introduction
 
-The `lulu.xpeg` module *extends* the standard`lpeg` module with predefined patterns and useful functions.
+The `lulu.xpeg` module *extends* the standard`lpeg` module with predefined patterns and valuable functions.
 
 ## Patterns
 
@@ -12,9 +12,9 @@ If you have imported the module as
 ```lua
 local lpeg = require 'lulu.xpeg'
 ```
-You then have access to many "standard" LPEG patterns in the `lpeg.patterns` table.
+You can access many "standard" LPEG patterns in the `lpeg.patterns` table.
 
-For convenience define:
+For convenience, define:
 ```lua
 local p = lpeg.patterns
 ```
@@ -57,12 +57,12 @@ Pattern                     | Description
 `p.ws_delete`               | Substitution capture that removes all whitespace.
 `p.blocks`                  | Table capture all the text blocks/paragraphs in a subject string. <br> A block/paragraph is text followed by one or more empty lines or the end of the string.
 `p.single_quoted`           | Matches single quoted strings.
-`p.double_quoted`           | Matches double quoted strings.
-`p.quoted`                  | Matches either single *or* double quoted strings.
+`p.double_quoted`           | Matches double-quoted strings.
+`p.quoted`                  | Matches either single *or* double-quoted strings.
 `p.single_quoted_content`   | Capture content inside single quotes.
 `p.double_quoted_content`   | Capture content inside double quotes.
 `p.quoted_content`          | Capture content inside single *or* double quotes.
-`p.careful_collapse_ws`     | Substitution capture that trims and collapses contiguous interior white-spaces to one space but not inside quotes.
+`p.careful_collapse_ws`     | Substitution capture that trims and collapses contiguous interior white spaces to one space but not inside quotes.
 : {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
 
 ## Methods
@@ -113,7 +113,7 @@ If the final boolean `line` is `true` (default is `false`) then the match stops 
 
 ## See Also
 
-These patterns and methods can be used on a stand-alone basis.
-In many cases, they act as the engine driving methods in the {lulu.string} module which extends Lua's `string` class.
+The patterns and methods in this module can be used on a stand-alone basis.
+In many cases, they act as the engine driving methods in the {lulu.string} module, which extends Lua's `string` class.
 
 {lulu.string}

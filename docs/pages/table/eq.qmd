@@ -25,7 +25,7 @@ putln("%q == %q returned: %s", s1, s2, s1 == s2)
 ```
 outputs `"Hallo" == "Hallo" returned: true`.
 
-Although it looks like you created two separate strings, `s1` and `s2`, Lua made a singleton behind the scenes and pointed the two values, `s1` and `s2`, to the same backing store.
+Although you created two separate strings, `s1` and `s2`, Lua made a singleton behind the scenes and pointed the two values, `s1` and `s2`, to the same backing store.
 
 This behaviour is unique to strings. Lua never does this for tables,
 
@@ -66,7 +66,7 @@ However, even for simple tables like
 local t1, t2 = {first='Alice',last='Smith'}, {first='Alice',last='Smith'}
 ```
 one has to do some more work to compare the contents.
-Lua does not standardise the order in which key-value pairs are stored in general tables, so even a trivial example like this one requires some care.
+Lua does not standardise the order in which key-value pairs are stored in general tables, so even a trivial example requires some care.
 
 For this example, once again, `print(t1==t2)` returns `false`, while our function `print(table.eq(t1,t2))` will “correctly” return `true`.
 

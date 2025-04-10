@@ -8,7 +8,7 @@ If you have imported the {lulu.table} module as
 ```lua
 require 'lulu.table'
 ```
-then you have access to the following methods:
+Then you have access to the following methods:
 
 Method                          | Brief Description
 ------------------------------- | -----------------------------------------------------------------
@@ -22,13 +22,13 @@ Method                          | Brief Description
 ## `table.keys`
 
 This method can be given a *comparator* argument, a function called with two items.
-It should return true if the first one is considered dominant and false otherwise.
+It should return true if the first one is dominant and otherwise false.
 
 TIP: We supply a default {table.compare} function used to sort table keys.
 It sorts the keys by type and value, so numeric keys come first and are sorted in natural order.
 String keys are sorted alphabetically.
 
-You can explicitly set the `comparator` argument to `false` to disable key sorting.
+You can explicitly set the `comparator` argument to `false` to turn off key sorting.
 So, `table.keys(tbl, false)` returns the array of keys in whatever order Lua happened to store them.
 This is **not** the same as `table.keys(tbl)`,  which returns the array of keys sorted using the *default* `comparator` method.
 
@@ -48,11 +48,11 @@ frog, eagle, badger  # <1>
 badger, eagle, frog  # <2>
 ```
 1. The keys are output in whatever undefined order Lua stores them (varies from run to run).
-2. The keys are output in a fixed, alphabetically sorted, order.
+2. The keys are output in a fixed, alphabetically sorted order.
 
 ## `table.values`
 
-Like the `keys` method above, you can pass the `values` method a `comparator` function or the boolean `false` to disable sorting.
+Like the `keys` method above, you can pass the `values` method a `comparator` function or the boolean `false` to turn off sorting.
 
 However, in this case, the default for `comparator` is `false`, and we return the values in whatever manner Lua stored them.
 
@@ -86,13 +86,13 @@ for k,v in pairs(counts) do print(k,v) end
 ```
 outputs:
 ```txt
-eddie	1
-kermit	2
+eddie   1
+kermit  2
 ```
 
 ## `table.set_of_keys`
 
-This method returns a table where the keys are the values in `tbl` with corresponding value `true`.
+This method returns a table where the keys are the values in `tbl` with the corresponding value `true`.
 
 [Example]{.bt}
 
@@ -110,7 +110,7 @@ frog
 
 ## `table.set_of_values`
 
-This method returns a table where the values are the values in `tbl` with corresponding value `true`.
+This method returns a table where the values are the values in `tbl` with the corresponding value `true`.
 
 [Example]{.bt}
 
@@ -129,7 +129,7 @@ kermit
 
 A custom comparator function can come in one of several forms:
 
-1. You can use Lua function like `table.keys(tbl, function(a,b) return a > b end)`.
+1. You can use Lua functions like `table.keys(tbl, function(a,b) return a > b end)`.
 2. You can use a string operator like `table.keys(tbl, ">", 0)`.
 3. You can use a string lambda like `table.keys(tbl, "|a,b| a > b")`.
 4. You can pass a "table" that happens to be *callable* i.e. has a `__call()` metamethod that takes two items and does a comparison.

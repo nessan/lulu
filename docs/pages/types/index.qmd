@@ -4,7 +4,7 @@ title: Type Checking Utilities
 
 ## Introduction
 
-The `lulu.types` module has a few functions for checking the type of a value.
+The `lulu.types` module has some functions for checking the “type” of a value.
 
 ## Methods
 
@@ -12,7 +12,7 @@ If you have imported the module as
 ```lua
 local types = require 'lulu.types'
 ```
-then you have access to the following methods:
+Then you have access to the following methods:
 
 Method                           | Description
 -------------------------------- | -----------------------------------------------------------------
@@ -22,12 +22,12 @@ Method                           | Description
 `types.is_nan(val)`              | Returns `true` if `val` a NaN.
 : {.bordered .striped .hover .responsive tbl-colwidths="[25,75]"}
 
-These functions are mostly self-explanatory, and mostly are simple one-liners.
+These functions are primarily self-explanatory and mostly are simple one-liners.
 
 ## `types.type`
 
-For tables with a string field `__name` this returns that string.
-Otherwise it returns the output from the Lua standard `type` function.
+For tables with a string field `__name`, this returns that string.
+Otherwise, it returns the output from the Lua standard `type` function.
 
 NOTE: The shorthand `types(obj)` is a synonym for `types.type(obj)`.
 

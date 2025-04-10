@@ -4,17 +4,17 @@ title: Function Arguments in the `lulu` Library
 
 ## Introduction
 
-Many methods in the `lulu` library are passed a *function* as one of their arguments.
+Many `lulu` library methods take a *function* as one of their arguments.
 
 For example, the {lulu.Array} class has various search and filter methods that expect to be passed a *predicate function* that will pick out specific elements in an array.
 
-If `a` is an `Array` we can use `a:take_if` to extract elements that satisfy some predicate.
+If `a` is an `Array`, we can use `a:take_if` to extract elements that satisfy some predicate.
 ```lua
 local a = Array{1,0,2,0,0,3}
 local non_zero = a:take_if(function(x) return x > 0 end)
 putln("%s has non-zero elements %s", a, non_zero)
 ```
-This will output `[1, 0, 2, 0, 0, 3] has non-zero elements [1, 2, 3]` where we are using the {scribe} module for easy formatted output printing.
+This will output `[1, 0, 2, 0, 0, 3] has non-zero elements [1, 2, 3]` where we are using the {scribe} module for formatted output printing.
 
 Similarly, we have *mapping and transformation functions* like:
 ```lua
@@ -27,7 +27,7 @@ This outputs `[1, 0, 2, 0, 0, 3] doubles to [2, 0, 4, 0, 0, 6]`.
 As shown, these methods are happy to be passed complete Lua function definitions, which allow you to do arbitrarily complex things.
 However, the arguments to higher-order functions like these are often quite simple, so we also support the idea of functions as string operators and string lambdas—anonymous functions, if you will.
 
-The first example above can be written in a simpler and more readily understood form:
+The first example above can be written in a more straightforward and more readily understood form:
 ```lua
 local a = Array{1,0,2,0,0,3}
 local non_zero = a:take_if(">", 0)
@@ -103,7 +103,7 @@ The `take_if` signature is `take_if(fun, ...)` and that call works as follows:
 1. The `callable` module looks up that first string argument ">" in its table and finds a corresponding value `function(x,y) return x > y end`, a function of two arguments `x` and `y`.
 2. Then `take_if` calls that function as `fun(a[i], ...)` iterating through the elements of `a` for the first argument and passing any trailing arguments it received after that. There was just one of those --- the number `0`.
 
-NOTE: You can call Lua functions with many more arguments than they expect and those are just ignored.
+NOTE: You can call Lua functions with many more arguments than they expect, and those are just ignored.
 
 **`callable.lambda(str, issue_warnings)`** <br>
 This tries to create a Lua function using either named or anonymous arguments from a lambda string.
