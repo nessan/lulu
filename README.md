@@ -1,9 +1,9 @@
 # lulu
 
 `lulu` is a collection of Lua utility modules and classes.
-It includes a full-featured `Array` class, an `Enum` class, and a variety of other utility functions and extensions.
+It includes a full-featured `Array` class, an `Enum` class, and a variety of other utility functions and extensions. It also includes a copy of [`scribe`](https://nessan.github.io/scribe), a Lua module for formatted output that gracefully handles Lua tables.
 
-It also includes a copy of [`scribe`](https://nessan.github.io/scribe), a Lua module for formatted output that gracefully handles Lua tables.
+Everyone creates one of these little libraries. This one has a comprehensive long-form [documentation site](https://nessan.github.io/lulu) built using [Quarto](https://quarto.org/).
 
 ## Available Modules
 
@@ -11,7 +11,7 @@ It also includes a copy of [`scribe`](https://nessan.github.io/scribe), a Lua mo
 | --------------- | -------------------------------------------------------------------------------- |
 | `lulu.Array`    | A full-featured `Array` class for Lua.                                           |
 | `lulu.Enum`     | An `Enum` class for Lua.                                                         |
-| `lulu.callable` | Builds "anonymous" functions from strings etc.                                   |
+| `lulu.callable` | Builds "anonymous" functions from strings, etc. a la Penlight.etc.               |
 | `lulu.messages` | Informational and error messages used throughout `lulu`.                         |
 | `lulu.scribe`   | Converts Lua objects to strings. Gracefully handles recursive and shared tables. |
 | `lulu.table`    | Lua `table` extensions that work on _any_ table.                                 |
@@ -78,7 +78,7 @@ We built the documentation site using [Quarto](https://quarto.org).
 
 ## Acknowledgements
 
-This library owes a lot to [Penlight](https://github.com/lunarmodules/Penlight) and the many questions that have been answered over the years on sites like StackOverflow and Reddit.
+This library owes a lot to [Penlight](https://github.com/lunarmodules/Penlight) and the many questions answered over the years on sites like StackOverflow and Reddit.
 
 ## Contact
 
